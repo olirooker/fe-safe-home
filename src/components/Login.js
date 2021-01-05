@@ -45,13 +45,17 @@ const Login = (props) => {
     event.preventDefault();
     firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
+      .createUserWithEmailAndPassword(email, password)
       .then((user) => {
         console.log(user);
-        const { displayName, uid } = firebase.auth().currentUser;
+        const { uid } = firebase.auth().currentUser;
+        const userInfo = firebase.auth().currentUser;
+        userInfo.updateProfile({
+          displayName: username,
+        });
         props.setId(uid);
         props.setLoggedIn(true);
-        props.setUsername(displayName);
+        props.setUsername(username);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -59,7 +63,6 @@ const Login = (props) => {
         console.log(errorCode);
         console.log(errorMessage);
       });
-    // reset the input values to empty string
   };
 
   //onchange
@@ -86,7 +89,7 @@ const Login = (props) => {
       </div>
       {showSignup && (
         <div className="signupFormContainer">
-          <form>
+          <form onSubmit={handleSignIn}>
             <label>
               {" "}
               Username:
@@ -95,6 +98,7 @@ const Login = (props) => {
                 type="text"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
+                required
               />
             </label>
             <label>
@@ -105,6 +109,7 @@ const Login = (props) => {
                 type="text"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
+                required
               />
             </label>
             <label>
@@ -115,16 +120,11 @@ const Login = (props) => {
                 type="password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
+                required
               />
             </label>
+            <button>Create Account</button>
           </form>
-          <button
-            onClick={() => {
-              handleSignIn();
-            }}
-          >
-            Create Account
-          </button>
         </div>
       )}
     </div>
