@@ -1,32 +1,109 @@
-import React, { useState, useEffect } from 'react';
+import { React, useState, useEffect } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { useDarkMode } from './components/useDarkMode';
 import { GlobalStyles } from './components/Globalstyle';
 import { lightTheme, darkTheme } from './components/Themes';
 import Toggle from './components/Toggler';
 import Header from './components/Header';
-import MainContent from './components/MainContent';
+import Login from './components/Login';
+import Loading from './components/Loading';
+import Logout from './components/Logout';
+import { Router, navigate } from '@reach/router';
 import './components/styles/App.css';
-import './components/styles/header.css';
 import './components/styles/mainContent.css';
+import './components/styles/header.css';
+import './components/styles/loading.css';
+import './components/styles/loginPage.css';
+import { auth, provider } from './FirebaseConfig';
 
 function App() {
-  const [theme, themeToggler, mountedComponent] = useDarkMode();
+  // componentDidMount to check local storage for logged in state
+  useEffect(() => {
+    const localLoggedIn = localStorage.getItem('loggedIn');
+    if (localLoggedIn === 'true') {
+      setIsLoggedIn(true);
+    }
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setIsLoggedIn(true);
+      }
+    });
+    setIsLoading(false);
+  }, []);
 
+  // dark mode stuff
+  const [theme, themeToggler, mountedComponent] = useDarkMode();
   const themeMode = theme === 'light' ? lightTheme : darkTheme;
+
+  // state stuff
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  // method to toggle isLoggedIn in state
+  const setLoggedIn = () => {
+    if (!isLoggedIn) {
+      setIsLoggedIn(true);
+      // set local state
+      localStorage.setItem('loggedIn', 'true');
+    }
+  };
+  // method to set current user id in state
+  const setId = (id) => {
+    setUserId(id);
+  };
+  // method to set current userName in state
+  const setUsername = (username) => {
+    setUserName(username);
+  };
+  //method to logout
+
+  const logout = () => {
+    auth.signOut().then(() => {
+      localStorage.setItem('loggedIn', 'false');
+      setIsLoggedIn(false);
+    });
+  };
+
+  console.log(isLoggedIn, '<<isLoggedIn');
 
   if (!mountedComponent) return <div />;
   return (
+    // dark mode styled components wrapper
     <ThemeProvider theme={themeMode}>
       <>
         <GlobalStyles />
-        <div className='App'>
-          <div className='headerContainer'>
-            <Toggle theme={theme} toggleTheme={themeToggler} />
-            <Header />
+        {/* check if isLoading */}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className='App'>
+            <div className='headerContainer'>
+              <Toggle theme={theme} toggleTheme={themeToggler} />
+              <Header />
+              {/* render logout button only when user logged in */}
+              {isLoggedIn && (
+                <Logout
+                  theme={theme}
+                  toggleTheme={themeToggler}
+                  logout={logout}
+                />
+              )}
+            </div>
+            {/* check if isLoggedIn */}
+            {!isLoggedIn ? (
+              // pass login methods to Login component
+              <Login
+                setId={setId}
+                setLoggedIn={setLoggedIn}
+                setUsername={setUsername}
+              />
+            ) : (
+              <div className='mainContent'>LOGGED IN</div>
+            )}
           </div>
-          <MainContent />
-        </div>
+        )}
       </>
     </ThemeProvider>
   );
