@@ -1,44 +1,52 @@
-import { React, useState, useEffect } from 'react';
-import { ThemeProvider } from 'styled-components';
-import { useDarkMode } from './components/useDarkMode';
-import { GlobalStyles } from './components/Globalstyle';
-import { lightTheme, darkTheme } from './components/Themes';
-import Toggle from './components/Toggler';
-import Header from './components/Header';
-import Login from './components/Login';
-import Loading from './components/Loading';
-import Logout from './components/Logout';
-import { Router, navigate } from '@reach/router';
-import './components/styles/App.css';
-import './components/styles/mainContent.css';
-import './components/styles/header.css';
-import './components/styles/loading.css';
-import './components/styles/loginPage.css';
-import { auth, provider } from './FirebaseConfig';
+import { React, useState, useEffect } from "react";
+import { ThemeProvider } from "styled-components";
+import { useDarkMode } from "./components/useDarkMode";
+import { GlobalStyles } from "./components/Globalstyle";
+import { lightTheme, darkTheme } from "./components/Themes";
+import Toggle from "./components/Toggler";
+import Header from "./components/Header";
+import Login from "./components/Login";
+import Loading from "./components/Loading";
+import Logout from "./components/Logout";
+import Main from "./components/Main";
+import UserProfile from "./components/UserProfile";
+import TravelAdvice from "./components/TravelAdvice";
+import { Router, navigate } from "@reach/router";
+import "./components/styles/App.css";
+import "./components/styles/mainContent.css";
+import "./components/styles/header.css";
+import "./components/styles/loading.css";
+import "./components/styles/loginPage.css";
+import "./components/styles/travelAdvice.css";
+import "./components/styles/userProfile.css";
+import "./components/styles/navbar.css";
+import { auth, provider } from "./FirebaseConfig";
+import Navbar from "./components/Navbar";
 
 function App() {
   // componentDidMount to check local storage for logged in state
   useEffect(() => {
-    const localLoggedIn = localStorage.getItem('loggedIn');
-    if (localLoggedIn === 'true') {
+    const localLoggedIn = localStorage.getItem("loggedIn");
+    if (localLoggedIn === "true") {
       setIsLoggedIn(true);
     }
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        setIsLoggedIn(true);
-      }
-    });
+    // auth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     setIsLoggedIn(true);
+    //   }
+    // });
+    navigate("/main");
     setIsLoading(false);
   }, []);
 
   // dark mode stuff
   const [theme, themeToggler, mountedComponent] = useDarkMode();
-  const themeMode = theme === 'light' ? lightTheme : darkTheme;
+  const themeMode = theme === "light" ? lightTheme : darkTheme;
 
   // state stuff
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useState('');
-  const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   // method to toggle isLoggedIn in state
@@ -46,7 +54,7 @@ function App() {
     if (!isLoggedIn) {
       setIsLoggedIn(true);
       // set local state
-      localStorage.setItem('loggedIn', 'true');
+      localStorage.setItem("loggedIn", "true");
     }
   };
   // method to set current user id in state
@@ -61,12 +69,13 @@ function App() {
 
   const logout = () => {
     auth.signOut().then(() => {
-      localStorage.setItem('loggedIn', 'false');
+      localStorage.setItem("loggedIn", "false");
       setIsLoggedIn(false);
     });
+    navigate("/");
   };
 
-  console.log(isLoggedIn, '<<isLoggedIn');
+  console.log(isLoggedIn, "<<isLoggedIn");
 
   if (!mountedComponent) return <div />;
   return (
@@ -78,8 +87,8 @@ function App() {
         {isLoading ? (
           <Loading />
         ) : (
-          <div className='App'>
-            <div className='headerContainer'>
+          <div className="App">
+            <div className="headerContainer">
               <Toggle theme={theme} toggleTheme={themeToggler} />
               <Header />
               {/* render logout button only when user logged in */}
@@ -98,9 +107,17 @@ function App() {
                 setId={setId}
                 setLoggedIn={setLoggedIn}
                 setUsername={setUsername}
+                path="/"
               />
             ) : (
-              <div className='mainContent'>LOGGED IN</div>
+              <>
+                <Navbar />
+                <Router>
+                  <Main path="/main" />
+                  <UserProfile path="/user-profile" />
+                  <TravelAdvice path="/travel-advice" />
+                </Router>
+              </>
             )}
           </div>
         )}
