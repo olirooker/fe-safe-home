@@ -1,14 +1,14 @@
-import { navigate } from "@reach/router";
-import { React, useState, useEffect } from "react";
-import { auth, provider } from "../FirebaseConfig";
-import firebase from "../FirebaseConfig.js";
+import { navigate } from '@reach/router';
+import { React, useState, useEffect } from 'react';
+import { auth, provider } from '../FirebaseConfig';
+import firebase from '../FirebaseConfig.js';
 
 const Login = (props) => {
   //state stuff
   const [showSignup, setShowSignup] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // google login functionality
   const googleLogin = () => {
@@ -21,7 +21,7 @@ const Login = (props) => {
         props.setId(uid);
         props.setLoggedIn(true);
         props.setUsername(displayName);
-        navigate("/main");
+        navigate('/main');
       })
       .catch((error) => {
         // Handle Errors here.
@@ -34,6 +34,7 @@ const Login = (props) => {
         // ...
       });
   };
+
   //toggle show signup button
   const toggleShowSignup = () => {
     if (showSignup) {
@@ -42,8 +43,8 @@ const Login = (props) => {
       setShowSignup(true);
     }
   };
-
-  const handleSignIn = (event) => {
+  // sign up login method
+  const handleSignUp = (event) => {
     event.preventDefault();
     firebase
       .auth()
@@ -58,7 +59,7 @@ const Login = (props) => {
         props.setId(uid);
         props.setLoggedIn(true);
         props.setUsername(username);
-        navigate("/main");
+        navigate('/main');
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -78,49 +79,49 @@ const Login = (props) => {
   // };
 
   return (
-    <div className="loginPage">
-      <h2 className="loginpageTitle">LOGIN PAGE</h2>
-      <div className="googleLoginContainer">
-        <button className="loginLink" onClick={googleLogin}>
+    <div className='loginPage'>
+      <h2 className='loginpageTitle'>LOGIN PAGE</h2>
+      <div className='googleLoginContainer'>
+        <button className='loginLink' onClick={googleLogin}>
           Sign In With Google
         </button>
       </div>
-      <div className="signupButtonContainer">
-        <button className="toggleSignupButton" onClick={toggleShowSignup}>
-          {showSignup ? "hide signup" : "show signup"}
+      <div className='signupButtonContainer'>
+        <button className='toggleSignupButton' onClick={toggleShowSignup}>
+          {showSignup ? 'hide signup' : 'show signup'}
         </button>
       </div>
       {showSignup && (
-        <div className="signupFormContainer">
-          <form onSubmit={handleSignIn}>
+        <div className='signupFormContainer'>
+          <form onSubmit={handleSignUp}>
             <label>
-              {" "}
+              {' '}
               Username:
               <input
-                name="username"
-                type="text"
+                name='username'
+                type='text'
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
                 required
               />
             </label>
             <label>
-              {" "}
+              {' '}
               Email:
               <input
-                name="email"
-                type="text"
+                name='email'
+                type='text'
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
               />
             </label>
             <label>
-              {" "}
+              {' '}
               Password:
               <input
-                name="password"
-                type="password"
+                name='password'
+                type='password'
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
