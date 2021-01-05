@@ -1,11 +1,13 @@
-import { React, useState, useEffect } from 'react';
-import { auth, provider, firebase } from '../FirebaseConfig.js';
+import { React, useState, useEffect } from "react";
+import { auth, provider } from "../FirebaseConfig";
+import firebase from "../FirebaseConfig.js";
 
 const Login = (props) => {
   //state stuff
   const [showSignup, setShowSignup] = useState(false);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // google login functionality
   const googleLogin = () => {
@@ -39,6 +41,27 @@ const Login = (props) => {
     }
   };
 
+  const handleSignIn = (event) => {
+    event.preventDefault();
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log(user);
+        const { displayName, uid } = firebase.auth().currentUser;
+        props.setId(uid);
+        props.setLoggedIn(true);
+        props.setUsername(displayName);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+      });
+    // reset the input values to empty string
+  };
+
   //onchange
 
   // const handleChange = (event) => {
@@ -49,42 +72,59 @@ const Login = (props) => {
   // };
 
   return (
-    <div className='loginPage'>
-      <h2 className='loginpageTitle'>LOGIN PAGE</h2>
-      <div className='googleLoginContainer'>
-        <button className='loginLink' onClick={googleLogin}>
+    <div className="loginPage">
+      <h2 className="loginpageTitle">LOGIN PAGE</h2>
+      <div className="googleLoginContainer">
+        <button className="loginLink" onClick={googleLogin}>
           Sign In With Google
         </button>
       </div>
-      <div className='signupButtonContainer'>
-        <button className='toggeSignupButton' onClick={toggleShowSignup}>
-          {showSignup ? 'hide signup' : 'show signup'}
+      <div className="signupButtonContainer">
+        <button className="toggleSignupButton" onClick={toggleShowSignup}>
+          {showSignup ? "hide signup" : "show signup"}
         </button>
       </div>
       {showSignup && (
-        <div className='signupFormContainer'>
+        <div className="signupFormContainer">
           <form>
             <label>
-              {' '}
-              Username
+              {" "}
+              Username:
               <input
-                name='username'
-                type='text'
+                name="username"
+                type="text"
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
               />
             </label>
             <label>
-              {' '}
-              email
+              {" "}
+              Email:
               <input
-                name='email'
-                type='text'
+                name="email"
+                type="text"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
             </label>
+            <label>
+              {" "}
+              Password:
+              <input
+                name="password"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </label>
           </form>
+          <button
+            onClick={() => {
+              handleSignIn();
+            }}
+          >
+            Create Account
+          </button>
         </div>
       )}
     </div>
