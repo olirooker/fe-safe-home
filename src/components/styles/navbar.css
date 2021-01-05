@@ -3,4 +3,14 @@
   margin-top: 50px;
   display: flex;
   align-items: center;
+  justify-content: space-around;
+  outline: solid green 2px;
+  width: 100vw;
+}
+
+.navButton {
+  outline: solid black 2px;
+  text-decoration: none;
+  width: 30%;
+  text-align: center;
 }

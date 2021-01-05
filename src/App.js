@@ -20,10 +20,18 @@ import "./components/styles/loginPage.css";
 import "./components/styles/travelAdvice.css";
 import "./components/styles/userProfile.css";
 import "./components/styles/navbar.css";
+import "./components/styles/error.css";
 import { auth, provider } from "./FirebaseConfig";
 import Navbar from "./components/Navbar";
+import ErrorMessage from "./components/ErrorMessage";
 
 function App() {
+  // state stuff
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
   // componentDidMount to check local storage for logged in state
   useEffect(() => {
     const localLoggedIn = localStorage.getItem("loggedIn");
@@ -35,19 +43,12 @@ function App() {
     //     setIsLoggedIn(true);
     //   }
     // });
-    navigate("/main");
     setIsLoading(false);
   }, []);
 
   // dark mode stuff
   const [theme, themeToggler, mountedComponent] = useDarkMode();
   const themeMode = theme === "light" ? lightTheme : darkTheme;
-
-  // state stuff
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useState("");
-  const [userName, setUserName] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
   // method to toggle isLoggedIn in state
   const setLoggedIn = () => {
@@ -71,8 +72,8 @@ function App() {
     auth.signOut().then(() => {
       localStorage.setItem("loggedIn", "false");
       setIsLoggedIn(false);
+      navigate("/");
     });
-    navigate("/");
   };
 
   console.log(isLoggedIn, "<<isLoggedIn");
@@ -112,10 +113,12 @@ function App() {
             ) : (
               <>
                 <Navbar />
+
                 <Router>
                   <Main path="/main" />
                   <UserProfile path="/user-profile" />
                   <TravelAdvice path="/travel-advice" />
+                  <ErrorMessage msg="Page not found" code="404" default />
                 </Router>
               </>
             )}

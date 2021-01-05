@@ -1,3 +1,4 @@
+import { navigate } from "@reach/router";
 import { React, useState, useEffect } from "react";
 import { auth, provider } from "../FirebaseConfig";
 import firebase from "../FirebaseConfig.js";
@@ -20,6 +21,7 @@ const Login = (props) => {
         props.setId(uid);
         props.setLoggedIn(true);
         props.setUsername(displayName);
+        navigate("/main");
       })
       .catch((error) => {
         // Handle Errors here.
@@ -56,6 +58,7 @@ const Login = (props) => {
         props.setId(uid);
         props.setLoggedIn(true);
         props.setUsername(username);
+        navigate("/main");
       })
       .catch((error) => {
         const errorCode = error.code;
