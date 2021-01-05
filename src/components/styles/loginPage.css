@@ -8,3 +8,7 @@
   justify-items: center;
   margin: 0 auto;
 }
+
+.loginError {
+  color: red;
+}

@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function Main(props) {
-  return <div className="mainContent">Main Page</div>;
+  return <div className='mainContent'>MAIN</div>;
 }
 
 export default Main;
