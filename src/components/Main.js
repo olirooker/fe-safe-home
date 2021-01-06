@@ -1,10 +1,14 @@
 import React from "react";
-import Map from "./Map";
+import { LoadScript } from "@react-google-maps/api";
 
 function Main(props) {
+  const API_KEY = process.env.REACT_APP_API_KEY;
   return (
     <div className="mainContent">
-      <Map></Map>
+      <LoadScript
+        googleMapsApiKey={API_KEY}
+        libraries={["visualization"]}
+      ></LoadScript>
     </div>
   );
 }

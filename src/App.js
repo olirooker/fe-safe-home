@@ -21,6 +21,7 @@ import './components/styles/travelAdvice.css';
 import './components/styles/userProfile.css';
 import './components/styles/navbar.css';
 import './components/styles/error.css';
+import './components/styles/signInEmail.css';
 import { auth, provider } from './FirebaseConfig';
 import Navbar from './components/Navbar';
 import ErrorMessage from './components/ErrorMessage';
