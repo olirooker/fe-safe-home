@@ -1,3 +1,4 @@
+
 import React from "react";
 import { LoadScript } from "@react-google-maps/api";
 
@@ -11,6 +12,7 @@ function Main(props) {
       ></LoadScript>
     </div>
   );
+
 }
 
 export default Main;
