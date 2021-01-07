@@ -1,14 +1,14 @@
 .loginPage {
-  padding-top: 50px;
-  text-align: center;
+    padding-top: 50px;
+    text-align: center;
 }
 
 .signupFormContainer input {
-  display: flex;
-  justify-items: center;
-  margin: 0 auto;
+    display: flex;
+    justify-items: center;
+    margin: 0 auto;
 }
 
 .loginError {
-  color: red;
+    color: red;
 }
