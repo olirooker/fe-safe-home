@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState, useContext, createContext, useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { useDarkMode } from './components/useDarkMode'
 import { GlobalStyles } from './components/Globalstyle'
@@ -23,6 +23,7 @@ import './components/styles/navbar.css'
 import './components/styles/error.css'
 import './components/styles/signInEmail.css'
 import { auth, provider } from './FirebaseConfig'
+import firebase from './FirebaseConfig.js'
 import Navbar from './components/Navbar'
 import ErrorMessage from './components/ErrorMessage'
 
@@ -32,6 +33,7 @@ function App() {
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
     const [isLoading, setIsLoading] = useState(true)
+    const [isNewUser, setIsNewUser] = useState(false)
 
     // componentDidMount to check local storage for logged in state
     useEffect(() => {
@@ -39,14 +41,15 @@ function App() {
         if (localLoggedIn === 'true') {
             setIsLoggedIn(true)
         }
-        // auth.onAuthStateChanged((user) => {
-        //   if (user) {
-        //     setIsLoggedIn(true);
-        //   }
-        // });
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                setUserId(user.uid)
+            }
+        })
+
         setIsLoading(false)
     }, [])
-
+    console.log(userId, 'user ID in app')
     // dark mode stuff
     const [theme, themeToggler, mountedComponent] = useDarkMode()
     const themeMode = theme === 'light' ? lightTheme : darkTheme
@@ -77,8 +80,11 @@ function App() {
         })
     }
 
+    // method to check if current user is new to app
+
     // console.log(isLoggedIn, '<<isLoggedIn');
     console.log(theme, 'newTheme')
+    console.log(isNewUser, 'isNewuser')
     if (!mountedComponent) return <div />
     return (
         // dark mode styled components wrapper
@@ -89,8 +95,8 @@ function App() {
                 {isLoading ? (
                     <Loading />
                 ) : (
-                    <div className="App">
-                        <div className="headerContainer">
+                    <div className='App'>
+                        <div className='headerContainer'>
                             <Toggle theme={theme} toggleTheme={themeToggler} />
                             <Header />
                             {/* render logout button only when user logged in */}
@@ -109,19 +115,24 @@ function App() {
                                 setId={setId}
                                 setLoggedIn={setLoggedIn}
                                 setUsername={setUsername}
-                                path="/"
+                                setIsNewUser={setIsNewUser}
+                                path='/'
                             />
                         ) : (
                             <>
                                 <Navbar />
 
                                 <Router>
-                                    <Main path="/main" theme={theme} />
-                                    <UserProfile path="/user-profile" />
-                                    <TravelAdvice path="/travel-advice" />
+                                    <Main path='/main' theme={theme} />
+                                    <UserProfile
+                                        path='/user-profile'
+                                        userId={userId}
+                                        isNewUser={isNewUser}
+                                    />
+                                    <TravelAdvice path='/travel-advice' />
                                     <ErrorMessage
-                                        msg="Page not found"
-                                        code="404"
+                                        msg='Page not found'
+                                        code='404'
                                         default
                                     />
                                 </Router>
