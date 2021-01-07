@@ -4,6 +4,7 @@ import {
   DirectionsRenderer,
   DirectionsService,
   HeatmapLayer,
+  DistanceMatrixService,
 } from "@react-google-maps/api";
 import { useRef, useEffect, useState } from "react";
 import { modeNightStyle, modeDayStyle } from "./styles/MapNightMode";
@@ -18,6 +19,9 @@ const Map = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [hasError, setError] = useState(false);
   const [messageError, setMessage] = useState("");
+  const [duration, setDuration] = useState("");
+  const [distance, setDistance] = useState("");
+  const [route, setRoute] = useState(false);
   const getOrigin = useRef("");
   const getDestination = useRef("");
 
@@ -62,6 +66,16 @@ const Map = (props) => {
       } else {
         console.log(response, "response");
       }
+    }
+  };
+
+  const callbackDistanceService = (response, status) => {
+    if (status === "OK" && response) {
+      console.log("status");
+      console.log("response", response);
+      //   setDuration(response.rows[0].elements[0].duration.text);
+      //   setDistance(response.rows[0].elements[0].distance.text);
+      //   setRoute(true);
     }
   };
 
@@ -114,6 +128,14 @@ const Map = (props) => {
                 new window.google.maps.LatLng(37.785, -122.435),
               ]}
             />
+            <DistanceMatrixService
+              options={{
+                destinations: [destination],
+                origins: [origin],
+                travelMode: "WALKING",
+              }}
+              callback={callbackDistanceService}
+            />
           </GoogleMap>
         </div>
       )}
@@ -152,6 +174,11 @@ const Map = (props) => {
         <button className="btn btn-primary" type="button" onClick={onClick}>
           Build Route
         </button>
+        {route && (
+          <p>
+            Duration: {duration}, Distance: {distance}
+          </p>
+        )}
       </div>
     </div>
   );
