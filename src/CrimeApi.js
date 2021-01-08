@@ -1,7 +1,7 @@
 const axios = require('axios')
 const crimeApi = axios.create({ baseURL: 'https://data.police.uk/api' })
 const types = ['robbery', 'violence-crime', 'other-crime']
-export const getCrimesByLocation = async (lat, lng, type) => {
+export const getCrimesByLocation = async (lat, lng) => {
     const data = await Promise.all(
         types.map((type) => {
             return crimeApi.get(
