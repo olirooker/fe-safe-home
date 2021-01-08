@@ -34,7 +34,8 @@ function App() {
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
     const [isLoading, setIsLoading] = useState(true)
-    const [isNewUser, setIsNewUser] = useState(false)
+    // isNewUser set to null because we either want true or false to come from Firebase or after we tell it after they submit their details in UserProfile
+    const [isNewUser, setIsNewUser] = useState(null)
 
     // componentDidMount to check local storage for logged in state
     useEffect(() => {
@@ -50,7 +51,7 @@ function App() {
 
         setIsLoading(false)
     }, [])
-    console.log(userId, 'user ID in app')
+    // console.log(userId, 'user ID in app')
     // dark mode stuff
     const [theme, themeToggler, mountedComponent] = useDarkMode()
     const themeMode = theme === 'light' ? lightTheme : darkTheme
@@ -84,8 +85,8 @@ function App() {
     // method to check if current user is new to app
 
     // console.log(isLoggedIn, '<<isLoggedIn');
-    console.log(theme, 'newTheme')
-    console.log(isNewUser, 'isNewuser')
+    // console.log(theme, 'newTheme')
+    // console.log(isNewUser, 'isNewuser')
     if (!mountedComponent) return <div />
     return (
         // dark mode styled components wrapper
@@ -133,6 +134,7 @@ function App() {
                                         path='/user-profile'
                                         userId={userId}
                                         isNewUser={isNewUser}
+                                        setIsNewUser={setIsNewUser}
                                         userName={userName}
                                     />
                                     <TravelAdvice path='/travel-advice' />

@@ -1,12 +1,12 @@
 import { React, useState, useEffect, useContext } from 'react'
-import { getUsers, postNewUser } from './backendApi'
+import { postNewUser } from './backendApi'
 import Loading from './Loading'
 
 function UserProfile(props) {
-    const [firebaseUid, setFirebaseUid] = useState('')
-    const [users, setUsers] = useState({})
+    // const [firebaseUid, setFirebaseUid] = useState('')
+    // const [users, setUsers] = useState({})
     const [isLoading, setIsLoading] = useState(true)
-    const [isNewUser, setIsNewUser] = useState(false)
+    // const [isNewUser, setIsNewUser] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [userName, setUserName] = useState('')
@@ -19,15 +19,15 @@ function UserProfile(props) {
 
     // set state
     useEffect(() => {
-        setFirebaseUid(props.userId)
+        // setFirebaseUid(props.userId)
+        // setIsNewUser(props.isNewUser)
+
         setIsLoading(false)
-        setIsNewUser(props.isNewUser)
     }, [userData])
 
-    console.log(firebaseUid, 'UID')
+    // console.log(firebaseUid, 'UID')
 
     const handleNewUserSubmit = (event) => {
-        console.log('hello')
         event.preventDefault()
         const newUser = {
             first_name: firstName,
@@ -42,15 +42,15 @@ function UserProfile(props) {
         }
         postNewUser(newUser).then((newUser) => {
             setUserData(newUser)
+            props.setIsNewUser(false)
         })
-        setIsNewUser(false)
     }
 
     return (
         <div className='userProfileContent'>
             {isLoading ? (
                 <Loading />
-            ) : isNewUser ? (
+            ) : props.isNewUser ? (
                 <>
                     <h2>New User Profile</h2>
                     <form
