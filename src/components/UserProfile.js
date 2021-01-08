@@ -1,12 +1,12 @@
 import { React, useState, useEffect, useContext } from 'react'
-import { getUsers, postNewUser } from './backendApi'
+import { getUserByUid, getUsers, postNewUser } from './backendApi'
 import Loading from './Loading'
 
 function UserProfile(props) {
-    const [firebaseUid, setFirebaseUid] = useState('')
-    const [users, setUsers] = useState({})
+    // const [firebaseUid, setFirebaseUid] = useState('')
+    // const [users, setUsers] = useState({})
     const [isLoading, setIsLoading] = useState(true)
-    const [isNewUser, setIsNewUser] = useState(false)
+    //const [isNewUser, setIsNewUser] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [userName, setUserName] = useState('')
@@ -15,16 +15,27 @@ function UserProfile(props) {
     const [streetName, setStreetName] = useState('')
     const [postCode, setPostCode] = useState('')
     const [city, setCity] = useState('')
-    const [userData, setUserData] = useState('')
+    const [userData, setUserData] = useState({})
 
     // set state
     useEffect(() => {
-        setFirebaseUid(props.userId)
+        // setFirebaseUid(props.userId)
+        console.log(props.userId)
         setIsLoading(false)
-        setIsNewUser(props.isNewUser)
+        if (!userData && !props.isNewUser) {
+            console.log(props.userId)
+            getUserByUid(props.userId).then((user) => {
+                setUserData(user)
+            })
+        }
+        // const localUser = localStorage.getItem('localUserData')
+        // if (localUser) {
+        //     setUserData('newUser')
+        // }
+        // setIsNewUser(props.isNewUser)
     }, [userData])
 
-    console.log(firebaseUid, 'UID')
+    // console.log(firebaseUid, 'UID')
 
     const handleNewUserSubmit = (event) => {
         console.log('hello')
@@ -42,15 +53,16 @@ function UserProfile(props) {
         }
         postNewUser(newUser).then((newUser) => {
             setUserData(newUser)
+            props.setIsNewUser(false)
         })
-        setIsNewUser(false)
+        // localStorage.setItem('localUserData', 'userData')
     }
 
     return (
         <div className='userProfileContent'>
             {isLoading ? (
                 <Loading />
-            ) : isNewUser ? (
+            ) : props.isNewUser ? (
                 <>
                     <h2>New User Profile</h2>
                     <form
@@ -169,14 +181,14 @@ function UserProfile(props) {
                         <Loading />
                     ) : (
                         <div>
-                            <p>First Name: {userData.newUser.first_name}</p>
-                            <p>Last Name: {userData.newUser.last_name}</p>
-                            <p>User Name: {userData.newUser.username}</p>
-                            <p>Phone Number: {userData.newUser.phone_number}</p>
-                            <p>House Number: {userData.newUser.house_number}</p>
-                            <p>Street Name: {userData.newUser.street_name}</p>
-                            <p>Post Code: {userData.newUser.postcode}</p>
-                            <p>City: {userData.newUser.city}</p>
+                            <p>First Name: {userData.user.first_name}</p>
+                            <p>Last Name: {userData.user.last_name}</p>
+                            <p>User Name: {userData.user.username}</p>
+                            <p>Phone Number: {userData.user.phone_number}</p>
+                            <p>House Number: {userData.user.house_number}</p>
+                            <p>Street Name: {userData.user.street_name}</p>
+                            <p>Post Code: {userData.user.postcode}</p>
+                            <p>City: {userData.user.city}</p>
                         </div>
                     )}
                 </>
