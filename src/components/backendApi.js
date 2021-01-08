@@ -9,6 +9,12 @@ export const getUsers = async () => {
     return data.users
 }
 
+export const getUserByUid = async (uid) => {
+    const { data } = await newsApi.get(`/users/${uid}`)
+    console.log(data)
+    return data
+}
+
 export const postNewUser = async (newUser) => {
     try {
         const { data } = await newsApi.post('/users', { newUser })

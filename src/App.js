@@ -34,7 +34,7 @@ function App() {
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
     const [isLoading, setIsLoading] = useState(true)
-    const [isNewUser, setIsNewUser] = useState(false)
+    const [isNewUser, setIsNewUser] = useState(null)
 
     // componentDidMount to check local storage for logged in state
     useEffect(() => {
@@ -133,6 +133,7 @@ function App() {
                                         path='/user-profile'
                                         userId={userId}
                                         isNewUser={isNewUser}
+                                        setIsNewUser={setIsNewUser}
                                         userName={userName}
                                     />
                                     <TravelAdvice path='/travel-advice' />
