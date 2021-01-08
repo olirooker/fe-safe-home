@@ -23,3 +23,8 @@ export const postNewUser = async (newUser) => {
         console.log(error)
     }
 }
+
+export const getContactsByUid = async (uid) => {
+    const { data } = await newsApi.get(`/users/${uid}/contacts`)
+    return data
+}

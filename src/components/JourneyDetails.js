@@ -9,14 +9,7 @@ function JourneyDetails(props) {
     const [travelCompanion, setTravelCompanion] = useState('')
     const [other, setOther] = useState('')
 
-    useEffect(() => {
-        console.log(travelMode)
-        console.log(taxiReg)
-        console.log(busService)
-        console.log(trainService)
-        console.log(travelCompanion)
-        console.log(other)
-    }, [travelMode, taxiReg, busService, trainService, travelCompanion, other])
+    // const saveDetails
 
     return (
         <div className='journeyContent'>

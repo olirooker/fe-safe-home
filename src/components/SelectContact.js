@@ -1,10 +1,25 @@
 import { React, useState, useEffect } from 'react'
+import { getContactsByUid } from './backendApi'
 
 function SelectContact(props) {
     const [chosenContact, setChosenContact] = useState({})
     const [contacts, setContacts] = useState([])
+    const [apiCalled, setApiCalled] = useState(false)
 
-    useEffect(() => {})
+    useEffect(() => {
+        if (!apiCalled) {
+            fetchAllContacts()
+        }
+    }, [])
+
+    // uid is hard coded
+    const fetchAllContacts = () => {
+        getContactsByUid('ouq2Vs5hq4afIZiEBV0wIUb8Fk03').then((response) => {
+            console.log(response.contacts, 'contacts')
+            setContacts(response.contacts)
+            setApiCalled(true)
+        })
+    }
 
     return (
         <div>
@@ -17,10 +32,13 @@ function SelectContact(props) {
                         setChosenContact(event.target.value)
                     }}
                 >
-                    <option value='walking'>walking</option>
-                    <option value='taxi'>taxi</option>
-                    <option value='bus'>bus</option>
-                    <option value='other'>other</option>
+                    {contacts.map((contact) => {
+                        return (
+                            <option value={contact.first_name}>
+                                {contact.first_name}
+                            </option>
+                        )
+                    })}
                 </select>
             </label>
         </div>

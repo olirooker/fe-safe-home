@@ -11,13 +11,16 @@ function Main(props) {
     const API_KEY = process.env.REACT_APP_API_KEY
 
     const [journeyDetails, setDetails] = useState({})
+    const [transportDetails, setTransportDetails] = useState({})
+    const [selectedContact, setSelectedContact] = useState({})
+    const [peopleWith, setPeopleWith] = useState({})
     const [userId, setUserId] = useState('')
 
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
         console.log(journeyDetails, 'journeyDetails')
         setUserId(props.userId)
-    }, [journeyDetails])
+    }, [])
 
     // sets the state to the required details
     const saveDetails = (origin, destination, duration, distance, centre) => {
@@ -42,6 +45,9 @@ function Main(props) {
         }
     }
 
+    const saveDetailsClick = () => {}
+    const startJourneyClick = () => {}
+
     return (
         <div className='mainContent'>
             <LoadScript
@@ -51,10 +57,22 @@ function Main(props) {
                 <Map theme={props.theme} saveDetails={saveDetails} />
             </LoadScript>
             <div className='messageContent'>
-                <WhoYouWith />
-                <JourneyDetails journeyDetails={journeyDetails} />
-                <SelectContact userId={props.userId} />
+                <WhoYouWith savePeople={setPeopleWith} />
+                <JourneyDetails saveTransport={setTransportDetails} />
+                <SelectContact
+                    userId={props.userId}
+                    saveContact={setSelectedContact}
+                />
+                <button
+                    className='saveDetailsButton'
+                    onClick={saveDetailsClick}
+                >
+                    Save Details
+                </button>
             </div>
+            <button className='startJourneyButton' onClick={startJourneyClick}>
+                Start Journey
+            </button>
         </div>
     )
 }
