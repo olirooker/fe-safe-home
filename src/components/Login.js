@@ -1,10 +1,11 @@
 import { navigate } from '@reach/router'
 import { React, useState, useEffect } from 'react'
-import { auth, provider } from '../FirebaseConfig'
+import { auth, google, facebook } from '../FirebaseConfig'
 import firebase from '../FirebaseConfig.js'
 import SignInEmail from './SignInEmail'
 import GoogleLogin from './GoogleLogin'
 import SignupForm from './SignupForm'
+import FacebookLogin from './FacebookLogin'
 
 const Login = (props) => {
     //state stuff
@@ -40,11 +41,35 @@ const Login = (props) => {
 
     // google login functionality
     const googleLogin = () => {
-        auth.signInWithPopup(provider)
+        auth.signInWithPopup(google)
             .then((result) => {
                 const newUser = result.additionalUserInfo.isNewUser
                 const uid = result.user.uid
                 const displayName = result.user.displayName
+                //use methods on props to change state in App.js
+                props.setId(uid)
+                props.setLoggedIn(true)
+                props.setUsername(displayName)
+                props.setIsNewUser(newUser)
+                navigate('/main')
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code
+                const errorMessage = error.message
+                setErrorMessage(errorMessage)
+                setLoginError(true)
+            })
+    }
+    // google login functionality
+    const facebookLogin = () => {
+        console.log('clicked')
+        auth.signInWithPopup(facebook)
+            .then((result) => {
+                const newUser = result.additionalUserInfo.isNewUser
+                const uid = result.user.uid
+                const displayName = result.user.displayName
+                console.log(result)
                 //use methods on props to change state in App.js
                 props.setId(uid)
                 props.setLoggedIn(true)
@@ -105,6 +130,8 @@ const Login = (props) => {
             <SignInEmail signInEmail={signInEmail} />
 
             <GoogleLogin googleLogin={googleLogin} />
+
+            <FacebookLogin facebookLogin={facebookLogin} />
 
             <div className='signupButtonContainer'>
                 <button
