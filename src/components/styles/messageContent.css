@@ -1,0 +1,19 @@
+.messageContent {
+    margin-top: 50px;
+    outline: solid blue 2px;
+}
+
+.journeyContent {
+    outline: solid red 2px;
+    margin: 10px;
+}
+
+.whoYouWithContent {
+    outline: solid green 2px;
+    margin: 10px;
+}
+
+.whoYouWithForm {
+    display: flex;
+    flex-direction: column;
+}
