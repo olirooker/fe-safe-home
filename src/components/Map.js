@@ -10,9 +10,10 @@ import { useRef, useEffect, useState } from 'react'
 import { modeNightStyle, modeDayStyle } from './styles/MapNightMode'
 import Loading from './Loading'
 import { getCrimesByLocation } from '../CrimeApi'
+import { getOriginCoord } from '../geocodeApi'
 
 import axios from 'axios'
-
+import JourneyDetails from './JourneyDetails'
 
 const Map = (props) => {
     const [origin, setOrigin] = useState('')
@@ -27,6 +28,7 @@ const Map = (props) => {
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
+    const [isRouted, setIsRouted] = useState(false)
 
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
@@ -88,12 +90,13 @@ const Map = (props) => {
             setDuration(response.rows[0].elements[0].duration.text)
             setDistance(response.rows[0].elements[0].distance.text)
             setRoute(true)
+            props.saveDetails(origin, destination, duration, distance, centre)
         }
     }
 
     const onClickHeatMap = () => {
         if (typeof origin === 'string') {
-            getOriginCoord().then((response) => {
+            getOriginCoord(origin).then((response) => {
                 getCrimesByLocation(response.lat, response.lng).then(
                     (response) => {
                         const dataCrime = []
@@ -144,22 +147,6 @@ const Map = (props) => {
         } else {
             setShow(true)
         }
-    }
-
-    const getOriginCoord = () => {
-        return axios
-            .get(
-                `http://api.positionstack.com/v1/forward?access_key=f057bf6425c9fc6624f68f585db51741&query=${origin}`
-            )
-            .then((response) => {
-                const coordinates = {
-                    lat: response.data.data[0].latitude.toString(),
-                    lng: response.data.data[0].longitude.toString(),
-                }
-                // console.log(coordinates, 'coordinates')
-                // setOrigin(coordinates)
-                return coordinates
-            })
     }
 
     return (
