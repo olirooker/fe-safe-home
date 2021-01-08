@@ -15,14 +15,14 @@ function UserProfile(props) {
     const [streetName, setStreetName] = useState('')
     const [postCode, setPostCode] = useState('')
     const [city, setCity] = useState('')
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState('')
 
     // set state
     useEffect(() => {
         setFirebaseUid(props.userId)
         setIsLoading(false)
         setIsNewUser(props.isNewUser)
-    }, [])
+    }, [userData])
 
     console.log(firebaseUid, 'UID')
 
@@ -163,7 +163,23 @@ function UserProfile(props) {
                     </form>
                 </>
             ) : (
-                <>User Profile</>
+                <>
+                    <h2>User Profile</h2>
+                    {!userData ? (
+                        <Loading />
+                    ) : (
+                        <div>
+                            <p>First Name: {userData.newUser.first_name}</p>
+                            <p>Last Name: {userData.newUser.last_name}</p>
+                            <p>User Name: {userData.newUser.username}</p>
+                            <p>Phone Number: {userData.newUser.phone_number}</p>
+                            <p>House Number: {userData.newUser.house_number}</p>
+                            <p>Street Name: {userData.newUser.street_name}</p>
+                            <p>Post Code: {userData.newUser.postcode}</p>
+                            <p>City: {userData.newUser.city}</p>
+                        </div>
+                    )}
+                </>
             )}
         </div>
     )

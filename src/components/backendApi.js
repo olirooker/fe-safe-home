@@ -12,8 +12,6 @@ export const getUsers = async () => {
 export const postNewUser = async (newUser) => {
     try {
         const { data } = await newsApi.post('/users', { newUser })
-        console.log(data)
-        console.log(data.newUser)
         return data
     } catch (error) {
         console.log(error)
