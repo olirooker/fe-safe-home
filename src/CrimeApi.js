@@ -1,8 +1,7 @@
 const axios = require('axios')
 const crimeApi = axios.create({ baseURL: 'https://data.police.uk/api' })
-const latLng = { lat: 53.4808, lng: -2.2462 }
 const types = ['robbery', 'violence-crime', 'other-crime']
-const getCrimesByLocation = async (lat, lng, type) => {
+export const getCrimesByLocation = async (lat, lng) => {
     const data = await Promise.all(
         types.map((type) => {
             return crimeApi.get(
@@ -10,13 +9,14 @@ const getCrimesByLocation = async (lat, lng, type) => {
             )
         })
     )
-    const locations = data[0].data.map((crime) => {
-        return { lat: crime.location.latitude, lng: crime.location.longitude }
+    const locations = data.map((data) => {
+        const crimes = data.data.map((crime) => {
+            return {
+                lat: crime.location.latitude,
+                lng: crime.location.longitude,
+            }
+        })
+        return crimes
     })
-    console.log(locations, 'locations')
     return locations
 }
-const crimesArray = types.map(() => {
-    return getCrimesByLocation(latLng.lat, latLng.lng)
-})
-console.log(crimesArray)

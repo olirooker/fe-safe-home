@@ -9,6 +9,10 @@ import {
 import { useRef, useEffect, useState } from 'react'
 import { modeNightStyle, modeDayStyle } from './styles/MapNightMode'
 import Loading from './Loading'
+import { getCrimesByLocation } from '../CrimeApi'
+
+import axios from 'axios'
+
 
 const Map = (props) => {
     const [origin, setOrigin] = useState('')
@@ -21,6 +25,8 @@ const Map = (props) => {
     const [duration, setDuration] = useState('')
     const [distance, setDistance] = useState('')
     const [route, setRoute] = useState(false)
+    const [crimeData, setData] = useState([])
+    const [showHeatMap, setShow] = useState(false)
 
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
@@ -57,8 +63,10 @@ const Map = (props) => {
     const onClick = () => {
         if (getOrigin.current.value === '') {
             setOrigin(centre)
+            setRoute(false)
         } else {
             setOrigin(getOrigin.current.value)
+            setRoute(false)
         }
         setDestination(getDestination.current.value)
     }
@@ -83,18 +91,89 @@ const Map = (props) => {
         }
     }
 
+    const onClickHeatMap = () => {
+        if (typeof origin === 'string') {
+            getOriginCoord().then((response) => {
+                getCrimesByLocation(response.lat, response.lng).then(
+                    (response) => {
+                        const dataCrime = []
+                        if (response) {
+                            response.forEach((crimeArray) => {
+                                let max = 40
+                                if (crimeArray.length !== 0) {
+                                    if (crimeArray.length < max) {
+                                        crimeArray.forEach((element) => {
+                                            dataCrime.push(element)
+                                        })
+                                    } else {
+                                        for (let i = 0; i <= max; i++) {
+                                            dataCrime.push(crimeArray[i])
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                        setData(dataCrime)
+                    }
+                )
+            })
+        } else {
+            getCrimesByLocation(origin.lat, origin.lng).then((response) => {
+                const dataCrime = []
+                if (response) {
+                    response.forEach((crimeArray) => {
+                        let max = 40
+                        if (crimeArray.length !== 0) {
+                            if (crimeArray.length < max) {
+                                crimeArray.forEach((element) => {
+                                    dataCrime.push(element)
+                                })
+                            } else {
+                                for (let i = 0; i <= max; i++) {
+                                    dataCrime.push(crimeArray[i])
+                                }
+                            }
+                        }
+                    })
+                }
+                setData(dataCrime)
+            })
+        }
+        if (showHeatMap === true) {
+            setShow(false)
+        } else {
+            setShow(true)
+        }
+    }
+
+    const getOriginCoord = () => {
+        return axios
+            .get(
+                `http://api.positionstack.com/v1/forward?access_key=f057bf6425c9fc6624f68f585db51741&query=${origin}`
+            )
+            .then((response) => {
+                const coordinates = {
+                    lat: response.data.data[0].latitude.toString(),
+                    lng: response.data.data[0].longitude.toString(),
+                }
+                // console.log(coordinates, 'coordinates')
+                // setOrigin(coordinates)
+                return coordinates
+            })
+    }
+
     return (
         // the names of these classes are predetermined by the google api, they do not appear in any css file created by us
-        <div className="map">
+        <div className='map'>
             {/* display the message */}
             {hasError && <p>{messageError}</p>}
             {isLoading ? (
                 <Loading />
             ) : (
-                <div className="map-container">
+                <div className='map-container'>
                     {/* component */}
                     <GoogleMap
-                        id="direction-example"
+                        id='direction-example'
                         mapContainerStyle={{
                             height: '150px',
                             width: '100%',
@@ -129,24 +208,16 @@ const Map = (props) => {
                         )}
 
                         {/* render de heatmapping in the map, the coordinates have to be changed with the coordinates from the police api */}
-                        <HeatmapLayer
-                            data={[
-                                new window.google.maps.LatLng(37.782, -122.447),
-                                new window.google.maps.LatLng(37.782, -122.445),
-                                new window.google.maps.LatLng(37.782, -122.443),
-                                new window.google.maps.LatLng(37.782, -122.441),
-                                new window.google.maps.LatLng(37.782, -122.439),
-                                new window.google.maps.LatLng(37.782, -122.437),
-                                new window.google.maps.LatLng(37.782, -122.435),
-                                new window.google.maps.LatLng(37.785, -122.447),
-                                new window.google.maps.LatLng(37.785, -122.445),
-                                new window.google.maps.LatLng(37.785, -122.443),
-                                new window.google.maps.LatLng(37.785, -122.441),
-                                new window.google.maps.LatLng(37.785, -122.439),
-                                new window.google.maps.LatLng(37.785, -122.437),
-                                new window.google.maps.LatLng(37.785, -122.435),
-                            ]}
-                        />
+                        {showHeatMap && (
+                            <HeatmapLayer
+                                data={crimeData.map((location) => {
+                                    return new window.google.maps.LatLng(
+                                        location.lat,
+                                        location.lng
+                                    )
+                                })}
+                            />
+                        )}
 
                         {/* once the destination is defined and the request is not sended yet to the api, send the request */}
                         {destination !== '' && !route && (
@@ -163,40 +234,41 @@ const Map = (props) => {
                 </div>
             )}
             {/* form to add the origin and the destination and the button to render the route */}
-            <div className="map-settings">
-                <hr className="mt-0 mb-3" />
+            <div className='map-settings'>
+                <hr className='mt-0 mb-3' />
 
-                <div className="row">
-                    <div className="col-md-6 col-lg-4">
-                        <div className="form-group">
-                            <label htmlFor="ORIGIN">Origin</label>
+                <div className='row'>
+                    <div className='col-md-6 col-lg-4'>
+                        <div className='form-group'>
+                            <label htmlFor='ORIGIN'>Origin</label>
                             <br />
                             <input
-                                id="ORIGIN"
-                                className="form-control"
-                                type="text"
+                                id='ORIGIN'
+                                className='form-control'
+                                type='text'
                                 ref={getOrigin}
-                                placeholder="current location"
+                                placeholder='current location'
                             />
                         </div>
                     </div>
 
-                    <div className="col-md-6 col-lg-4">
-                        <div className="form-group">
-                            <label htmlFor="DESTINATION">Destination</label>
+                    <div className='col-md-6 col-lg-4'>
+                        <div className='form-group'>
+                            <label htmlFor='DESTINATION'>Destination</label>
                             <br />
                             <input
-                                id="DESTINATION"
-                                className="form-control"
-                                type="text"
+                                id='DESTINATION'
+                                className='form-control'
+                                type='text'
                                 ref={getDestination}
                             />
                         </div>
                     </div>
                 </div>
+                {/* button to create the route */}
                 <button
-                    className="btn btn-primary"
-                    type="button"
+                    className='btn btn-primary'
+                    type='button'
                     onClick={onClick}
                 >
                     Build Route
@@ -208,6 +280,14 @@ const Map = (props) => {
                         Duration: {duration}, Distance: {distance}
                     </p>
                 )}
+                {/* button to display crime markers */}
+                <button
+                    className='btn btn-primary'
+                    type='button'
+                    onClick={onClickHeatMap}
+                >
+                    {showHeatMap ? 'Hide Hot Spots' : 'Show Hot Spots'}
+                </button>
             </div>
         </div>
     )
