@@ -12,6 +12,7 @@ const Login = (props) => {
     const [loginError, setLoginError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
 
+    useEffect(() => {}, [])
     // sign in with email method
     const signInEmail = (email, password) => {
         firebase
@@ -20,7 +21,9 @@ const Login = (props) => {
             .then((result) => {
                 const uid = result.user.uid
                 const displayName = result.user.displayName
+                const newUser = result.additionalUserInfo.isNewUser
                 //use methods on props to change state in App.js
+                props.setIsNewUser(newUser)
                 props.setId(uid)
                 props.setLoggedIn(true)
                 props.setUsername(displayName)
@@ -39,12 +42,14 @@ const Login = (props) => {
     const googleLogin = () => {
         auth.signInWithPopup(provider)
             .then((result) => {
+                const newUser = result.additionalUserInfo.isNewUser
                 const uid = result.user.uid
                 const displayName = result.user.displayName
                 //use methods on props to change state in App.js
                 props.setId(uid)
                 props.setLoggedIn(true)
                 props.setUsername(displayName)
+                props.setIsNewUser(newUser)
                 navigate('/main')
             })
             .catch((error) => {
@@ -73,12 +78,14 @@ const Login = (props) => {
                 console.log(user)
                 const { uid } = firebase.auth().currentUser
                 const userInfo = firebase.auth().currentUser
+                const newUser = user.additionalUserInfo.isNewUser
                 userInfo.updateProfile({
                     displayName: username,
                 })
                 props.setId(uid)
                 props.setLoggedIn(true)
                 props.setUsername(username)
+                props.setIsNewUser(newUser)
                 navigate('/main')
             })
             .catch((error) => {
@@ -90,18 +97,18 @@ const Login = (props) => {
     }
 
     return (
-        <div className="loginPage">
-            <h2 className="loginpageTitle">LOGIN PAGE</h2>
+        <div className='loginPage'>
+            <h2 className='loginpageTitle'>LOGIN PAGE</h2>
 
-            {loginError && <div className="loginError">{errorMessage}</div>}
+            {loginError && <div className='loginError'>{errorMessage}</div>}
 
             <SignInEmail signInEmail={signInEmail} />
 
             <GoogleLogin googleLogin={googleLogin} />
 
-            <div className="signupButtonContainer">
+            <div className='signupButtonContainer'>
                 <button
-                    className="toggleSignupButton"
+                    className='toggleSignupButton'
                     onClick={toggleShowSignup}
                 >
                     {showSignup ? 'hide signup' : 'show signup'}
