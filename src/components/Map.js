@@ -9,6 +9,7 @@ import {
 import { useRef, useEffect, useState } from 'react'
 import { modeNightStyle, modeDayStyle } from './styles/MapNightMode'
 import Loading from './Loading'
+import getCrimesByLocation from '../CrimeApi'
 
 const Map = (props) => {
     const [origin, setOrigin] = useState('')
@@ -82,19 +83,24 @@ const Map = (props) => {
             setRoute(true)
         }
     }
+    const fetchCrimesByLocation = () => {
+        getCrimesByLocation().then((response) => {
+            console.log(response)
+        })
+    }
 
     return (
         // the names of these classes are predetermined by the google api, they do not appear in any css file created by us
-        <div className="map">
+        <div className='map'>
             {/* display the message */}
             {hasError && <p>{messageError}</p>}
             {isLoading ? (
                 <Loading />
             ) : (
-                <div className="map-container">
+                <div className='map-container'>
                     {/* component */}
                     <GoogleMap
-                        id="direction-example"
+                        id='direction-example'
                         mapContainerStyle={{
                             height: '150px',
                             width: '100%',
@@ -163,40 +169,40 @@ const Map = (props) => {
                 </div>
             )}
             {/* form to add the origin and the destination and the button to render the route */}
-            <div className="map-settings">
-                <hr className="mt-0 mb-3" />
+            <div className='map-settings'>
+                <hr className='mt-0 mb-3' />
 
-                <div className="row">
-                    <div className="col-md-6 col-lg-4">
-                        <div className="form-group">
-                            <label htmlFor="ORIGIN">Origin</label>
+                <div className='row'>
+                    <div className='col-md-6 col-lg-4'>
+                        <div className='form-group'>
+                            <label htmlFor='ORIGIN'>Origin</label>
                             <br />
                             <input
-                                id="ORIGIN"
-                                className="form-control"
-                                type="text"
+                                id='ORIGIN'
+                                className='form-control'
+                                type='text'
                                 ref={getOrigin}
-                                placeholder="current location"
+                                placeholder='current location'
                             />
                         </div>
                     </div>
 
-                    <div className="col-md-6 col-lg-4">
-                        <div className="form-group">
-                            <label htmlFor="DESTINATION">Destination</label>
+                    <div className='col-md-6 col-lg-4'>
+                        <div className='form-group'>
+                            <label htmlFor='DESTINATION'>Destination</label>
                             <br />
                             <input
-                                id="DESTINATION"
-                                className="form-control"
-                                type="text"
+                                id='DESTINATION'
+                                className='form-control'
+                                type='text'
                                 ref={getDestination}
                             />
                         </div>
                     </div>
                 </div>
                 <button
-                    className="btn btn-primary"
-                    type="button"
+                    className='btn btn-primary'
+                    type='button'
                     onClick={onClick}
                 >
                     Build Route
