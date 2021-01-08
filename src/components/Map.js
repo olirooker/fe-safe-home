@@ -9,7 +9,7 @@ import {
 import { useRef, useEffect, useState } from 'react'
 import { modeNightStyle, modeDayStyle } from './styles/MapNightMode'
 import Loading from './Loading'
-import getCrimesByLocation from '../CrimeApi'
+import { getCrimesByLocation } from '../CrimeApi'
 
 const Map = (props) => {
     const [origin, setOrigin] = useState('')
