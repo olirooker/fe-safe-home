@@ -22,6 +22,7 @@ import './components/styles/userProfile.css'
 import './components/styles/navbar.css'
 import './components/styles/error.css'
 import './components/styles/signInEmail.css'
+import './components/styles/messageContent.css'
 import { auth, provider } from './FirebaseConfig'
 import firebase from './FirebaseConfig.js'
 import Navbar from './components/Navbar'
@@ -123,7 +124,11 @@ function App() {
                                 <Navbar />
 
                                 <Router>
-                                    <Main path='/main' theme={theme} />
+                                    <Main
+                                        path='/main'
+                                        theme={theme}
+                                        userId={userId}
+                                    />
                                     <UserProfile
                                         path='/user-profile'
                                         userId={userId}
