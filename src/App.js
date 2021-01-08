@@ -128,6 +128,7 @@ function App() {
                                         path='/user-profile'
                                         userId={userId}
                                         isNewUser={isNewUser}
+                                        userName={userName}
                                     />
                                     <TravelAdvice path='/travel-advice' />
                                     <ErrorMessage
