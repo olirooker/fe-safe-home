@@ -19,18 +19,17 @@ function UserProfile(props) {
 
     // set state
     useEffect(() => {
-        // setFirebaseUid(props.userId)
-        // setIsNewUser(props.isNewUser)
-
-        // check if there is user info in the localStorage
-        if (!userData && !props.isNewUser) {
+        const localUserData = JSON.parse(localStorage.getItem('localUser'))
+        if (localUserData) {
+            setUserData(localUserData)
+        } else if (!userData && !props.isNewUser) {
             getUserByUid(props.userId).then((user) => {
                 setUserData(user)
-                // save user info to local storage here
+                localStorage.setItem('localUser', JSON.stringify(user))
             })
         }
         setIsLoading(false)
-    }, [userData])
+    }, [])
     // not sure if the userData in the array is needed
 
     // console.log(firebaseUid, 'UID')
@@ -50,6 +49,7 @@ function UserProfile(props) {
         }
         postNewUser(newUser).then((newUser) => {
             setUserData(newUser)
+            // also save newUser to localStorage
             props.setIsNewUser(false)
         })
     }
