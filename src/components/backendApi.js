@@ -17,3 +17,10 @@ export const postNewUser = async (newUser) => {
         console.log(error)
     }
 }
+
+export const getUserByUid = async (uid) => {
+    try {
+        const { data } = await newsApi.get(`/users/${uid}`)
+        return data
+    } catch (error) {}
+}

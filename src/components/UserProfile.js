@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useContext } from 'react'
-import { postNewUser } from './backendApi'
+import { getUserByUid, postNewUser } from './backendApi'
 import Loading from './Loading'
 
 function UserProfile(props) {
@@ -22,8 +22,16 @@ function UserProfile(props) {
         // setFirebaseUid(props.userId)
         // setIsNewUser(props.isNewUser)
 
+        // check if there is user info in the localStorage
+        if (!userData && !props.isNewUser) {
+            getUserByUid(props.userId).then((user) => {
+                setUserData(user)
+                // save user info to local storage here
+            })
+        }
         setIsLoading(false)
     }, [userData])
+    // not sure if the userData in the array is needed
 
     // console.log(firebaseUid, 'UID')
 
@@ -169,14 +177,14 @@ function UserProfile(props) {
                         <Loading />
                     ) : (
                         <div>
-                            <p>First Name: {userData.newUser.first_name}</p>
-                            <p>Last Name: {userData.newUser.last_name}</p>
-                            <p>User Name: {userData.newUser.username}</p>
-                            <p>Phone Number: {userData.newUser.phone_number}</p>
-                            <p>House Number: {userData.newUser.house_number}</p>
-                            <p>Street Name: {userData.newUser.street_name}</p>
-                            <p>Post Code: {userData.newUser.postcode}</p>
-                            <p>City: {userData.newUser.city}</p>
+                            <p>First Name: {userData.user.first_name}</p>
+                            <p>Last Name: {userData.user.last_name}</p>
+                            <p>User Name: {userData.user.username}</p>
+                            <p>Phone Number: {userData.user.phone_number}</p>
+                            <p>House Number: {userData.user.house_number}</p>
+                            <p>Street Name: {userData.user.street_name}</p>
+                            <p>Post Code: {userData.user.postcode}</p>
+                            <p>City: {userData.user.city}</p>
                         </div>
                     )}
                 </>
