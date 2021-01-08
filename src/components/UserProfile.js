@@ -19,20 +19,19 @@ function UserProfile(props) {
 
     // set state
     useEffect(() => {
+        // we don't need to change isLoading here
         const localUserData = JSON.parse(localStorage.getItem('localUser'))
         if (localUserData) {
             setUserData(localUserData)
+            setIsLoading(false)
         } else if (!userData && !props.isNewUser) {
             getUserByUid(props.userId).then((user) => {
                 setUserData(user)
                 localStorage.setItem('localUser', JSON.stringify(user))
+                setIsLoading(false)
             })
         }
-        setIsLoading(false)
     }, [])
-    // not sure if the userData in the array is needed
-
-    // console.log(firebaseUid, 'UID')
 
     const handleNewUserSubmit = (event) => {
         event.preventDefault()
@@ -47,8 +46,9 @@ function UserProfile(props) {
             city: city,
             uid: props.userId,
         }
-        postNewUser(newUser).then((newUser) => {
-            setUserData(newUser)
+        postNewUser(newUser).then((user) => {
+            setUserData(user)
+            localStorage.setItem('localUser', JSON.stringify(user))
             // also save newUser to localStorage
             props.setIsNewUser(false)
         })
@@ -56,6 +56,7 @@ function UserProfile(props) {
 
     return (
         <div className='userProfileContent'>
+            {/* why is this not stuck on load when you are a new user coming to the page for the first time? */}
             {isLoading ? (
                 <Loading />
             ) : props.isNewUser ? (
