@@ -62,6 +62,7 @@ function Main(props) {
         }
     }
 
+    // email sending function.
     const sendEmail = () => {
         init('user_woEvxk93zUEkrcs7jCTzE')
 
