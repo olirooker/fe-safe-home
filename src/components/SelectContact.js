@@ -33,7 +33,10 @@ function SelectContact(props) {
                 >
                     {contacts.map((contact) => {
                         return (
-                            <option value={contact.first_name}>
+                            <option
+                                value={contact.first_name}
+                                key={contact.first_name}
+                            >
                                 {contact.first_name}
                             </option>
                         )

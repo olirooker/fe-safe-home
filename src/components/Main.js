@@ -7,6 +7,9 @@ import { getAddressFromCoord } from '../geocodeApi'
 import WhoYouWith from './WhoYouWith'
 import SelectContact from './SelectContact'
 
+import { init } from 'emailjs-com'
+import emailjs from 'emailjs-com'
+
 function Main(props) {
     const API_KEY = process.env.REACT_APP_API_KEY
 
@@ -59,6 +62,28 @@ function Main(props) {
         }
     }
 
+    const sendEmail = () => {
+        init('user_woEvxk93zUEkrcs7jCTzE')
+
+        const templateParams = {
+            from_name: 'safe home test',
+            to_name: 'alan',
+            message: 'test message',
+            to_email: 'adfharrison@icloud.com',
+        }
+
+        emailjs
+            .send('default_service', 'template_u667pzk', templateParams)
+            .then(
+                function (response) {
+                    console.log('SUCCESS!', response.status, response.text)
+                },
+                function (error) {
+                    console.log('FAILED...', error)
+                }
+            )
+    }
+
     const saveDetailsClick = () => {
         if (savedDetails) {
             setSavedDetails(false)
@@ -70,6 +95,7 @@ function Main(props) {
         if (startedJourney) {
             setStartedJourney(false)
         } else {
+            sendEmail()
             setStartedJourney(true)
         }
     }
@@ -90,7 +116,7 @@ function Main(props) {
                 (savedDetails ? (
                     <div className='savedDetails'>
                         <p>
-                            People who you are with: {personOne} {personTwo}
+                            People who you are with: {personOne} {personTwo}{' '}
                             {personThree}
                         </p>
                         <p>Travel companion: {travelCompanion}</p>
@@ -103,11 +129,13 @@ function Main(props) {
                                 <ul>
                                     {Object.keys(journeyDetails).map(
                                         (detail) => {
-                                            return (
-                                                <li>
-                                                    {`${detail}: ${journeyDetails[detail]}`}
-                                                </li>
-                                            )
+                                            if (detail !== 'userLocation') {
+                                                return (
+                                                    <li>
+                                                        {`${detail}: ${journeyDetails[detail]}`}
+                                                    </li>
+                                                )
+                                            }
                                         }
                                     )}
                                 </ul>
