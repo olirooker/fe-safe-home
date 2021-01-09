@@ -1,9 +1,14 @@
 import { React, useState } from 'react'
 
 function WhoYouWith(props) {
-    const [personOne, setPersonOne] = useState('')
-    const [personTwo, setPersonTwo] = useState('')
-    const [personThree, setPersonThree] = useState('')
+    const {
+        savePersonOne,
+        personOne,
+        savePersonTwo,
+        personTwo,
+        savePersonThree,
+        personThree,
+    } = props
 
     return (
         <div className='whoYouWithContent'>
@@ -17,7 +22,7 @@ function WhoYouWith(props) {
                         type='text'
                         placeholder='personOne'
                         value={personOne}
-                        onChange={(event) => setPersonOne(event.target.value)}
+                        onChange={(event) => savePersonOne(event.target.value)}
                     />
                 </label>
                 <label>
@@ -27,7 +32,7 @@ function WhoYouWith(props) {
                         type='text'
                         placeholder='personTwo'
                         value={personTwo}
-                        onChange={(event) => setPersonTwo(event.target.value)}
+                        onChange={(event) => savePersonTwo(event.target.value)}
                     />
                 </label>
                 <label>
@@ -37,7 +42,9 @@ function WhoYouWith(props) {
                         type='text'
                         placeholder='personThree'
                         value={personThree}
-                        onChange={(event) => setPersonThree(event.target.value)}
+                        onChange={(event) =>
+                            savePersonThree(event.target.value)
+                        }
                     />
                 </label>
             </form>

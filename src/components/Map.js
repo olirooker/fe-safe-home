@@ -12,9 +12,6 @@ import Loading from './Loading'
 import { getCrimesByLocation } from '../CrimeApi'
 import { getOriginCoord } from '../geocodeApi'
 
-import axios from 'axios'
-import JourneyDetails from './JourneyDetails'
-
 const Map = (props) => {
     const [origin, setOrigin] = useState('')
     const [destination, setDestination] = useState('')
@@ -28,8 +25,7 @@ const Map = (props) => {
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
-    const [isRouted, setIsRouted] = useState(false)
-
+    const { theme, saveDetails, startedJourney } = props
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
     const getDestination = useRef('')
@@ -77,9 +73,10 @@ const Map = (props) => {
     const directionsCallback = (response) => {
         if (response !== null) {
             if (response.status === 'OK') {
+                console.log(response, 'response directions')
                 setResponse(response)
             } else {
-                console.log(response, 'response')
+                console.log(response, 'response directions')
             }
         }
     }
@@ -90,7 +87,7 @@ const Map = (props) => {
             setDuration(response.rows[0].elements[0].duration.text)
             setDistance(response.rows[0].elements[0].distance.text)
             setRoute(true)
-            props.saveDetails(origin, destination, duration, distance, centre)
+            saveDetails(origin, destination, duration, distance, centre)
         }
     }
 
@@ -161,14 +158,21 @@ const Map = (props) => {
                     {/* component */}
                     <GoogleMap
                         id='direction-example'
-                        mapContainerStyle={{
-                            height: '150px',
-                            width: '100%',
-                        }}
-                        zoom={13}
+                        mapContainerStyle={
+                            !startedJourney
+                                ? {
+                                      height: '150px',
+                                      width: '100%',
+                                  }
+                                : {
+                                      height: '100vh',
+                                      width: '100%',
+                                  }
+                        }
+                        zoom={startedJourney ? 50 : 13}
                         center={centre}
                         options={
-                            props.theme === 'light'
+                            theme === 'light'
                                 ? { styles: modeDayStyle }
                                 : { styles: modeNightStyle }
                         }
@@ -221,61 +225,63 @@ const Map = (props) => {
                 </div>
             )}
             {/* form to add the origin and the destination and the button to render the route */}
-            <div className='map-settings'>
-                <hr className='mt-0 mb-3' />
+            {!startedJourney && (
+                <div className='map-settings'>
+                    <hr className='mt-0 mb-3' />
 
-                <div className='row'>
-                    <div className='col-md-6 col-lg-4'>
-                        <div className='form-group'>
-                            <label htmlFor='ORIGIN'>Origin</label>
-                            <br />
-                            <input
-                                id='ORIGIN'
-                                className='form-control'
-                                type='text'
-                                ref={getOrigin}
-                                placeholder='current location'
-                            />
+                    <div className='row'>
+                        <div className='col-md-6 col-lg-4'>
+                            <div className='form-group'>
+                                <label htmlFor='ORIGIN'>Origin</label>
+                                <br />
+                                <input
+                                    id='ORIGIN'
+                                    className='form-control'
+                                    type='text'
+                                    ref={getOrigin}
+                                    placeholder='current location'
+                                />
+                            </div>
+                        </div>
+
+                        <div className='col-md-6 col-lg-4'>
+                            <div className='form-group'>
+                                <label htmlFor='DESTINATION'>Destination</label>
+                                <br />
+                                <input
+                                    id='DESTINATION'
+                                    className='form-control'
+                                    type='text'
+                                    ref={getDestination}
+                                />
+                            </div>
                         </div>
                     </div>
+                    {/* button to create the route */}
+                    <button
+                        className='btn btn-primary'
+                        type='button'
+                        onClick={onClick}
+                    >
+                        Build Route
+                    </button>
 
-                    <div className='col-md-6 col-lg-4'>
-                        <div className='form-group'>
-                            <label htmlFor='DESTINATION'>Destination</label>
-                            <br />
-                            <input
-                                id='DESTINATION'
-                                className='form-control'
-                                type='text'
-                                ref={getDestination}
-                            />
-                        </div>
-                    </div>
+                    {/* when we have the response from the request to the api and we get the duration and the distance, display in a paragraph */}
+                    {route && (
+                        <p>
+                            Duration: {duration}, Distance: {distance}
+                        </p>
+                    )}
+                    {/* button to display crime markers */}
+                    <button
+                        className='btn btn-primary'
+                        type='button'
+                        onClick={onClickHeatMap}
+                    >
+                        {showHeatMap ? 'Hide Hot Spots' : 'Show Hot Spots'}
+                    </button>
                 </div>
-                {/* button to create the route */}
-                <button
-                    className='btn btn-primary'
-                    type='button'
-                    onClick={onClick}
-                >
-                    Build Route
-                </button>
-
-                {/* when we have the response from the request to the api and we get the duration and the distance, display in a paragraph */}
-                {route && (
-                    <p>
-                        Duration: {duration}, Distance: {distance}
-                    </p>
-                )}
-                {/* button to display crime markers */}
-                <button
-                    className='btn btn-primary'
-                    type='button'
-                    onClick={onClickHeatMap}
-                >
-                    {showHeatMap ? 'Hide Hot Spots' : 'Show Hot Spots'}
-                </button>
-            </div>
+            )}
         </div>
     )
 }
