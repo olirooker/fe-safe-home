@@ -29,6 +29,7 @@ function JourneyDetails(props) {
                 >
                     <option value='walking'>walking</option>
                     <option value='taxi'>taxi</option>
+                    <option value='train'>train</option>
                     <option value='bus'>bus</option>
                     <option value='other'>other</option>
                 </select>
