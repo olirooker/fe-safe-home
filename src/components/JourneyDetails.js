@@ -1,15 +1,20 @@
 import { React, useState, useEffect } from 'react'
 
-// remember walking journey deatils are in props
 function JourneyDetails(props) {
-    const [travelMode, setTravelMode] = useState('walking')
-    const [taxiReg, setTaxiReg] = useState('')
-    const [busService, setBusService] = useState('')
-    const [trainService, setTrainService] = useState('')
-    const [travelCompanion, setTravelCompanion] = useState('')
-    const [other, setOther] = useState('')
-
-    // const saveDetails
+    const {
+        setTravelMode,
+        travelMode,
+        setTaxiReg,
+        taxiReg,
+        setBusService,
+        busService,
+        setTrainService,
+        trainService,
+        setTravelCompanion,
+        travelCompanion,
+        setOther,
+        other,
+    } = props
 
     return (
         <div className='journeyContent'>

@@ -11,14 +11,26 @@ function Main(props) {
     const API_KEY = process.env.REACT_APP_API_KEY
 
     const [journeyDetails, setDetails] = useState({})
-    const [transportDetails, setTransportDetails] = useState({})
-    const [selectedContact, setSelectedContact] = useState({})
-    const [peopleWith, setPeopleWith] = useState({})
     const [userId, setUserId] = useState('')
+
+    // details from journey details component
+    const [travelMode, setTravelMode] = useState('walking')
+    const [taxiReg, setTaxiReg] = useState('')
+    const [busService, setBusService] = useState('')
+    const [trainService, setTrainService] = useState('')
+    const [travelCompanion, setTravelCompanion] = useState('')
+    const [other, setOther] = useState('')
+
+    // contact selected from selectContact component
+    const [selectedContact, setSelectedContact] = useState({})
+
+    // details from whoYouWith component
+    const [personOne, setPersonOne] = useState('')
+    const [personTwo, setPersonTwo] = useState('')
+    const [personThree, setPersonThree] = useState('')
 
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
-        console.log(journeyDetails, 'journeyDetails')
         setUserId(props.userId)
     }, [])
 
@@ -45,7 +57,6 @@ function Main(props) {
         }
     }
 
-    const saveDetailsClick = () => {}
     const startJourneyClick = () => {}
 
     return (
@@ -57,18 +68,32 @@ function Main(props) {
                 <Map theme={props.theme} saveDetails={saveDetails} />
             </LoadScript>
             <div className='messageContent'>
-                <WhoYouWith savePeople={setPeopleWith} />
-                <JourneyDetails saveTransport={setTransportDetails} />
+                <WhoYouWith
+                    savePersonOne={setPersonOne}
+                    personOne={personOne}
+                    savePersonTwo={setPersonTwo}
+                    personTwo={personTwo}
+                    savePersonThree={setPersonThree}
+                    personThree={personThree}
+                />
+                <JourneyDetails
+                    setTravelMode={setTravelMode}
+                    travelMode={travelMode}
+                    setTaxiReg={setTaxiReg}
+                    taxiReg={taxiReg}
+                    setBusService={setBusService}
+                    busService={busService}
+                    setTrainService={setTrainService}
+                    trainService={trainService}
+                    setTravelCompanion={setTravelCompanion}
+                    travelCompanion={travelCompanion}
+                    setOther={setOther}
+                    other={other}
+                />
                 <SelectContact
                     userId={props.userId}
                     saveContact={setSelectedContact}
                 />
-                <button
-                    className='saveDetailsButton'
-                    onClick={saveDetailsClick}
-                >
-                    Save Details
-                </button>
             </div>
             <button className='startJourneyButton' onClick={startJourneyClick}>
                 Start Journey
