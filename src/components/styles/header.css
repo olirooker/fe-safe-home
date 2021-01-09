@@ -1,15 +1,23 @@
 .headerContainer {
     display: flex;
+    justify-content: space-between;
     width: 100%;
     align-items: center;
     position: fixed;
-
     outline: solid red 2px;
 }
 
+.HomeIcon {
+    max-height: 5vh;
+}
+
+.headerDiv {
+    width: 100%;
+    display: flex;
+}
+
 .headerContent {
-    outline: solid blue 2px;
     margin: 0 auto;
     text-align: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
