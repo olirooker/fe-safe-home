@@ -6,13 +6,34 @@ import {
     HeatmapLayer,
     DistanceMatrixService,
 } from '@react-google-maps/api'
-import { useRef, useEffect, useState } from 'react'
+import { React, useRef, useEffect, useState } from 'react'
 import { modeNightStyle, modeDayStyle } from './styles/MapNightMode'
 import Loading from './Loading'
 import { getCrimesByLocation } from '../CrimeApi'
 import { getOriginCoord } from '../geocodeApi'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Icon from '@material-ui/core/Icon'
+import HeatSwitch from './Switch'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+    },
+    button: {
+        margin: theme.spacing(1),
+        background: '#00A99D',
+    },
+}))
 
 const Map = (props) => {
+    const classes = useStyles()
     const [origin, setOrigin] = useState('')
     const [destination, setDestination] = useState('')
     const [response, setResponse] = useState(null)
@@ -29,6 +50,18 @@ const Map = (props) => {
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
     const getDestination = useRef('')
+
+    const [switchState, setSwitchState] = useState({
+        checkedB: false,
+    })
+
+    const handleSwitchChange = (event) => {
+        setSwitchState({
+            ...switchState,
+            [event.target.name]: event.target.checked,
+        })
+        onClickHeatMap()
+    }
 
     // asking permission to navigator to set location
     useEffect(() => {
@@ -227,44 +260,54 @@ const Map = (props) => {
             {/* form to add the origin and the destination and the button to render the route */}
             {!startedJourney && (
                 <div className='map-settings'>
-                    <hr className='mt-0 mb-3' />
-
+                    {/* <hr className='mt-0 mb-3' /> */}
                     <div className='row'>
                         <div className='col-md-6 col-lg-4'>
                             <div className='form-group'>
-                                <label htmlFor='ORIGIN'>Origin</label>
-                                <br />
-                                <input
-                                    id='ORIGIN'
-                                    className='form-control'
-                                    type='text'
-                                    ref={getOrigin}
-                                    placeholder='current location'
-                                />
+                                <form
+                                    className={classes.root}
+                                    noValidate
+                                    autoComplete='off'
+                                >
+                                    <TextField
+                                        id='ORIGIN'
+                                        label='Origin'
+                                        className='form-control'
+                                        variant='outlined'
+                                        placeholder='current location'
+                                        inputRef={getOrigin}
+                                    />
+                                </form>
                             </div>
                         </div>
-
                         <div className='col-md-6 col-lg-4'>
                             <div className='form-group'>
-                                <label htmlFor='DESTINATION'>Destination</label>
-                                <br />
-                                <input
-                                    id='DESTINATION'
-                                    className='form-control'
-                                    type='text'
-                                    ref={getDestination}
-                                />
+                                <form
+                                    className={classes.root}
+                                    noValidate
+                                    autoComplete='off'
+                                >
+                                    <TextField
+                                        id='DESTINATION'
+                                        label='Destination'
+                                        className='form-control'
+                                        variant='outlined'
+                                        inputRef={getDestination}
+                                    />
+                                </form>
                             </div>
                         </div>
                     </div>
                     {/* button to create the route */}
-                    <button
-                        className='btn btn-primary'
-                        type='button'
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        className={classes.button}
+                        endIcon={<Icon>send</Icon>}
                         onClick={onClick}
                     >
                         Build Route
-                    </button>
+                    </Button>
 
                     {/* when we have the response from the request to the api and we get the duration and the distance, display in a paragraph */}
                     {route && (
@@ -273,13 +316,30 @@ const Map = (props) => {
                         </p>
                     )}
                     {/* button to display crime markers */}
-                    <button
+                    <FormGroup className='switchContainer'>
+                        <FormControlLabel
+                            control={
+                                <HeatSwitch
+                                    checked={switchState.checkedB}
+                                    onChange={handleSwitchChange}
+                                    name='checkedB'
+                                />
+                            }
+                            label={
+                                showHeatMap
+                                    ? 'Hide Hot Spots'
+                                    : 'Show Hot Spots'
+                            }
+                        />
+                    </FormGroup>
+
+                    {/* <button
                         className='btn btn-primary'
                         type='button'
                         onClick={onClickHeatMap}
                     >
                         {showHeatMap ? 'Hide Hot Spots' : 'Show Hot Spots'}
-                    </button>
+                    </button> */}
                 </div>
             )}
         </div>

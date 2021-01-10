@@ -1,6 +1,9 @@
 .messageContent {
     margin-top: 10px;
-    outline: solid blue 2px;
+    background-color: rgba(128, 128, 128, 0.15);
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .journeyContent {

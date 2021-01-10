@@ -11,7 +11,6 @@ const LogoutButton = styled.button`
     justify-self: left;
     overflow: hidden;
     padding: 0.5rem;
-
     width: 4rem;
     height: 3rem;
 `

@@ -1,4 +1,15 @@
 import { React, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+    },
+}))
 
 function WhoYouWith(props) {
     const {
@@ -10,44 +21,47 @@ function WhoYouWith(props) {
         personThree,
     } = props
 
+    const classes = useStyles()
+
     return (
         <div className='whoYouWithContent'>
             <p className='whoYouWithTitle'>Who You With? </p>
-
-            <form className='whoYouWithForm'>
-                <label>
-                    person 1 :
-                    <input
+            <div className='whoYouWithForm'>
+                <form className={classes.root} noValidate autoComplete='off'>
+                    <TextField
+                        className='form-control'
+                        id='filled-basic'
+                        label='Person 1'
                         name='personOne'
                         type='text'
-                        placeholder='personOne'
                         value={personOne}
                         onChange={(event) => savePersonOne(event.target.value)}
+                        variant='filled'
                     />
-                </label>
-                <label>
-                    person 2 :
-                    <input
+                    <TextField
+                        className='form-control'
+                        id='filled-basic'
+                        label='Person 2'
                         name='personTwo'
                         type='text'
-                        placeholder='personTwo'
                         value={personTwo}
                         onChange={(event) => savePersonTwo(event.target.value)}
+                        variant='filled'
                     />
-                </label>
-                <label>
-                    person 3 :
-                    <input
+                    <TextField
+                        className='form-control'
+                        id='filled-basic'
+                        label='Person 3'
                         name='personThree'
                         type='text'
-                        placeholder='personThree'
                         value={personThree}
                         onChange={(event) =>
                             savePersonThree(event.target.value)
                         }
+                        variant='filled'
                     />
-                </label>
-            </form>
+                </form>
+            </div>
         </div>
     )
 }
