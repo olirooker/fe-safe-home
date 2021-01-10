@@ -1,10 +1,31 @@
 import { React, useState, useEffect } from 'react'
 import { getContactsByUid } from './backendApi'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+import { makeStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
 
 function SelectContact(props) {
     const [contacts, setContacts] = useState([])
     const [apiCalled, setApiCalled] = useState(false)
     const { saveContact } = props
+
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            '& > *': {
+                margin: theme.spacing(1),
+                width: '25ch',
+            },
+        },
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
+        },
+        selectEmpty: {
+            marginTop: theme.spacing(2),
+        },
+    }))
 
     useEffect(() => {
         if (!apiCalled) {
@@ -22,27 +43,34 @@ function SelectContact(props) {
 
     return (
         <div>
-            <label>
-                Select Emergency Contact
-                <select
-                    name='cars'
-                    id='cars'
+            <FormControl
+                variant='filled'
+                className='form-control'
+                style={{ minWidth: 224 }}
+            >
+                <InputLabel id='demo-simple-select-filled-label'>
+                    Select Emergency Contact
+                </InputLabel>
+                <Select
+                    labelId='demo-simple-select-filled-label'
+                    id='demo-simple-select-filled'
                     onChange={(event) => {
                         saveContact(event.target.value)
                     }}
+                    className='form-control'
                 >
                     {contacts.map((contact) => {
                         return (
-                            <option
+                            <MenuItem
                                 value={contact.first_name}
                                 key={contact.first_name}
                             >
                                 {contact.first_name}
-                            </option>
+                            </MenuItem>
                         )
                     })}
-                </select>
-            </label>
+                </Select>
+            </FormControl>
         </div>
     )
 }
