@@ -1,12 +1,12 @@
 import { React, useState, useEffect, useContext } from 'react'
-import { getUserByUid, getUsers, postNewUser } from './backendApi'
+import { getUserByUid, postNewUser } from './backendApi'
 import Loading from './Loading'
 
 function UserProfile(props) {
     // const [firebaseUid, setFirebaseUid] = useState('')
     // const [users, setUsers] = useState({})
     const [isLoading, setIsLoading] = useState(true)
-    //const [isNewUser, setIsNewUser] = useState(false)
+    // const [isNewUser, setIsNewUser] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [userName, setUserName] = useState('')
@@ -15,30 +15,25 @@ function UserProfile(props) {
     const [streetName, setStreetName] = useState('')
     const [postCode, setPostCode] = useState('')
     const [city, setCity] = useState('')
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState('')
 
     // set state
     useEffect(() => {
-        // setFirebaseUid(props.userId)
-        console.log(props.userId)
-        setIsLoading(false)
-        if (!userData && !props.isNewUser) {
-            console.log(props.userId)
+        // we don't need to change isLoading here
+        const localUserData = JSON.parse(localStorage.getItem('localUser'))
+        if (localUserData) {
+            setUserData(localUserData)
+            setIsLoading(false)
+        } else if (!userData && !props.isNewUser) {
             getUserByUid(props.userId).then((user) => {
                 setUserData(user)
+                localStorage.setItem('localUser', JSON.stringify(user))
+                setIsLoading(false)
             })
         }
-        // const localUser = localStorage.getItem('localUserData')
-        // if (localUser) {
-        //     setUserData('newUser')
-        // }
-        // setIsNewUser(props.isNewUser)
-    }, [userData])
-
-    // console.log(firebaseUid, 'UID')
+    }, [])
 
     const handleNewUserSubmit = (event) => {
-        console.log('hello')
         event.preventDefault()
         const newUser = {
             first_name: firstName,
@@ -51,15 +46,17 @@ function UserProfile(props) {
             city: city,
             uid: props.userId,
         }
-        postNewUser(newUser).then((newUser) => {
-            setUserData(newUser)
+        postNewUser(newUser).then((user) => {
+            setUserData(user)
+            localStorage.setItem('localUser', JSON.stringify(user))
+            // also save newUser to localStorage
             props.setIsNewUser(false)
         })
-        // localStorage.setItem('localUserData', 'userData')
     }
 
     return (
         <div className='userProfileContent'>
+            {/* why is this not stuck on load when you are a new user coming to the page for the first time? */}
             {isLoading ? (
                 <Loading />
             ) : props.isNewUser ? (
