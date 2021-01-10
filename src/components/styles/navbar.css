@@ -1,14 +1,19 @@
 .nav {
     position: fixed;
-    margin-top: 50px;
+    margin-top: 60px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     width: 100vw;
-    z-index: 1;
+    z-index: 100;
 }
 
 .navButton {
     text-decoration: none;
     text-align: center;
+}
+
+.MuiTabs-flexContainer {
+    display: flex;
+    justify-content: space-evenly;
 }

@@ -1,6 +1,23 @@
 import { React, useState, useEffect } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
+
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}))
 
 function JourneyDetails(props) {
+    const classes = useStyles()
     const {
         setTravelMode,
         travelMode,
@@ -18,7 +35,28 @@ function JourneyDetails(props) {
 
     return (
         <div className='journeyContent'>
-            <label>
+            <FormControl variant='filled' className='form-control'>
+                <InputLabel id='demo-simple-select-filled-label'>
+                    Select Travel Mode
+                </InputLabel>
+                <Select
+                    labelId='demo-simple-select-filled-label'
+                    id='demo-simple-select-filled'
+                    onChange={(event) => {
+                        setTravelMode(event.target.value)
+                    }}
+                    className='form-control'
+                >
+                    <MenuItem value='walking'>
+                        <em>Walking</em>
+                    </MenuItem>
+                    <MenuItem value='taxi'>Taxi</MenuItem>
+                    <MenuItem value='train'>Train</MenuItem>
+                    <MenuItem value='bus'>Bus</MenuItem>
+                    <MenuItem value='other'>Other</MenuItem>
+                </Select>
+            </FormControl>
+            {/* <label>
                 Select Travel Mode
                 <select
                     name='cars'
@@ -33,7 +71,7 @@ function JourneyDetails(props) {
                     <option value='bus'>bus</option>
                     <option value='other'>other</option>
                 </select>
-            </label>
+            </label> */}
 
             <form className='newUserForm'>
                 {travelMode === 'taxi' && (
