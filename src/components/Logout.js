@@ -14,7 +14,6 @@ const LogoutButton = styled.button`
 
     width: 4rem;
     height: 3rem;
-    outline: solid green 2px;
 `
 const Logout = (props) => {
     return <LogoutButton onClick={props.logout}>LOGOUT</LogoutButton>

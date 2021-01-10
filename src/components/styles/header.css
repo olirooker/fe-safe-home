@@ -1,23 +1,24 @@
 .headerContainer {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 95vw;
     align-items: center;
     position: fixed;
-    outline: solid red 2px;
+    z-index: 1;
 }
 
 .HomeIcon {
     max-height: 5vh;
-}
-
-.headerDiv {
-    width: 100%;
-    display: flex;
+    margin-right: 10px;
 }
 
 .headerContent {
-    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px;
     text-align: center;
     font-size: 1.5rem;
+    font-weight: 100;
 }

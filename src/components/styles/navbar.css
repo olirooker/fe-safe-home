@@ -4,13 +4,11 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    outline: solid green 2px;
     width: 100vw;
+    z-index: 1;
 }
 
 .navButton {
-    outline: solid black 2px;
     text-decoration: none;
-    width: 30%;
     text-align: center;
 }

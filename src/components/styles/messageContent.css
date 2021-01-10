@@ -1,15 +1,13 @@
 .messageContent {
-    margin-top: 50px;
+    margin-top: 10px;
     outline: solid blue 2px;
 }
 
 .journeyContent {
-    outline: solid red 2px;
     margin: 10px;
 }
 
 .whoYouWithContent {
-    outline: solid green 2px;
     margin: 10px;
 }
 
