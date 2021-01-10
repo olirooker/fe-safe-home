@@ -6,11 +6,25 @@ import { useState, useEffect } from 'react'
 import { getAddressFromCoord } from '../geocodeApi'
 import WhoYouWith from './WhoYouWith'
 import SelectContact from './SelectContact'
+import { makeStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 
 import { init } from 'emailjs-com'
 import emailjs from 'emailjs-com'
 
 function Main(props) {
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            '& > *': {
+                margin: theme.spacing(1),
+                width: '25ch',
+            },
+        },
+        button: {
+            margin: theme.spacing(1),
+            background: '#00A99D',
+        },
+    }))
     const API_KEY = process.env.REACT_APP_API_KEY
 
     const [journeyDetails, setDetails] = useState({})
@@ -33,6 +47,7 @@ function Main(props) {
     const [personOne, setPersonOne] = useState('')
     const [personTwo, setPersonTwo] = useState('')
     const [personThree, setPersonThree] = useState('')
+    const classes = useStyles()
 
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
@@ -186,18 +201,25 @@ function Main(props) {
                             userId={props.userId}
                             saveContact={setSelectedContact}
                         />
-                        <button
-                            className='startJourneyButton'
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}
                             onClick={saveDetailsClick}
                         >
                             Save Details
-                        </button>
+                        </Button>
                     </div>
                 ))}
 
-            <button className='startJourneyButton' onClick={startJourneyClick}>
+            <Button
+                variant='contained'
+                color='primary'
+                className={classes.button}
+                onClick={startJourneyClick}
+            >
                 {!startedJourney ? 'Start Journey' : 'End Journey'}
-            </button>
+            </Button>
         </div>
     )
 }

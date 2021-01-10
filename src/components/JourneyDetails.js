@@ -5,8 +5,16 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        '& > *': {
+            margin: theme.spacing(1),
+            width: '25ch',
+        },
+    },
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
@@ -35,7 +43,11 @@ function JourneyDetails(props) {
 
     return (
         <div className='journeyContent'>
-            <FormControl variant='filled' className='form-control'>
+            <FormControl
+                variant='filled'
+                className='form-control'
+                style={{ minWidth: 224 }}
+            >
                 <InputLabel id='demo-simple-select-filled-label'>
                     Select Travel Mode
                 </InputLabel>
@@ -56,95 +68,126 @@ function JourneyDetails(props) {
                     <MenuItem value='other'>Other</MenuItem>
                 </Select>
             </FormControl>
-            {/* <label>
-                Select Travel Mode
-                <select
-                    name='cars'
-                    id='cars'
-                    onChange={(event) => {
-                        setTravelMode(event.target.value)
-                    }}
-                >
-                    <option value='walking'>walking</option>
-                    <option value='taxi'>taxi</option>
-                    <option value='train'>train</option>
-                    <option value='bus'>bus</option>
-                    <option value='other'>other</option>
-                </select>
-            </label> */}
 
             <form className='newUserForm'>
                 {travelMode === 'taxi' && (
-                    <label>
-                        Taxi Reg:
-                        <input
-                            name='taxiReg'
-                            type='text'
-                            placeholder='Taxi Reg'
-                            required
-                            value={taxiReg}
-                            onChange={(event) => setTaxiReg(event.target.value)}
-                        />
-                    </label>
+                    <div className='form-group'>
+                        <form
+                            className={classes.root}
+                            noValidate
+                            autoComplete='off'
+                        >
+                            <TextField
+                                id='taxiReg'
+                                label='Taxi Reg'
+                                className='form-control'
+                                variant='outlined'
+                                name='taxiReg'
+                                type='text'
+                                placeholder='Taxi Reg'
+                                required
+                                value={taxiReg}
+                                onChange={(event) =>
+                                    setTaxiReg(event.target.value)
+                                }
+                            />
+                        </form>
+                    </div>
                 )}
                 {travelMode === 'bus' && (
-                    <label>
-                        Bus Service:
-                        <input
-                            name='busService'
-                            type='text'
-                            placeholder='Bus Service'
-                            required
-                            value={busService}
-                            onChange={(event) =>
-                                setBusService(event.target.value)
-                            }
-                        />
-                    </label>
+                    <div className='form-group'>
+                        <form
+                            className={classes.root}
+                            noValidate
+                            autoComplete='off'
+                        >
+                            <TextField
+                                id='busService'
+                                label='Bus service'
+                                className='form-control'
+                                variant='outlined'
+                                name='busService'
+                                type='text'
+                                placeholder='Bus Service'
+                                required
+                                value={busService}
+                                onChange={(event) =>
+                                    setBusService(event.target.value)
+                                }
+                            />
+                        </form>
+                    </div>
                 )}
 
                 {travelMode === 'train' && (
-                    <label>
-                        Train Service:
-                        <input
-                            name='trainService'
-                            type='text'
-                            placeholder='Train Service'
-                            required
-                            value={trainService}
-                            onChange={(event) =>
-                                setTrainService(event.target.value)
-                            }
-                        />
-                    </label>
+                    <div className='form-group'>
+                        <form
+                            className={classes.root}
+                            noValidate
+                            autoComplete='off'
+                        >
+                            <TextField
+                                id='trainService'
+                                label='Train service'
+                                className='form-control'
+                                variant='outlined'
+                                name='trainService'
+                                type='text'
+                                placeholder='Train Service'
+                                required
+                                value={trainService}
+                                onChange={(event) =>
+                                    setTrainService(event.target.value)
+                                }
+                            />
+                        </form>
+                    </div>
                 )}
                 {travelMode === 'other' && (
-                    <label>
-                        Other Transport:
-                        <input
-                            name='other'
-                            type='text'
-                            placeholder='please give details'
-                            required
-                            value={other}
-                            onChange={(event) => setOther(event.target.value)}
-                        />
-                    </label>
+                    <div className='form-group'>
+                        <form
+                            className={classes.root}
+                            noValidate
+                            autoComplete='off'
+                        >
+                            <TextField
+                                id='other'
+                                label='Other'
+                                className='form-control'
+                                variant='outlined'
+                                name='other'
+                                type='text'
+                                placeholder='please give details'
+                                required
+                                value={other}
+                                onChange={(event) =>
+                                    setOther(event.target.value)
+                                }
+                            />
+                        </form>
+                    </div>
                 )}
-
-                <label>
-                    Travel Companion?:
-                    <input
-                        name='travelCompanion'
-                        type='text'
-                        placeholder='Travel Companion?'
-                        required
-                        value={travelCompanion}
-                        onChange={(event) =>
-                            setTravelCompanion(event.target.value)
-                        }
-                    />
-                </label>
+                <div className='form-group'>
+                    <form
+                        className={classes.root}
+                        noValidate
+                        autoComplete='off'
+                    >
+                        <TextField
+                            id='travelCompanion'
+                            label='Travel companion ?'
+                            className='form-control'
+                            variant='outlined'
+                            name='travelCompanion'
+                            type='text'
+                            placeholder='Travel Companion?'
+                            value={travelCompanion}
+                            onChange={(event) =>
+                                setTravelCompanion(event.target.value)
+                            }
+                        />
+                    </form>
+                </div>
             </form>
         </div>
     )
