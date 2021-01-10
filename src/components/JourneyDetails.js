@@ -1,22 +1,20 @@
 import { React, useState, useEffect } from 'react'
 
-// remember walking journey deatils are in props
 function JourneyDetails(props) {
-    const [travelMode, setTravelMode] = useState('walking')
-    const [taxiReg, setTaxiReg] = useState('')
-    const [busService, setBusService] = useState('')
-    const [trainService, setTrainService] = useState('')
-    const [travelCompanion, setTravelCompanion] = useState('')
-    const [other, setOther] = useState('')
-
-    useEffect(() => {
-        console.log(travelMode)
-        console.log(taxiReg)
-        console.log(busService)
-        console.log(trainService)
-        console.log(travelCompanion)
-        console.log(other)
-    }, [travelMode, taxiReg, busService, trainService, travelCompanion, other])
+    const {
+        setTravelMode,
+        travelMode,
+        setTaxiReg,
+        taxiReg,
+        setBusService,
+        busService,
+        setTrainService,
+        trainService,
+        setTravelCompanion,
+        travelCompanion,
+        setOther,
+        other,
+    } = props
 
     return (
         <div className='journeyContent'>
@@ -31,6 +29,7 @@ function JourneyDetails(props) {
                 >
                     <option value='walking'>walking</option>
                     <option value='taxi'>taxi</option>
+                    <option value='train'>train</option>
                     <option value='bus'>bus</option>
                     <option value='other'>other</option>
                 </select>
