@@ -67,13 +67,17 @@ const Map = (props) => {
     useEffect(() => {
         navigator.permissions.query({ name: 'geolocation' }).then((result) => {
             if (result.state === 'granted') {
-                setLocation()
+                if (startedJourney) {
+                    watchLocation()
+                } else {
+                    setLocation()
+                }
             } else {
                 setError(true)
                 setMessage('Your browser needs access to your location')
             }
         })
-    }, [])
+    }, [startedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -88,6 +92,40 @@ const Map = (props) => {
             })
             setLoading(false)
         })
+    }
+
+    const watchLocation = () => {
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 60000,
+            maximumAge: 0,
+        }
+        let count = 0
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(
+                function (position) {
+                    count++
+                    console.log(
+                        'Latitude is :',
+                        position.coords.latitude,
+                        count
+                    )
+                    console.log(
+                        'Longitude is :',
+                        position.coords.longitude,
+                        count
+                    )
+                    setCentre({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    })
+                },
+                function (error) {
+                    console.log(error)
+                },
+                options
+            )
+        }
     }
 
     // when click the button to create the route, set the origin as the current position if there is nothing in the input, set the destination with the input value
@@ -332,14 +370,6 @@ const Map = (props) => {
                             }
                         />
                     </FormGroup>
-
-                    {/* <button
-                        className='btn btn-primary'
-                        type='button'
-                        onClick={onClickHeatMap}
-                    >
-                        {showHeatMap ? 'Hide Hot Spots' : 'Show Hot Spots'}
-                    </button> */}
                 </div>
             )}
         </div>

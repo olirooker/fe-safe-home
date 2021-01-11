@@ -166,12 +166,14 @@ function Main(props) {
                         {travelMode === 'bus' && <p>{busService}</p>}
                         {travelMode === 'train' && <p>{trainService}</p>}
                         {travelMode === 'other' && <p>{other}</p>}
-                        <button
-                            className='startJourneyButton'
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}
                             onClick={saveDetailsClick}
                         >
-                            Edit
-                        </button>
+                            Edit Details
+                        </Button>
                     </div>
                 ) : (
                     <div className='messageContent'>
