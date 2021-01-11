@@ -34,8 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Map = (props) => {
     const classes = useStyles()
-    const [origin, setOrigin] = useState('')
-    const [destination, setDestination] = useState('')
     const [response, setResponse] = useState(null)
     const [centre, setCentre] = useState({})
     const [isLoading, setLoading] = useState(true)
@@ -46,7 +44,18 @@ const Map = (props) => {
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
-    const { theme, saveDetails, startedJourney, setWatchId, watchId } = props
+    const {
+        theme,
+        saveDetails,
+        startedJourney,
+        setWatchId,
+        watchId,
+        setOrigin,
+        origin,
+        setDestination,
+        destination,
+        endRoute,
+    } = props
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
     const getDestination = useRef('')
@@ -97,10 +106,11 @@ const Map = (props) => {
     const watchLocation = () => {
         const options = {
             enableHighAccuracy: true,
-            timeout: 6000,
+            timeout: 60000,
             maximumAge: 0,
         }
         // let count = 0
+
         if (navigator.geolocation) {
             setWatchId(
                 navigator.geolocation.watchPosition(
@@ -127,6 +137,7 @@ const Map = (props) => {
                     options
                 )
             )
+            console.log(watchId, 'watchId')
         }
     }
 
@@ -247,7 +258,7 @@ const Map = (props) => {
                                       width: '100%',
                                   }
                         }
-                        zoom={startedJourney ? 50 : 13}
+                        zoom={startedJourney ? 20 : 13}
                         center={centre}
                         options={
                             theme === 'light'
@@ -270,7 +281,7 @@ const Map = (props) => {
                             />
                         )}
                         {/* once get the response to the request, render the route in the map*/}
-                        {response !== null && (
+                        {response !== null && !endRoute && (
                             <DirectionsRenderer
                                 options={{ directions: response }}
                             />

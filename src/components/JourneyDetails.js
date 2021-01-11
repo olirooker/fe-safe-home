@@ -69,7 +69,7 @@ function JourneyDetails(props) {
                 </Select>
             </FormControl>
 
-            <form className='newUserForm'>
+            <div className='newUserForm'>
                 {travelMode === 'taxi' && (
                     <div className='form-group'>
                         <form
@@ -188,7 +188,7 @@ function JourneyDetails(props) {
                         />
                     </form>
                 </div>
-            </form>
+            </div>
         </div>
     )
 }
