@@ -44,6 +44,19 @@ export const postNewContact = async (newContact, uid) => {
         console.log(error)
     }
 }
+
+export const sendEditUser = async (editUser, uid) => {
+    try {
+        const { data } = await newsApi.patch(`/users/${uid}`, {
+            editUser,
+        })
+
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 export const sendEditContact = async (editContact, uid, contact_id) => {
     try {
         const { data } = await newsApi.patch(
