@@ -95,7 +95,8 @@ function Main(props) {
         const templateParams = {
             from_name: 'safe home test',
             to_name: `${selected.first_name} ${selected.last_name}`,
-            message: `I'm going from ${journeyDetails.origin} to ${journeyDetails.destination}, it should take me ${journeyDetails.duration}. My current position is ${journeyDetails.userLocation}`,
+            message: `I'm going from ${journeyDetails.origin} to ${journeyDetails.destination}, it should take me ${journeyDetails.duration}. My current position is ${journeyDetails.userLocation}
+            `,
             to_email: `${selected.email}`,
         }
 
