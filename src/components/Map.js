@@ -46,7 +46,7 @@ const Map = (props) => {
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
-    const { theme, saveDetails, startedJourney } = props
+    const { theme, saveDetails, startedJourney, setWatchId, watchId } = props
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
     const getDestination = useRef('')
@@ -67,13 +67,17 @@ const Map = (props) => {
     useEffect(() => {
         navigator.permissions.query({ name: 'geolocation' }).then((result) => {
             if (result.state === 'granted') {
-                setLocation()
+                if (startedJourney) {
+                    watchLocation()
+                } else {
+                    setLocation()
+                }
             } else {
                 setError(true)
                 setMessage('Your browser needs access to your location')
             }
         })
-    }, [])
+    }, [startedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -88,6 +92,42 @@ const Map = (props) => {
             })
             setLoading(false)
         })
+    }
+
+    const watchLocation = () => {
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 6000,
+            maximumAge: 0,
+        }
+        // let count = 0
+        if (navigator.geolocation) {
+            setWatchId(
+                navigator.geolocation.watchPosition(
+                    function (position) {
+                        // count++
+                        console.log(
+                            'Latitude is :',
+                            position.coords.latitude
+                            // count
+                        )
+                        console.log(
+                            'Longitude is :',
+                            position.coords.longitude
+                            // count
+                        )
+                        setCentre({
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        })
+                    },
+                    function (error) {
+                        console.log(error)
+                    },
+                    options
+                )
+            )
+        }
     }
 
     // when click the button to create the route, set the origin as the current position if there is nothing in the input, set the destination with the input value
@@ -183,7 +223,12 @@ const Map = (props) => {
         // the names of these classes are predetermined by the google api, they do not appear in any css file created by us
         <div className='map'>
             {/* display the message */}
-            {hasError && <p>{messageError}</p>}
+            {hasError && (
+                <div>
+                    <p>{messageError}</p>
+                    {/* <button onClick={showMap}>show map</button> */}
+                </div>
+            )}
             {isLoading ? (
                 <Loading />
             ) : (
@@ -332,14 +377,6 @@ const Map = (props) => {
                             }
                         />
                     </FormGroup>
-
-                    {/* <button
-                        className='btn btn-primary'
-                        type='button'
-                        onClick={onClickHeatMap}
-                    >
-                        {showHeatMap ? 'Hide Hot Spots' : 'Show Hot Spots'}
-                    </button> */}
                 </div>
             )}
         </div>
