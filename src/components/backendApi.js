@@ -26,6 +26,45 @@ export const getUserByUid = async (uid) => {
 }
 
 export const getContactsByUid = async (uid) => {
-    const { data } = await newsApi.get(`/users/${uid}/contacts`)
-    return data
+    try {
+        const { data } = await newsApi.get(`/users/${uid}/contacts`)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const postNewContact = async (newContact, uid) => {
+    try {
+        const { data } = await newsApi.post(`/users/${uid}/contacts`, {
+            newContact,
+        })
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+export const sendEditContact = async (editContact, uid, contact_id) => {
+    try {
+        const { data } = await newsApi.patch(
+            `/users/${uid}/contacts/${contact_id}`,
+            {
+                editContact,
+            }
+        )
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deleteContactByContactId = async (uid, contact_id) => {
+    try {
+        const { data } = await newsApi.delete(
+            `/users/${uid}/contacts/${contact_id}`
+        )
+        console.log(data)
+    } catch (error) {
+        console.log(error)
+    }
 }

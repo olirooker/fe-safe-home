@@ -60,6 +60,7 @@ function UserProfile(props) {
     }, [])
 
     const handleNewUserSubmit = (event) => {
+        const userId = JSON.parse(localStorage.getItem('userId'))
         event.preventDefault()
         const newUser = {
             first_name: firstName,
@@ -70,7 +71,7 @@ function UserProfile(props) {
             street_name: streetName,
             postcode: postCode,
             city: city,
-            uid: props.userId,
+            uid: userId,
         }
         postNewUser(newUser).then((user) => {
             setUserData(user)
@@ -205,7 +206,7 @@ function UserProfile(props) {
                     {!userData ? (
                         <Loading />
                     ) : (
-                        <div>
+                        <div className='profileDetails'>
                             <p>First Name: {userData.user.first_name}</p>
                             <p>Last Name: {userData.user.last_name}</p>
                             <p>User Name: {userData.user.username}</p>
