@@ -32,7 +32,7 @@ function SignInEmail(props) {
                     className='form-control'
                     id='filled-basic'
                     label='Email'
-                    name='eamil'
+                    name='email'
                     type='text'
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
@@ -43,7 +43,7 @@ function SignInEmail(props) {
                     id='filled-basic'
                     label='Password'
                     name='password'
-                    type='text'
+                    type='password'
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     variant='filled'
