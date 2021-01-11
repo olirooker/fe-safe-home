@@ -1,11 +1,15 @@
 import React from 'react'
+import { FacebookLoginButton } from 'react-social-login-buttons'
 
 function FacebookLogin(props) {
     return (
         <div className='facebookLoginContainer'>
-            <button className='loginLink' onClick={props.facebookLogin}>
-                Sign In With Facebook
-            </button>
+            <FacebookLoginButton
+                className='facebookButton'
+                onClick={props.googleLogin}
+            >
+                <span>Log In with Facebook</span>
+            </FacebookLoginButton>
         </div>
     )
 }

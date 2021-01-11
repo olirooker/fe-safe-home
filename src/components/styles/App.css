@@ -2,3 +2,10 @@
     width: 100%;
     margin: 0;
 }
+@media screen and (min-width: 600px) {
+    .App {
+        width: 60%;
+        justify-self: center;
+        margin: 0 auto;
+    }
+}

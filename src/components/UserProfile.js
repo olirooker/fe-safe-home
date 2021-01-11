@@ -53,9 +53,11 @@ function UserProfile(props) {
         console.log(showUserEdit, 'show user edit')
         console.log(firstName, 'firstName')
 
+        //new user with no details in back end
         if (isNewUser) {
             setIsNewUser(true)
             setIsLoading(false)
+            // existing user
         } else if (
             !isNewUser &&
             localStorage.getItem.localUser !== 'undefined'
@@ -66,6 +68,7 @@ function UserProfile(props) {
                 localStorage.setItem('localUser', JSON.stringify(user))
                 setIsLoading(false)
             })
+            // new user after details submit
         } else if (
             !isNewUser &&
             localStorage.getItem('localUser') === 'undefined'
@@ -168,114 +171,107 @@ function UserProfile(props) {
             ) : isNewUser ? (
                 <>
                     <h2>New User Profile</h2>
-                    <form
-                        onSubmit={handleNewUserSubmit}
-                        className='newUserForm'
-                    >
-                        <label>
-                            First Name:
-                            <input
+                    <div className='profileDetails'>
+                        <form
+                            className={classes.root}
+                            noValidate
+                            autoComplete='off'
+                        >
+                            <TextField
+                                className='form-control'
+                                id='filled-basic'
+                                label='First Name'
                                 name='firstName'
                                 type='text'
-                                placeholder='First Name'
-                                required
                                 value={firstName}
                                 onChange={(event) =>
                                     setFirstName(event.target.value)
                                 }
+                                variant='filled'
                             />
-                        </label>
-                        <label>
-                            Last Name:
-                            <input
+                            <TextField
+                                className='form-control'
+                                id='filled-basic'
+                                label='Last Name'
                                 name='lastName'
                                 type='text'
-                                placeholder='Last Name'
-                                required
                                 value={lastName}
                                 onChange={(event) =>
                                     setLastName(event.target.value)
                                 }
+                                variant='filled'
                             />
-                        </label>
-                        <label>
-                            Username:
-                            <input
-                                placeholder='Username'
-                                required
-                                value={userName}
-                                onChange={(event) =>
-                                    setUserName(event.target.value)
-                                }
-                            />
-                        </label>
-                        <label>
-                            Phone Number:
-                            <input
+                            <TextField
+                                className='form-control'
+                                id='filled-basic'
+                                label='Phone Number'
                                 name='phoneNumber'
-                                type='text'
-                                placeholder='Phone Number'
-                                required
+                                type='number'
                                 value={phoneNumber}
                                 onChange={(event) =>
                                     setPhoneNumber(event.target.value)
                                 }
+                                variant='filled'
                             />
-                        </label>
-                        <label>
-                            House Number:
-                            <input
+
+                            <TextField
+                                className='form-control'
+                                id='filled-basic'
+                                label='House Number'
                                 name='houseNumber'
                                 type='number'
-                                placeholder='House Number'
-                                required
                                 value={houseNumber}
                                 onChange={(event) =>
                                     setHouseNumber(event.target.value)
                                 }
+                                variant='filled'
                             />
-                        </label>
-                        <label>
-                            Street Name:
-                            <input
+                            <TextField
+                                className='form-control'
+                                id='filled-basic'
+                                label='Street Name'
                                 name='streetName'
                                 type='text'
-                                placeholder='Street Name'
-                                required
                                 value={streetName}
                                 onChange={(event) =>
                                     setStreetName(event.target.value)
                                 }
+                                variant='filled'
                             />
-                        </label>
-                        <label>
-                            Post Code:
-                            <input
+                            <TextField
+                                className='form-control'
+                                id='filled-basic'
+                                label='Postcode'
                                 name='postCode'
                                 type='text'
-                                placeholder='Post Code'
-                                required
                                 value={postCode}
                                 onChange={(event) =>
                                     setPostCode(event.target.value)
                                 }
+                                variant='filled'
                             />
-                        </label>
-                        <label>
-                            City:
-                            <input
+                            <TextField
+                                className='form-control'
+                                id='filled-basic'
+                                label='city'
                                 name='city'
                                 type='text'
-                                placeholder='City'
-                                required
                                 value={city}
                                 onChange={(event) =>
                                     setCity(event.target.value)
                                 }
+                                variant='filled'
                             />
-                        </label>
-                        <button type='submit'>Create Account</button>
-                    </form>
+                        </form>
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            className={classes.button}
+                            onClick={handleNewUserSubmit}
+                        >
+                            Submit Profile
+                        </Button>
+                    </div>
                 </>
             ) : (
                 <>
