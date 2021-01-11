@@ -31,6 +31,9 @@ function Main(props) {
     const [userId, setUserId] = useState('')
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
+    const [origin, setOrigin] = useState('')
+    const [destination, setDestination] = useState('')
+    const [endRoute, setEndRoute] = useState(false)
 
     // details from journey details component
     const [travelMode, setTravelMode] = useState('walking')
@@ -41,8 +44,10 @@ function Main(props) {
     const [other, setOther] = useState('')
 
     // contact selected from selectContact component
-    const [selectedContact, setSelectedContact] = useState({})
+    const [selectedContact, setSelectedContact] = useState('')
     const [contacts, setContacts] = useState([])
+    const [contactErrorMessage, setContactErrorMessage] = useState('')
+    const [hasError, setHasError] = useState(false)
 
     // details from whoYouWith component
     const [personOne, setPersonOne] = useState('')
@@ -87,7 +92,6 @@ function Main(props) {
     // email sending function.
     const sendStartEmail = () => {
         init('user_woEvxk93zUEkrcs7jCTzE')
-        // console.log(contacts, 'contacts')
         const selected = contacts.filter((contact) => {
             return contact.first_name === selectedContact
         })
@@ -108,9 +112,9 @@ function Main(props) {
 
         const templateParams = {
             from_name: 'safe home test',
-            to_name: `${selected.first_name} ${selected.last_name}`,
+            to_name: `${selected[0].first_name} ${selected[0].last_name}`,
             message: `I'm going from ${journeyDetails.origin} to ${journeyDetails.destination} ${message} My current position is ${journeyDetails.userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
-            to_email: `${selected.email}`,
+            to_email: 'albmatcar@gmail.com',
         }
 
         emailjs
@@ -132,11 +136,13 @@ function Main(props) {
             return contact.first_name === selectedContact
         })
 
+        console.log(selected.email)
+
         const templateParams = {
             from_name: 'safe home test',
-            to_name: `${selected.first_name} ${selected.last_name}`,
+            to_name: `${selected[0].first_name} ${selected[0].last_name}`,
             message: "I'm safe home!",
-            to_email: `${selected.email}`,
+            to_email: 'albmatcar@gmail.com',
         }
 
         emailjs
@@ -159,13 +165,27 @@ function Main(props) {
         }
     }
     const startJourneyClick = () => {
-        if (startedJourney) {
+        if (startedJourney && selectedContact !== '') {
             setStartedJourney(false)
             clearWatch(watchId)
             sendFinishEmail()
-        } else {
+            setSavedDetails(false)
+            setPersonOne('')
+            setPersonTwo('')
+            setPersonThree('')
+            setTravelMode('walking')
+            setTravelCompanion('')
+            setSelectedContact('')
+            setOrigin('')
+            setDestination('')
+            setEndRoute(true)
+        } else if (selectedContact !== '' && !startedJourney) {
             sendStartEmail()
             setStartedJourney(true)
+            setHasError(false)
+        } else {
+            setHasError(true)
+            setContactErrorMessage('You need to select an emergency contact!')
         }
     }
 
@@ -195,6 +215,11 @@ function Main(props) {
                     startedJourney={startedJourney}
                     setWatchId={setWatchId}
                     watchId={watchId}
+                    setOrigin={setOrigin}
+                    origin={origin}
+                    setDestination={setDestination}
+                    destination={destination}
+                    endRoute={endRoute}
                 />
             </LoadScript>
             {!startedJourney &&
@@ -284,6 +309,8 @@ function Main(props) {
                         </Button>
                     </div>
                 ))}
+
+            {hasError && <p>{contactErrorMessage}</p>}
 
             <Button
                 variant='contained'

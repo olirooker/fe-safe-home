@@ -34,8 +34,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Map = (props) => {
     const classes = useStyles()
-    const [origin, setOrigin] = useState('')
-    const [destination, setDestination] = useState('')
     const [response, setResponse] = useState(null)
     const [centre, setCentre] = useState({})
     const [isLoading, setLoading] = useState(true)
@@ -46,7 +44,18 @@ const Map = (props) => {
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
-    const { theme, saveDetails, startedJourney, setWatchId, watchId } = props
+    const {
+        theme,
+        saveDetails,
+        startedJourney,
+        setWatchId,
+        watchId,
+        setOrigin,
+        origin,
+        setDestination,
+        destination,
+        endRoute,
+    } = props
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
     const getDestination = useRef('')
@@ -77,7 +86,7 @@ const Map = (props) => {
                 setMessage('Your browser needs access to your location')
             }
         })
-    }, [startedJourney, centre])
+    }, [startedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -272,7 +281,7 @@ const Map = (props) => {
                             />
                         )}
                         {/* once get the response to the request, render the route in the map*/}
-                        {response !== null && (
+                        {response !== null && !endRoute && (
                             <DirectionsRenderer
                                 options={{ directions: response }}
                             />

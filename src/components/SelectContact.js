@@ -41,6 +41,7 @@ function SelectContact(props) {
                         saveContact(event.target.value)
                     }}
                     className='form-control'
+                    required
                 >
                     {contacts.map((contact) => {
                         return (
