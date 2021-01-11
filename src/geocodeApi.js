@@ -10,8 +10,6 @@ export const getOriginCoord = (origin) => {
                 lat: response.data.data[0].latitude.toString(),
                 lng: response.data.data[0].longitude.toString(),
             }
-            // console.log(coordinates, 'coordinates')
-            // setOrigin(coordinates)
             return coordinates
         })
 }
@@ -28,8 +26,3 @@ export const getAddressFromCoord = (coords) => {
             return response.data.data[0].label
         })
 }
-
-// Alba Mateos  2:48 PM
-// http://api.positionstack.com/v1/reverse
-//     ? access_key = YOUR_ACCESS_KEY
-//     & query = 40.7638435,-73.9729691

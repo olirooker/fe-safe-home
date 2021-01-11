@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from 'react'
-import { getContactsByUid } from './backendApi'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import { makeStyles } from '@material-ui/core/styles'
@@ -7,9 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 
 function SelectContact(props) {
-    const [contacts, setContacts] = useState([])
-    const [apiCalled, setApiCalled] = useState(false)
-    const { saveContact } = props
+    const { saveContact, contacts } = props
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -26,20 +23,6 @@ function SelectContact(props) {
             marginTop: theme.spacing(2),
         },
     }))
-
-    useEffect(() => {
-        if (!apiCalled) {
-            fetchAllContacts()
-        }
-    }, [])
-
-    // uid is hard coded
-    const fetchAllContacts = () => {
-        getContactsByUid('ouq2Vs5hq4afIZiEBV0wIUb8Fk03').then((response) => {
-            setContacts(response.contacts)
-            setApiCalled(true)
-        })
-    }
 
     return (
         <div>

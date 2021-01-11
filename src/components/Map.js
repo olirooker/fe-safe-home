@@ -77,7 +77,7 @@ const Map = (props) => {
                 setMessage('Your browser needs access to your location')
             }
         })
-    }, [startedJourney])
+    }, [startedJourney, centre])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -97,10 +97,11 @@ const Map = (props) => {
     const watchLocation = () => {
         const options = {
             enableHighAccuracy: true,
-            timeout: 6000,
+            timeout: 60000,
             maximumAge: 0,
         }
         // let count = 0
+
         if (navigator.geolocation) {
             setWatchId(
                 navigator.geolocation.watchPosition(
@@ -127,6 +128,7 @@ const Map = (props) => {
                     options
                 )
             )
+            console.log(watchId, 'watchId')
         }
     }
 
@@ -247,7 +249,7 @@ const Map = (props) => {
                                       width: '100%',
                                   }
                         }
-                        zoom={startedJourney ? 50 : 13}
+                        zoom={startedJourney ? 20 : 13}
                         center={centre}
                         options={
                             theme === 'light'

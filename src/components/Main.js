@@ -2,13 +2,13 @@ import React from 'react'
 import { LoadScript } from '@react-google-maps/api'
 import Map from './Map'
 import JourneyDetails from './JourneyDetails'
+import { getContactsByUid } from './backendApi'
 import { useState, useEffect } from 'react'
 import { getAddressFromCoord } from '../geocodeApi'
 import WhoYouWith from './WhoYouWith'
 import SelectContact from './SelectContact'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-
 import { init } from 'emailjs-com'
 import emailjs from 'emailjs-com'
 
@@ -42,6 +42,7 @@ function Main(props) {
 
     // contact selected from selectContact component
     const [selectedContact, setSelectedContact] = useState({})
+    const [contacts, setContacts] = useState([])
 
     // details from whoYouWith component
     const [personOne, setPersonOne] = useState('')
@@ -49,9 +50,15 @@ function Main(props) {
     const [personThree, setPersonThree] = useState('')
     const classes = useStyles()
     const [watchId, setWatchId] = useState('')
+
+    const [apiCalled, setApiCalled] = useState(false)
+
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
         setUserId(props.userId)
+        if (!apiCalled) {
+            fetchAllContacts()
+        }
     }, [])
 
     // sets the state to the required details
@@ -78,14 +85,18 @@ function Main(props) {
     }
 
     // email sending function.
-    const sendEmail = () => {
+    const sendStartEmail = () => {
         init('user_woEvxk93zUEkrcs7jCTzE')
+        // console.log(contacts, 'contacts')
+        const selected = contacts.filter((contact) => {
+            return contact.first_name === selectedContact
+        })
 
         const templateParams = {
             from_name: 'safe home test',
-            to_name: 'alan',
-            message: 'test message',
-            to_email: 'adfharrison@icloud.com',
+            to_name: `${selected.first_name} ${selected.last_name}`,
+            message: `I'm going from ${journeyDetails.origin} to ${journeyDetails.destination}, it should take me ${journeyDetails.duration}. My current position is ${journeyDetails.userLocation}`,
+            to_email: `${selected.email}`,
         }
 
         emailjs
@@ -112,14 +123,23 @@ function Main(props) {
             setStartedJourney(false)
             clearWatch(watchId)
         } else {
-            sendEmail()
+            sendStartEmail()
             setStartedJourney(true)
         }
     }
 
     const clearWatch = (watchId) => {
-        console.log(watchId)
+        // for (let i = 0; i < watchId; i++) {
         navigator.geolocation.clearWatch(watchId)
+        // }
+    }
+
+    // uid is hard coded
+    const fetchAllContacts = () => {
+        getContactsByUid('ouq2Vs5hq4afIZiEBV0wIUb8Fk03').then((response) => {
+            setContacts(response.contacts)
+            setApiCalled(true)
+        })
     }
 
     return (
@@ -210,6 +230,8 @@ function Main(props) {
                         <SelectContact
                             userId={props.userId}
                             saveContact={setSelectedContact}
+                            contacts={contacts}
+                            setContacts={setContacts}
                         />
                         <Button
                             variant='contained'
