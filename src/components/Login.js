@@ -28,6 +28,9 @@ const Login = (props) => {
                 props.setId(uid)
                 props.setLoggedIn(true)
                 props.setUsername(displayName)
+                localStorage.setItem('isNewUser', JSON.stringify(newUser))
+                localStorage.setItem('userId', JSON.stringify(uid))
+
                 navigate('/main')
             })
             .catch((error) => {
@@ -51,6 +54,8 @@ const Login = (props) => {
                 props.setLoggedIn(true)
                 props.setUsername(displayName)
                 props.setIsNewUser(newUser)
+                localStorage.setItem('isNewUser', JSON.stringify(newUser))
+                localStorage.setItem('userId', JSON.stringify(uid))
                 navigate('/main')
             })
             .catch((error) => {
@@ -75,6 +80,8 @@ const Login = (props) => {
                 props.setLoggedIn(true)
                 props.setUsername(displayName)
                 props.setIsNewUser(newUser)
+                localStorage.setItem('isNewUser', JSON.stringify(newUser))
+                localStorage.setItem('userId', JSON.stringify(uid))
                 navigate('/main')
             })
             .catch((error) => {
@@ -111,6 +118,8 @@ const Login = (props) => {
                 props.setLoggedIn(true)
                 props.setUsername(username)
                 props.setIsNewUser(newUser)
+                localStorage.setItem('isNewUser', JSON.stringify(newUser))
+                localStorage.setItem('userId', JSON.stringify(uid))
                 navigate('/main')
             })
             .catch((error) => {
