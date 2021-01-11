@@ -48,9 +48,7 @@
             "last 1 safari version"
         ]
     },
-    "devDependencies": {
-        "axios": "^0.21.1"
-    },
+    "devDependencies": {},
     "prettier": {
         "trailingComma": "es5",
         "tabWidth": 4,
