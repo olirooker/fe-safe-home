@@ -92,11 +92,24 @@ function Main(props) {
             return contact.first_name === selectedContact
         })
 
+        let message = ''
+
+        if (travelMode === 'walking') {
+            message = `, it should take me ${journeyDetails.duration}.`
+        } else if (travelMode === 'taxi') {
+            message = `. I'm going by taxi and the registration is ${taxiReg}.`
+        } else if (travelMode === 'train') {
+            message = `. I'm going by train and the information is ${trainService}.`
+        } else if (travelMode === 'bus') {
+            message = `. I'm going by bus and the number is ${busService}.`
+        } else {
+            message = `. I'm going by ${other}.`
+        }
+
         const templateParams = {
             from_name: 'safe home test',
             to_name: `${selected.first_name} ${selected.last_name}`,
-            message: `I'm going from ${journeyDetails.origin} to ${journeyDetails.destination}, it should take me ${journeyDetails.duration}. My current position is ${journeyDetails.userLocation}
-            `,
+            message: `I'm going from ${journeyDetails.origin} to ${journeyDetails.destination} ${message} My current position is ${journeyDetails.userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
             to_email: `${selected.email}`,
         }
 
@@ -105,6 +118,32 @@ function Main(props) {
             .then(
                 function (response) {
                     console.log('SUCCESS!', response.status, response.text)
+                },
+                function (error) {
+                    console.log('FAILED...', error)
+                }
+            )
+    }
+
+    const sendFinishEmail = () => {
+        init('user_woEvxk93zUEkrcs7jCTzE')
+        // console.log(contacts, 'contacts')
+        const selected = contacts.filter((contact) => {
+            return contact.first_name === selectedContact
+        })
+
+        const templateParams = {
+            from_name: 'safe home test',
+            to_name: `${selected.first_name} ${selected.last_name}`,
+            message: "I'm safe home!",
+            to_email: `${selected.email}`,
+        }
+
+        emailjs
+            .send('default_service', 'template_u667pzk', templateParams)
+            .then(
+                function (response) {
+                    console.log('FINISH EMAIL!', response.status, response.text)
                 },
                 function (error) {
                     console.log('FAILED...', error)
@@ -123,6 +162,7 @@ function Main(props) {
         if (startedJourney) {
             setStartedJourney(false)
             clearWatch(watchId)
+            sendFinishEmail()
         } else {
             sendStartEmail()
             setStartedJourney(true)
