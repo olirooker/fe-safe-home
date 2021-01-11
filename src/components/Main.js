@@ -48,7 +48,7 @@ function Main(props) {
     const [personTwo, setPersonTwo] = useState('')
     const [personThree, setPersonThree] = useState('')
     const classes = useStyles()
-
+    const [watchId, setWatchId] = useState('')
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
         setUserId(props.userId)
@@ -110,10 +110,16 @@ function Main(props) {
     const startJourneyClick = () => {
         if (startedJourney) {
             setStartedJourney(false)
+            clearWatch(watchId)
         } else {
             sendEmail()
             setStartedJourney(true)
         }
+    }
+
+    const clearWatch = (watchId) => {
+        console.log(watchId)
+        navigator.geolocation.clearWatch(watchId)
     }
 
     return (
@@ -126,6 +132,8 @@ function Main(props) {
                     theme={props.theme}
                     saveDetails={saveDetails}
                     startedJourney={startedJourney}
+                    setWatchId={setWatchId}
+                    watchId={watchId}
                 />
             </LoadScript>
             {!startedJourney &&
