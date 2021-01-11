@@ -1,6 +1,8 @@
 import { React, useState, useEffect, useContext } from 'react'
 import { getUserByUid, postNewUser } from './backendApi'
 import Loading from './Loading'
+import SetContacts from './UserContacts'
+import UserContacts from './UserContacts'
 
 function UserProfile(props) {
     // const [firebaseUid, setFirebaseUid] = useState('')
@@ -16,18 +18,42 @@ function UserProfile(props) {
     const [postCode, setPostCode] = useState('')
     const [city, setCity] = useState('')
     const [userData, setUserData] = useState('')
+    const [isNewUser, setIsNewUser] = useState(false)
+    const [userId, setUserId] = useState('')
 
     // set state
     useEffect(() => {
         // we don't need to change isLoading here
-        const localUserData = JSON.parse(localStorage.getItem('localUser'))
-        if (localUserData) {
-            setUserData(localUserData)
+        // console.log(props.userId, 'USER ID IN USER PROFILE')
+        // const reloadUserId = JSON.parse(localStorage.getItem('userProfileId'))
+
+        const userId = JSON.parse(localStorage.getItem('userId'))
+        const isNewUser = JSON.parse(localStorage.getItem('isNewUser'))
+        console.log(userId, 'user ID in profile')
+        console.log(isNewUser, 'isNewUser in profile')
+
+        if (isNewUser) {
+            setIsNewUser(true)
             setIsLoading(false)
-        } else if (!userData && !props.isNewUser) {
-            getUserByUid(props.userId).then((user) => {
+        } else if (
+            !isNewUser &&
+            localStorage.getItem.localUser !== 'undefined'
+        ) {
+            getUserByUid(userId).then((user) => {
                 setUserData(user)
+
                 localStorage.setItem('localUser', JSON.stringify(user))
+                setIsLoading(false)
+            })
+        } else if (
+            !isNewUser &&
+            localStorage.getItem('localUser') === 'undefined'
+        ) {
+            const userId = JSON.parse(localStorage.getItem('userId'))
+            getUserByUid(userId).then((user) => {
+                setUserData(user)
+
+                localStorage.setItem('localUser', JSON.stringify(userData))
                 setIsLoading(false)
             })
         }
@@ -49,8 +75,10 @@ function UserProfile(props) {
         postNewUser(newUser).then((user) => {
             setUserData(user)
             localStorage.setItem('localUser', JSON.stringify(user))
+            localStorage.setItem('isNewUser', JSON.stringify(false))
             // also save newUser to localStorage
             props.setIsNewUser(false)
+            setIsNewUser(false)
         })
     }
 
@@ -59,7 +87,7 @@ function UserProfile(props) {
             {/* why is this not stuck on load when you are a new user coming to the page for the first time? */}
             {isLoading ? (
                 <Loading />
-            ) : props.isNewUser ? (
+            ) : isNewUser ? (
                 <>
                     <h2>New User Profile</h2>
                     <form
@@ -190,6 +218,7 @@ function UserProfile(props) {
                     )}
                 </>
             )}
+            <UserContacts />
         </div>
     )
 }
