@@ -250,7 +250,7 @@ const Map = (props) => {
                         mapContainerStyle={
                             !startedJourney
                                 ? {
-                                      height: '150px',
+                                      height: '200px',
                                       width: '100%',
                                   }
                                 : {
@@ -258,7 +258,7 @@ const Map = (props) => {
                                       width: '100%',
                                   }
                         }
-                        zoom={startedJourney ? 20 : 13}
+                        zoom={startedJourney ? 20 : 15}
                         center={centre}
                         options={
                             theme === 'light'
