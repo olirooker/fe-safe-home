@@ -11,29 +11,24 @@ const Navbar = (props) => {
         setValue(newValue)
     }
     return (
-        <div className='nav'>
-            <Paper square>
-                <Tabs
-                    value={value}
-                    indicatorColor='primary'
-                    textColor='primary'
-                    onChange={handleChange}
-                    aria-label='disabled tabs example'
-                >
-                    <Tab label='Main' to='/main' component={Link} />
-                    <Tab
-                        label='User Profile'
-                        to='/user-profile'
-                        component={Link}
-                    />
-                    <Tab
-                        label='Travel Advice'
-                        to='/travel-advice'
-                        component={Link}
-                    />
-                </Tabs>
-            </Paper>
-        </div>
+        <Paper square>
+            <Tabs
+                value={value}
+                indicatorColor='primary'
+                textColor='primary'
+                onChange={handleChange}
+                aria-label='disabled tabs example'
+                className='nav'
+            >
+                <Tab label='Main' to='/main' component={Link} />
+                <Tab label='User Profile' to='/user-profile' component={Link} />
+                <Tab
+                    label='Travel Advice'
+                    to='/travel-advice'
+                    component={Link}
+                />
+            </Tabs>
+        </Paper>
     )
 }
 
