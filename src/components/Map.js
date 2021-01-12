@@ -105,7 +105,7 @@ const Map = (props) => {
                 },
                 (error) => {
                     setError(true)
-                    setMessage('Your browser needs access to your location')
+                    setMessage('Geolocation request timed out')
                 },
                 { timeout: 50000, enableHighAccuracy: false }
             )
