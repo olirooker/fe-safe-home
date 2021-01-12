@@ -37,14 +37,10 @@ export const getContactsByUid = async (uid) => {
 }
 
 export const postNewContact = async (newContact, uid) => {
-    try {
-        const { data } = await newsApi.post(`/users/${uid}/contacts`, {
-            newContact,
-        })
-        return data
-    } catch (error) {
-        console.log(error)
-    }
+    const { data } = await newsApi.post(`/users/${uid}/contacts`, {
+        newContact,
+    })
+    return data
 }
 
 export const sendEditUser = async (editUser, uid) => {

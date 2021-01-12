@@ -105,9 +105,9 @@ const Map = (props) => {
                 },
                 (error) => {
                     setError(true)
-                    setMessage('Your browser needs access to your location')
+                    setMessage('Geolocation request timed out')
                 },
-                { timeout: 50000, enableHighAccuracy: false }
+                { timeout: 10000, enableHighAccuracy: false }
             )
         } else {
             setError(true)
@@ -163,7 +163,6 @@ const Map = (props) => {
     const directionsCallback = (response) => {
         if (response !== null) {
             if (response.status === 'OK') {
-                console.log(response, 'responseCallback')
                 setCreatedRoute(true)
                 setResponse(response)
                 localStorage.setItem(
@@ -178,10 +177,16 @@ const Map = (props) => {
 
     // callback function to send a request to the api of google to get the duration and the distance of route
     const callbackDistanceService = (response, status) => {
-        if (status === 'OK' && response) {
+        if (
+            response.originAddresses[0] !== '' ||
+            response.destinationAddresses[0] !== ''
+        ) {
             setDuration(response.rows[0].elements[0].duration.text)
             setDistance(response.rows[0].elements[0].distance.text)
             setRoute(true)
+        } else {
+            setError(true)
+            setMessage('One or both of Origin and Distination are invalid')
         }
     }
 
