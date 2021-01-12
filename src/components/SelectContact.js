@@ -49,7 +49,9 @@ function SelectContact(props) {
                                 <MenuItem
                                     value={contact.first_name}
                                     key={contact.first_name}
+
                                     ref={createRef}
+
                                 >
                                     {contact.first_name}
                                 </MenuItem>
