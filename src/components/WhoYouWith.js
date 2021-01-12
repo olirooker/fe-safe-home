@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 
@@ -14,10 +14,10 @@ const useStyles = makeStyles((theme) => ({
 function WhoYouWith(props) {
     const {
         savePersonOne,
-        personOne,
         savePersonTwo,
-        personTwo,
         savePersonThree,
+        personOne,
+        personTwo,
         personThree,
     } = props
 
@@ -30,7 +30,7 @@ function WhoYouWith(props) {
                 <form className={classes.root} noValidate autoComplete='off'>
                     <TextField
                         className='form-control'
-                        id='filled-basic'
+                        id='person 1'
                         label='Person 1'
                         name='personOne'
                         type='text'
@@ -40,7 +40,7 @@ function WhoYouWith(props) {
                     />
                     <TextField
                         className='form-control'
-                        id='filled-basic'
+                        id='person 2'
                         label='Person 2'
                         name='personTwo'
                         type='text'
@@ -50,7 +50,7 @@ function WhoYouWith(props) {
                     />
                     <TextField
                         className='form-control'
-                        id='filled-basic'
+                        id='person 3'
                         label='Person 3'
                         name='personThree'
                         type='text'

@@ -13,6 +13,7 @@ const LogoutButton = styled.button`
     padding: 0.5rem;
     width: 4rem;
     height: 3rem;
+    margin-right: 1.5em;
 `
 const Logout = (props) => {
     return <LogoutButton onClick={props.logout}>LOGOUT</LogoutButton>

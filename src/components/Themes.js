@@ -6,6 +6,8 @@ export const lightTheme = {
     navbarText: 'rgba(40, 40, 40,1)',
     formBackground: 'white',
     headerBackground: '#ddd9d3',
+    navBackground: '#ddd9d3',
+    navText: 'rgba(40, 40, 40,1)',
 }
 
 export const darkTheme = {
@@ -16,4 +18,6 @@ export const darkTheme = {
     navbarText: '#FAFAFA',
     formBackground: 'white',
     headerBackground: '#054064',
+    navBackground: '#054064',
+    navText: '#FAFAFA',
 }

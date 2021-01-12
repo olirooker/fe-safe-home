@@ -25,4 +25,13 @@ html {
 .headerContainer {
   background: ${({ theme }) => theme.headerBackground};
 }
+
+.nav {
+  background: ${({ theme }) => theme.navBackground};
+  
+}
+
+.MuiTab-wrapper {
+  color: ${({ theme }) => theme.navText};
+}
   `

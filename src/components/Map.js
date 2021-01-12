@@ -39,11 +39,10 @@ const Map = (props) => {
     const [isLoading, setLoading] = useState(true)
     const [hasError, setError] = useState(false)
     const [messageError, setMessage] = useState('')
-    const [duration, setDuration] = useState('')
-    const [distance, setDistance] = useState('')
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
+    const [createdRoute, setCreatedRoute] = useState(false)
     const {
         theme,
         saveDetails,
@@ -55,6 +54,10 @@ const Map = (props) => {
         setDestination,
         destination,
         endRoute,
+        setDuration,
+        setDistance,
+        duration,
+        distance,
     } = props
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
@@ -74,33 +77,31 @@ const Map = (props) => {
 
     // asking permission to navigator to set location
     useEffect(() => {
-        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-            if (result.state === 'granted') {
-                if (startedJourney) {
-                    watchLocation()
-                } else {
-                    setLocation()
-                }
-            } else {
-                setError(true)
-                setMessage('Your browser needs access to your location')
-            }
-        })
+        if (startedJourney) {
+            watchLocation()
+        } else {
+            setLocation()
+        }
     }, [startedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setCentre({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setCentre({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                })
+                setOrigin({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                })
+                setLoading(false)
             })
-            setOrigin({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            })
-            setLoading(false)
-        })
+        } else {
+            setError(true)
+            setMessage('Your browser needs access to your location')
+        }
     }
 
     const watchLocation = () => {
@@ -109,23 +110,13 @@ const Map = (props) => {
             timeout: 60000,
             maximumAge: 0,
         }
-        // let count = 0
 
         if (navigator.geolocation) {
             setWatchId(
                 navigator.geolocation.watchPosition(
                     function (position) {
-                        // count++
-                        console.log(
-                            'Latitude is :',
-                            position.coords.latitude
-                            // count
-                        )
-                        console.log(
-                            'Longitude is :',
-                            position.coords.longitude
-                            // count
-                        )
+                        console.log('Latitude is :', position.coords.latitude)
+                        console.log('Longitude is :', position.coords.longitude)
                         setCentre({
                             lat: position.coords.latitude,
                             lng: position.coords.longitude,
@@ -146,9 +137,11 @@ const Map = (props) => {
         if (getOrigin.current.value === '') {
             setOrigin(centre)
             setRoute(false)
+            setCreatedRoute(false)
         } else {
             setOrigin(getOrigin.current.value)
             setRoute(false)
+            setCreatedRoute(false)
         }
         setDestination(getDestination.current.value)
     }
@@ -157,7 +150,7 @@ const Map = (props) => {
     const directionsCallback = (response) => {
         if (response !== null) {
             if (response.status === 'OK') {
-                console.log(response, 'response directions')
+                setCreatedRoute(true)
                 setResponse(response)
             } else {
                 console.log(response, 'response directions')
@@ -171,7 +164,6 @@ const Map = (props) => {
             setDuration(response.rows[0].elements[0].duration.text)
             setDistance(response.rows[0].elements[0].distance.text)
             setRoute(true)
-            saveDetails(origin, destination, duration, distance, centre)
         }
     }
 
@@ -270,7 +262,7 @@ const Map = (props) => {
                         <Marker position={centre} />
 
                         {/* if origin and destination are added, send the request to get the route */}
-                        {destination !== '' && origin !== '' && (
+                        {destination !== '' && origin !== '' && !createdRoute && (
                             <DirectionsService
                                 options={{
                                     destination,

@@ -1,4 +1,4 @@
-import React from 'react'
+import { React, useRef } from 'react'
 import { LoadScript } from '@react-google-maps/api'
 import Map from './Map'
 import JourneyDetails from './JourneyDetails'
@@ -27,13 +27,16 @@ function Main(props) {
     }))
     const API_KEY = process.env.REACT_APP_API_KEY
 
-    const [journeyDetails, setDetails] = useState({})
-    const [userId, setUserId] = useState('')
+    const userId = JSON.parse(localStorage.getItem('userId'))
+
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
     const [origin, setOrigin] = useState('')
     const [destination, setDestination] = useState('')
     const [endRoute, setEndRoute] = useState(false)
+    const [duration, setDuration] = useState('')
+    const [distance, setDistance] = useState('')
+    const [userLocation, setUserLocation] = useState('')
 
     // details from journey details component
     const [travelMode, setTravelMode] = useState('walking')
@@ -60,32 +63,20 @@ function Main(props) {
 
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
-        setUserId(props.userId)
         if (!apiCalled) {
-            fetchAllContacts()
+            fetchAllContacts(userId)
         }
     }, [])
 
     // sets the state to the required details
-    const saveDetails = (origin, destination, duration, distance, centre) => {
+    const getAddress = () => {
         if (typeof origin !== 'string') {
             getAddressFromCoord(origin).then((response) => {
-                setDetails({
-                    origin: response,
-                    destination,
-                    duration,
-                    distance,
-                    userLocation: centre,
-                })
+                setOrigin(response)
             })
-        } else {
-            setDetails({
-                origin,
-                destination,
-                duration,
-                distance,
-                userLocation: centre,
-            })
+            // getAddressFromCoord(userLocation).then((response) => {
+            //     setUserLocation(response)
+            // })
         }
     }
 
@@ -99,7 +90,7 @@ function Main(props) {
         let message = ''
 
         if (travelMode === 'walking') {
-            message = `, it should take me ${journeyDetails.duration}.`
+            message = `, it should take me ${duration}.`
         } else if (travelMode === 'taxi') {
             message = `. I'm going by taxi and the registration is ${taxiReg}.`
         } else if (travelMode === 'train') {
@@ -113,7 +104,7 @@ function Main(props) {
         const templateParams = {
             from_name: 'safe home test',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
-            message: `I'm going from ${journeyDetails.origin} to ${journeyDetails.destination} ${message} My current position is ${journeyDetails.userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
+            message: `I'm going from ${origin} to ${destination} ${message} My current position is ${userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
             to_email: 'albmatcar@gmail.com',
         }
 
@@ -158,6 +149,7 @@ function Main(props) {
     }
 
     const saveDetailsClick = () => {
+        getAddress()
         if (savedDetails) {
             setSavedDetails(false)
         } else {
@@ -178,6 +170,8 @@ function Main(props) {
             setSelectedContact('')
             setOrigin('')
             setDestination('')
+            setDuration('')
+            setDistance('')
             setEndRoute(true)
         } else if (selectedContact !== '' && !startedJourney) {
             sendStartEmail()
@@ -190,14 +184,11 @@ function Main(props) {
     }
 
     const clearWatch = (watchId) => {
-        // for (let i = 0; i < watchId; i++) {
         navigator.geolocation.clearWatch(watchId)
-        // }
     }
 
-    // uid is hard coded
-    const fetchAllContacts = () => {
-        getContactsByUid('ouq2Vs5hq4afIZiEBV0wIUb8Fk03').then((response) => {
+    const fetchAllContacts = (id) => {
+        getContactsByUid(id).then((response) => {
             setContacts(response.contacts)
             setApiCalled(true)
         })
@@ -211,7 +202,6 @@ function Main(props) {
             >
                 <Map
                     theme={props.theme}
-                    saveDetails={saveDetails}
                     startedJourney={startedJourney}
                     setWatchId={setWatchId}
                     watchId={watchId}
@@ -220,14 +210,19 @@ function Main(props) {
                     setDestination={setDestination}
                     destination={destination}
                     endRoute={endRoute}
+                    setDuration={setDuration}
+                    setDistance={setDistance}
+                    duration={duration}
+                    distance={distance}
                 />
             </LoadScript>
             {!startedJourney &&
                 (savedDetails ? (
                     <div className='savedDetails'>
                         <p>
-                            People who you are with: {personOne} {personTwo}{' '}
-                            {personThree}
+                            People who you are with: {personOne}{' '}
+                            {personTwo && `, ${personTwo}`}{' '}
+                            {personThree && `and ${personThree}`}
                         </p>
                         <p>Travel companion: {travelCompanion}</p>
                         {travelMode === 'walking' ? (
@@ -237,17 +232,10 @@ function Main(props) {
                                     journey details:
                                 </p>
                                 <ul>
-                                    {Object.keys(journeyDetails).map(
-                                        (detail) => {
-                                            if (detail !== 'userLocation') {
-                                                return (
-                                                    <li>
-                                                        {`${detail}: ${journeyDetails[detail]}`}
-                                                    </li>
-                                                )
-                                            }
-                                        }
-                                    )}
+                                    <li>{`Origin: ${origin}`}</li>
+                                    <li>{`Destination: ${destination}`}</li>
+                                    <li>{`Duration: ${duration}`}</li>
+                                    <li>{`Distance: ${distance}`}</li>
                                 </ul>
                             </div>
                         ) : (
@@ -273,10 +261,10 @@ function Main(props) {
                     <div className='messageContent'>
                         <WhoYouWith
                             savePersonOne={setPersonOne}
-                            personOne={personOne}
                             savePersonTwo={setPersonTwo}
-                            personTwo={personTwo}
                             savePersonThree={setPersonThree}
+                            personOne={personOne}
+                            personTwo={personTwo}
                             personThree={personThree}
                         />
                         <JourneyDetails
@@ -294,7 +282,6 @@ function Main(props) {
                             other={other}
                         />
                         <SelectContact
-                            userId={props.userId}
                             saveContact={setSelectedContact}
                             contacts={contacts}
                             setContacts={setContacts}
