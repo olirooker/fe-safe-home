@@ -27,7 +27,7 @@ function Main(props) {
     }))
     const API_KEY = process.env.REACT_APP_API_KEY
 
-    const { userId } = props
+    const userId = JSON.parse(localStorage.getItem('userId'))
 
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
@@ -187,8 +187,8 @@ function Main(props) {
         navigator.geolocation.clearWatch(watchId)
     }
 
-    const fetchAllContacts = (userId) => {
-        getContactsByUid(userId).then((response) => {
+    const fetchAllContacts = (id) => {
+        getContactsByUid(id).then((response) => {
             setContacts(response.contacts)
             setApiCalled(true)
         })

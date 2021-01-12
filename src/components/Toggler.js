@@ -11,7 +11,7 @@ const Button = styled.button`
     justify-self: left;
     overflow: hidden;
     padding: 0.5rem;
-
+    margin-left: 1.5em;
     width: 4rem;
     height: 3rem;
 `
