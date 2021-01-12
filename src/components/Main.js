@@ -74,6 +74,20 @@ function Main(props) {
         }
     }, [contacts, apiCalled, userId])
 
+
+    // sets the state to the required details
+    const getAddress = () => {
+        if (typeof origin !== 'string') {
+            getAddressFromCoord(origin).then((response) => {
+                setOrigin(response)
+            })
+            // getAddressFromCoord(userLocation).then((response) => {
+            //     setUserLocation(response)
+            // })
+        }
+    }
+
+
     // email sending function.
     const sendStartEmail = () => {
         init('user_woEvxk93zUEkrcs7jCTzE')
@@ -98,8 +112,13 @@ function Main(props) {
         const templateParams = {
             from_name: 'safe home test',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
+
+            message: `I'm going from ${origin} to ${destination} ${message} My current position is ${userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
+            to_email: selected[0].email,
+
             message: `I'm going from ${storageOrigin} to ${storageDestination} ${message} My current position is ${storageUserLocation}. I'm going with ${storageDetails.travelCompanion}. I've been with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
             to_email: `${selected[0].email}`,
+
         }
 
         emailjs
