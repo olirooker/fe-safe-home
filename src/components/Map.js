@@ -10,7 +10,7 @@ import { React, useRef, useEffect, useState } from 'react'
 import { modeNightStyle, modeDayStyle } from './styles/MapNightMode'
 import Loading from './Loading'
 import { getCrimesByLocation } from '../CrimeApi'
-import { getOriginCoord } from '../geocodeApi'
+import { getAddressFromCoord, getOriginCoord } from '../geocodeApi'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -149,14 +149,25 @@ const Map = (props) => {
             setOrigin(centre)
             setRoute(false)
             setCreatedRoute(false)
+            getAddressFromCoord(centre).then((response) => {
+                localStorage.setItem('origin', JSON.stringify(response))
+                localStorage.setItem('centre', JSON.stringify(response))
+            })
         } else {
             setOrigin(getOrigin.current.value)
             setRoute(false)
             setCreatedRoute(false)
+            localStorage.setItem(
+                'origin',
+                JSON.stringify(getOrigin.current.value)
+            )
         }
         setDestination(getDestination.current.value)
-        localStorage.setItem('origin', JSON.stringify(origin))
-        localStorage.setItem('destination', JSON.stringify(destination))
+
+        localStorage.setItem(
+            'destination',
+            JSON.stringify(getDestination.current.value)
+        )
     }
 
     // callback function to send a request to the api of google to get the response to render the route
