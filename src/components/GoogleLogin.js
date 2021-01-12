@@ -3,7 +3,7 @@ import { GoogleLoginButton } from 'react-social-login-buttons'
 
 function GoogleLogin(props) {
     return (
-        <div className='npm install --save react-social-login-buttons'>
+        <div className='googleLoginContainer'>
             <GoogleLoginButton
                 className='googleButton'
                 onClick={props.googleLogin}
