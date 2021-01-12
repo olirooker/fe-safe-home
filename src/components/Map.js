@@ -64,6 +64,10 @@ const Map = (props) => {
     const getOrigin = useRef('')
     const getDestination = useRef('')
 
+    let storageStartedJourney = JSON.parse(
+        localStorage.getItem('startedJourney')
+    )
+
     const [switchState, setSwitchState] = useState({
         checkedB: false,
     })
@@ -87,7 +91,6 @@ const Map = (props) => {
 
     // set centre and origin with current position
     const setLocation = () => {
-        console.log('Called setLocation')
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -105,7 +108,7 @@ const Map = (props) => {
                     setError(true)
                     setMessage('Your browser needs access to your location')
                 },
-                { timeout: 5000, enableHighAccuracy: false }
+                { timeout: 50000, enableHighAccuracy: false }
             )
         } else {
             setError(true)
@@ -262,7 +265,7 @@ const Map = (props) => {
                     <GoogleMap
                         id='direction-example'
                         mapContainerStyle={
-                            !startedJourney
+                            !storageStartedJourney
                                 ? {
                                       height: '200px',
                                       width: '100%',
@@ -272,7 +275,7 @@ const Map = (props) => {
                                       width: '100%',
                                   }
                         }
-                        zoom={startedJourney ? 20 : 15}
+                        zoom={storageStartedJourney ? 20 : 15}
                         center={centre}
                         options={
                             theme === 'light'
@@ -331,7 +334,7 @@ const Map = (props) => {
                 </div>
             )}
             {/* form to add the origin and the destination and the button to render the route */}
-            {!startedJourney && (
+            {!storageStartedJourney && (
                 <div className='map-settings'>
                     {/* <hr className='mt-0 mb-3' /> */}
                     <div className='row'>
