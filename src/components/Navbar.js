@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import { withStyles } from '@material-ui/core/styles'
+import { useLocation } from 'react-router-dom'
 
 const NewTabs = withStyles({
     indicator: {
@@ -13,14 +14,14 @@ const NewTabs = withStyles({
 
 const Navbar = (props) => {
     const [value, setValue] = React.useState(2)
-
+    const location = useLocation()
     const handleChange = (event, newValue) => {
         setValue(newValue)
     }
     return (
         <Paper square>
             <NewTabs
-                value={value}
+                value={location.pathname}
                 indicatorColor='primary'
                 textColor='primary'
                 onChange={handleChange}
