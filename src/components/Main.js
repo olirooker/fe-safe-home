@@ -4,7 +4,6 @@ import Map from './Map'
 import JourneyDetails from './JourneyDetails'
 import { getContactsByUid } from './backendApi'
 import { useState, useEffect } from 'react'
-import { getAddressFromCoord } from '../geocodeApi'
 import WhoYouWith from './WhoYouWith'
 import SelectContact from './SelectContact'
 import { makeStyles } from '@material-ui/core/styles'
@@ -27,7 +26,15 @@ function Main(props) {
     }))
     const API_KEY = process.env.REACT_APP_API_KEY
 
+    // local storage data
     const userId = JSON.parse(localStorage.getItem('userId'))
+    let storageOrigin = JSON.parse(localStorage.getItem('origin'))
+    let storageDestination = JSON.parse(localStorage.getItem('destination'))
+    let storageStartedJourney = JSON.parse(
+        localStorage.getItem('startedJourney')
+    )
+    let storageDetails = JSON.parse(localStorage.getItem('details'))
+    let storageUserLocation = JSON.parse(localStorage.getItem('centre'))
 
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
@@ -65,21 +72,7 @@ function Main(props) {
         if (!apiCalled) {
             fetchAllContacts(userId)
         }
-
-    }, [contacts,apiCalled, userId])
-
-
-    // sets the state to the required details
-    const getAddress = () => {
-        if (typeof origin !== 'string') {
-            getAddressFromCoord(origin).then((response) => {
-                setOrigin(response)
-            })
-            // getAddressFromCoord(userLocation).then((response) => {
-            //     setUserLocation(response)
-            // })
-        }
-    }
+    }, [contacts, apiCalled, userId])
 
     // email sending function.
     const sendStartEmail = () => {
@@ -90,23 +83,23 @@ function Main(props) {
 
         let message = ''
 
-        if (travelMode === 'walking') {
-            message = `, it should take me ${duration}.`
-        } else if (travelMode === 'taxi') {
-            message = `. I'm going by taxi and the registration is ${taxiReg}.`
-        } else if (travelMode === 'train') {
-            message = `. I'm going by train and the information is ${trainService}.`
-        } else if (travelMode === 'bus') {
-            message = `. I'm going by bus and the number is ${busService}.`
+        if (storageDetails.travelMode === 'walking') {
+            message = `, it should take me ${storageDetails.duration}.`
+        } else if (storageDetails.travelMode === 'taxi') {
+            message = `. I'm going by taxi and the registration is ${storageDetails.taxiReg}.`
+        } else if (storageDetails.travelMode === 'train') {
+            message = `. I'm going by train and the information is ${storageDetails.trainService}.`
+        } else if (storageDetails.travelMode === 'bus') {
+            message = `. I'm going by bus and the number is ${storageDetails.busService}.`
         } else {
-            message = `. I'm going by ${other}.`
+            message = `. I'm going by ${storageDetails.other}.`
         }
 
         const templateParams = {
             from_name: 'safe home test',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
-            message: `I'm going from ${origin} to ${destination} ${message} My current position is ${userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
-            to_email: 'albmatcar@gmail.com',
+            message: `I'm going from ${storageOrigin} to ${storageDestination} ${message} My current position is ${storageUserLocation}. I'm going with ${storageDetails.travelCompanion}. I've been with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
+            to_email: `${selected[0].email}`,
         }
 
         emailjs
@@ -123,18 +116,15 @@ function Main(props) {
 
     const sendFinishEmail = () => {
         init('user_woEvxk93zUEkrcs7jCTzE')
-        // console.log(contacts, 'contacts')
         const selected = contacts.filter((contact) => {
             return contact.first_name === selectedContact
         })
-
-        console.log(selected.email)
 
         const templateParams = {
             from_name: 'safe home test',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
             message: "I'm safe home!",
-            to_email: 'albmatcar@gmail.com',
+            to_email: `${selected[0].email}`,
         }
 
         emailjs
@@ -150,11 +140,27 @@ function Main(props) {
     }
 
     const saveDetailsClick = () => {
-        getAddress()
         if (savedDetails) {
             setSavedDetails(false)
         } else {
             setSavedDetails(true)
+            localStorage.setItem(
+                'details',
+                JSON.stringify({
+                    personOne,
+                    personTwo,
+                    personThree,
+                    travelMode,
+                    travelCompanion,
+                    selectedContact,
+                    taxiReg,
+                    busService,
+                    trainService,
+                    other,
+                    distance,
+                    duration,
+                })
+            )
         }
     }
     const startJourneyClick = () => {
@@ -175,13 +181,11 @@ function Main(props) {
             setDistance('')
             setEndRoute(true)
             localStorage.setItem('startedJourney', JSON.stringify(false))
-            console.log(JSON.parse(localStorage.getItem('startedJourney')))
         } else if (selectedContact !== '' && !startedJourney) {
             sendStartEmail()
             setStartedJourney(true)
             setHasError(false)
             localStorage.setItem('startedJourney', JSON.stringify(true))
-            console.log(JSON.parse(localStorage.getItem('startedJourney')))
         } else {
             setHasError(true)
             setContactErrorMessage('You need to select an emergency contact!')
@@ -198,12 +202,6 @@ function Main(props) {
             setApiCalled(true)
         })
     }
-
-    let storageOrigin = JSON.parse(localStorage.getItem('origin'))
-    let storageDestination = JSON.parse(localStorage.getItem('destination'))
-    let storageStartedJourney = JSON.parse(
-        localStorage.getItem('startedJourney')
-    )
 
     return (
         <div className='mainContent'>
@@ -231,34 +229,47 @@ function Main(props) {
                 (savedDetails ? (
                     <div className='savedDetails'>
                         <p>
-                            People who you are with: {personOne}{' '}
-                            {personTwo && `, ${personTwo}`}{' '}
-                            {personThree && `and ${personThree}`}
+                            People who you are with: {storageDetails.personOne}{' '}
+                            {storageDetails.personTwo &&
+                                `, ${storageDetails.personTwo}`}{' '}
+                            {storageDetails.personThree &&
+                                `and ${storageDetails.personThree}`}
                         </p>
-                        <p>Travel companion: {travelCompanion}</p>
-                        {travelMode === 'walking' ? (
+                        <p>
+                            Travel companion: {storageDetails.travelCompanion}
+                        </p>
+                        {storageDetails.travelMode === 'walking' ? (
                             <div>
                                 <p>
                                     I'm going to walk home and these are my
                                     journey details:
                                 </p>
                                 <ul>
-                                    <li>{`Origin: ${origin}`}</li>
-                                    <li>{`Destination: ${destination}`}</li>
-                                    <li>{`Duration: ${duration}`}</li>
-                                    <li>{`Distance: ${distance}`}</li>
+                                    <li>{`Origin: ${storageOrigin}`}</li>
+                                    <li>{`Destination: ${storageDestination}`}</li>
+                                    <li>{`Duration: ${storageDetails.duration}`}</li>
+                                    <li>{`Distance: ${storageDetails.distance}`}</li>
                                 </ul>
                             </div>
                         ) : (
                             <p>
-                                I'm going to go home by {travelMode} and these
-                                are the details:
+                                I'm going to go home by{' '}
+                                {storageDetails.travelMode} and these are the
+                                details:
                             </p>
                         )}
-                        {travelMode === 'taxi' && <p>{taxiReg}</p>}
-                        {travelMode === 'bus' && <p>{busService}</p>}
-                        {travelMode === 'train' && <p>{trainService}</p>}
-                        {travelMode === 'other' && <p>{other}</p>}
+                        {storageDetails.travelMode === 'taxi' && (
+                            <p>{storageDetails.taxiReg}</p>
+                        )}
+                        {storageDetails.travelMode === 'bus' && (
+                            <p>{storageDetails.busService}</p>
+                        )}
+                        {storageDetails.travelMode === 'train' && (
+                            <p>{storageDetails.trainService}</p>
+                        )}
+                        {storageDetails.travelMode === 'other' && (
+                            <p>{storageDetails.other}</p>
+                        )}
                         <Button
                             variant='contained'
                             color='primary'

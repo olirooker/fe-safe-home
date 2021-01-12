@@ -12,16 +12,19 @@ const NewTabs = withStyles({
 })(Tabs)
 
 const Navbar = (props) => {
-
     const [value, setValue] = React.useState(0)
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
+        localStorage.setItem('value', JSON.stringify(newValue))
     }
+
+    let storageNavValue = JSON.parse(localStorage.getItem('value'))
+
     return (
         <Paper square>
             <NewTabs
-                value={value}
+                value={storageNavValue}
                 indicatorColor='primary'
                 textColor='primary'
                 onChange={handleChange}
