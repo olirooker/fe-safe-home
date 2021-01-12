@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useContext } from 'react'
+import { React, useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -49,7 +49,7 @@ const UserContacts = () => {
             setUserContacts(contacts)
             setIsLoading(false)
         })
-    }, [contactAdded, contactDeleted])
+    }, [contactAdded, contactDeleted, uid])
 
     const handleShowContactsForm = () => {
         if (showContactsForm) {
