@@ -1,7 +1,11 @@
 {
     "short_name": "React App",
     "name": "Create React App Sample",
-    "icons": [],
+    "icons": [{
+        "src": "HomeIconSphere.png",
+        "sizes": "800x800",
+        "type": "image/png"
+      }],
     "start_url": ".",
     "display": "standalone",
     "theme_color": "#000000",
