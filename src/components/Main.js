@@ -65,9 +65,7 @@ function Main(props) {
         if (!apiCalled) {
             fetchAllContacts(userId)
         }
-
-    }, [contacts,apiCalled, userId])
-
+    }, [contacts, apiCalled, userId])
 
     // sets the state to the required details
     const getAddress = () => {
@@ -106,7 +104,7 @@ function Main(props) {
             from_name: 'safe home test',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
             message: `I'm going from ${origin} to ${destination} ${message} My current position is ${userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
-            to_email: 'albmatcar@gmail.com',
+            to_email: selected[0].email,
         }
 
         emailjs

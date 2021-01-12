@@ -1,4 +1,4 @@
-import { React } from 'react'
+import { React, createRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -58,13 +58,21 @@ function JourneyDetails(props) {
                     }}
                     className='form-control'
                 >
-                    <MenuItem value='walking'>
+                    <MenuItem value='walking' ref={createRef}>
                         <em>Walking</em>
                     </MenuItem>
-                    <MenuItem value='taxi'>Taxi</MenuItem>
-                    <MenuItem value='train'>Train</MenuItem>
-                    <MenuItem value='bus'>Bus</MenuItem>
-                    <MenuItem value='other'>Other</MenuItem>
+                    <MenuItem value='taxi' ref={createRef}>
+                        Taxi
+                    </MenuItem>
+                    <MenuItem value='train' ref={createRef}>
+                        Train
+                    </MenuItem>
+                    <MenuItem value='bus' ref={createRef}>
+                        Bus
+                    </MenuItem>
+                    <MenuItem value='other' ref={createRef}>
+                        Other
+                    </MenuItem>
                 </Select>
             </FormControl>
 

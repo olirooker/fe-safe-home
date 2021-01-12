@@ -1,4 +1,4 @@
-import { React } from 'react'
+import { React, createRef } from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 // import { makeStyles } from '@material-ui/core/styles'
@@ -49,7 +49,7 @@ function SelectContact(props) {
                                 <MenuItem
                                     value={contact.first_name}
                                     key={contact.first_name}
-                                    ref={contact.first_name}
+                                    ref={createRef}
                                 >
                                     {contact.first_name}
                                 </MenuItem>
