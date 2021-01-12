@@ -77,33 +77,31 @@ const Map = (props) => {
 
     // asking permission to navigator to set location
     useEffect(() => {
-        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-            if (result.state === 'granted') {
-                if (startedJourney) {
-                    watchLocation()
-                } else {
-                    setLocation()
-                }
-            } else {
-                setError(true)
-                setMessage('Your browser needs access to your location')
-            }
-        })
+        if (startedJourney) {
+            watchLocation()
+        } else {
+            setLocation()
+        }
     }, [startedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setCentre({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setCentre({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                })
+                setOrigin({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                })
+                setLoading(false)
             })
-            setOrigin({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            })
-            setLoading(false)
-        })
+        } else {
+            setError(true)
+            setMessage('Your browser needs access to your location')
+        }
     }
 
     const watchLocation = () => {
