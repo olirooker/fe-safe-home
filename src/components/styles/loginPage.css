@@ -12,3 +12,14 @@
 .loginError {
     color: red;
 }
+
+.googleLoginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.facebookLoginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

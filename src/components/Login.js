@@ -6,12 +6,29 @@ import SignInEmail from './SignInEmail'
 import GoogleLogin from './GoogleLogin'
 import SignupForm from './SignupForm'
 import FacebookLogin from './FacebookLogin'
+import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 
 const Login = (props) => {
     //state stuff
     const [showSignup, setShowSignup] = useState(false)
     const [loginError, setLoginError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+
+    const useStyles = makeStyles((theme) => ({
+        root: {
+            '& > *': {
+                margin: theme.spacing(1),
+                width: '25ch',
+            },
+        },
+        button: {
+            margin: theme.spacing(1),
+            background: '#00A99D',
+        },
+    }))
+    const classes = useStyles()
 
     useEffect(() => {}, [])
     // sign in with email method
@@ -143,12 +160,14 @@ const Login = (props) => {
             <FacebookLogin facebookLogin={facebookLogin} />
 
             <div className='signupButtonContainer'>
-                <button
-                    className='toggleSignupButton'
+                <Button
+                    variant='contained'
+                    color='primary'
+                    className={classes.button}
                     onClick={toggleShowSignup}
                 >
                     {showSignup ? 'hide signup' : 'show signup'}
-                </button>
+                </Button>
             </div>
 
             {showSignup && <SignupForm handleSignUp={handleSignUp} />}

@@ -9,6 +9,14 @@
     width: 100vw;
     z-index: 100;
 }
+@media screen and (min-width: 600px) {
+    .nav {
+        width: 60%;
+
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
 
 .navButton {
     text-decoration: none;
