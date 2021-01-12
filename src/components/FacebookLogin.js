@@ -6,7 +6,7 @@ function FacebookLogin(props) {
         <div className='facebookLoginContainer'>
             <FacebookLoginButton
                 className='facebookButton'
-                onClick={props.googleLogin}
+                onClick={props.facebookLogin}
             >
                 <span>Log In with Facebook</span>
             </FacebookLoginButton>

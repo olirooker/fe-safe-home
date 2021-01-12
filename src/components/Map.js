@@ -18,6 +18,7 @@ import Icon from '@material-ui/core/Icon'
 import HeatSwitch from './Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import { navigate } from '@reach/router'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -86,18 +87,26 @@ const Map = (props) => {
 
     // set centre and origin with current position
     const setLocation = () => {
+        console.log('Called setLocation')
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                setCentre({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                })
-                setOrigin({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                })
-                setLoading(false)
-            })
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setCentre({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    })
+                    setOrigin({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    })
+                    setLoading(false)
+                },
+                (error) => {
+                    setError(true)
+                    setMessage('Your browser needs access to your location')
+                },
+                { timeout: 5000, enableHighAccuracy: false }
+            )
         } else {
             setError(true)
             setMessage('Your browser needs access to your location')
@@ -179,10 +188,11 @@ const Map = (props) => {
             getOriginCoord(origin).then((response) => {
                 getCrimesByLocation(response.lat, response.lng).then(
                     (response) => {
+                        console.log(response, 'response')
                         const dataCrime = []
                         if (response) {
                             response.forEach((crimeArray) => {
-                                let max = 40
+                                let max = 50
                                 if (crimeArray.length !== 0) {
                                     if (crimeArray.length < max) {
                                         crimeArray.forEach((element) => {
@@ -204,8 +214,9 @@ const Map = (props) => {
             getCrimesByLocation(origin.lat, origin.lng).then((response) => {
                 const dataCrime = []
                 if (response) {
+                    console.log(response, 'response2')
                     response.forEach((crimeArray) => {
-                        let max = 40
+                        let max = 50
                         if (crimeArray.length !== 0) {
                             if (crimeArray.length < max) {
                                 crimeArray.forEach((element) => {
@@ -301,6 +312,7 @@ const Map = (props) => {
                                         location.lng
                                     )
                                 })}
+                                radius={10000}
                             />
                         )}
 
