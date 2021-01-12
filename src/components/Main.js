@@ -194,6 +194,12 @@ function Main(props) {
         })
     }
 
+    let storageOrigin = JSON.parse(localStorage.getItem('origin'))
+    let storageDestination = JSON.parse(localStorage.getItem('destination'))
+
+    console.log(storageOrigin, 'origin')
+    console.log(storageDestination, 'destination')
+
     return (
         <div className='mainContent'>
             <LoadScript

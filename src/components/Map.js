@@ -153,14 +153,21 @@ const Map = (props) => {
             setCreatedRoute(false)
         }
         setDestination(getDestination.current.value)
+        localStorage.setItem('origin', JSON.stringify(origin))
+        localStorage.setItem('destination', JSON.stringify(destination))
     }
 
     // callback function to send a request to the api of google to get the response to render the route
     const directionsCallback = (response) => {
         if (response !== null) {
             if (response.status === 'OK') {
+                console.log(response, 'responseCallback')
                 setCreatedRoute(true)
                 setResponse(response)
+                localStorage.setItem(
+                    'responseDirections',
+                    JSON.stringify(response)
+                )
             } else {
                 console.log(response, 'response directions')
             }
@@ -233,6 +240,10 @@ const Map = (props) => {
         }
     }
 
+    let storageResponse = {
+        response: JSON.parse(localStorage.getItem('responseDirections')),
+    }
+
     return (
         // the names of these classes are predetermined by the google api, they do not appear in any css file created by us
         <div className='map'>
@@ -284,9 +295,11 @@ const Map = (props) => {
                             />
                         )}
                         {/* once get the response to the request, render the route in the map*/}
-                        {response !== null && !endRoute && (
+                        {storageResponse !== null && !endRoute && (
                             <DirectionsRenderer
-                                options={{ directions: response }}
+                                options={{
+                                    directions: storageResponse.response,
+                                }}
                             />
                         )}
 
