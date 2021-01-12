@@ -18,7 +18,6 @@ import Icon from '@material-ui/core/Icon'
 import HeatSwitch from './Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { navigate } from '@reach/router'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,7 +45,7 @@ const Map = (props) => {
     const [createdRoute, setCreatedRoute] = useState(false)
     const {
         theme,
-        saveDetails,
+
         startedJourney,
         setWatchId,
         watchId,

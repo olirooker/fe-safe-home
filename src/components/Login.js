@@ -7,7 +7,7 @@ import GoogleLogin from './GoogleLogin'
 import SignupForm from './SignupForm'
 import FacebookLogin from './FacebookLogin'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
+
 import Button from '@material-ui/core/Button'
 
 const Login = (props) => {
@@ -47,12 +47,15 @@ const Login = (props) => {
                 props.setUsername(displayName)
                 localStorage.setItem('isNewUser', JSON.stringify(newUser))
                 localStorage.setItem('userId', JSON.stringify(uid))
-
-                navigate('/main')
+                if (newUser) {
+                    navigate('/user-profile')
+                } else {
+                    navigate('/main')
+                }
             })
             .catch((error) => {
                 // Handle Errors here.
-                const errorCode = error.code
+
                 const errorMessage = error.message
                 setErrorMessage(errorMessage)
                 setLoginError(true)
@@ -73,11 +76,15 @@ const Login = (props) => {
                 props.setIsNewUser(newUser)
                 localStorage.setItem('isNewUser', JSON.stringify(newUser))
                 localStorage.setItem('userId', JSON.stringify(uid))
-                navigate('/main')
+                if (newUser) {
+                    navigate('/user-profile')
+                } else {
+                    navigate('/main')
+                }
             })
             .catch((error) => {
                 // Handle Errors here.
-                const errorCode = error.code
+
                 const errorMessage = error.message
                 setErrorMessage(errorMessage)
                 setLoginError(true)
@@ -99,11 +106,15 @@ const Login = (props) => {
                 props.setIsNewUser(newUser)
                 localStorage.setItem('isNewUser', JSON.stringify(newUser))
                 localStorage.setItem('userId', JSON.stringify(uid))
-                navigate('/main')
+                if (newUser) {
+                    navigate('/user-profile')
+                } else {
+                    navigate('/main')
+                }
             })
             .catch((error) => {
                 // Handle Errors here.
-                const errorCode = error.code
+
                 const errorMessage = error.message
                 setErrorMessage(errorMessage)
                 setLoginError(true)
@@ -137,10 +148,13 @@ const Login = (props) => {
                 props.setIsNewUser(newUser)
                 localStorage.setItem('isNewUser', JSON.stringify(newUser))
                 localStorage.setItem('userId', JSON.stringify(uid))
-                navigate('/main')
+                if (newUser) {
+                    navigate('/user-profile')
+                } else {
+                    navigate('/main')
+                }
             })
             .catch((error) => {
-                const errorCode = error.code
                 const errorMessage = error.message
                 setErrorMessage(errorMessage)
                 setLoginError(true)

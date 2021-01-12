@@ -1,5 +1,5 @@
 import React from 'react'
-import Toggle from './Toggler'
+
 import HomeIconSphere from '../icons/HomeIconSphere.png'
 
 const Header = (props) => {

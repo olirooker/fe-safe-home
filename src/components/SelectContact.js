@@ -1,28 +1,28 @@
-import { React, useState, useEffect } from 'react'
+import { React } from 'react'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
-import { makeStyles } from '@material-ui/core/styles'
+// import { makeStyles } from '@material-ui/core/styles'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 
 function SelectContact(props) {
     const { saveContact, contacts } = props
 
-    const useStyles = makeStyles((theme) => ({
-        root: {
-            '& > *': {
-                margin: theme.spacing(1),
-                width: '25ch',
-            },
-        },
-        formControl: {
-            margin: theme.spacing(1),
-            minWidth: 120,
-        },
-        selectEmpty: {
-            marginTop: theme.spacing(2),
-        },
-    }))
+    // const useStyles = makeStyles((theme) => ({
+    //     root: {
+    //         '& > *': {
+    //             margin: theme.spacing(1),
+    //             width: '25ch',
+    //         },
+    //     },
+    //     formControl: {
+    //         margin: theme.spacing(1),
+    //         minWidth: 120,
+    //     },
+    //     selectEmpty: {
+    //         marginTop: theme.spacing(2),
+    //     },
+    // }))
 
     return (
         <div>
@@ -43,16 +43,23 @@ function SelectContact(props) {
                     className='form-control'
                     required
                 >
-                    {contacts.map((contact) => {
-                        return (
-                            <MenuItem
-                                value={contact.first_name}
-                                key={contact.first_name}
-                            >
-                                {contact.first_name}
-                            </MenuItem>
-                        )
-                    })}
+                    {contacts.length > 0 ? (
+                        contacts.map((contact) => {
+                            return (
+                                <MenuItem
+                                    value={contact.first_name}
+                                    key={contact.first_name}
+                                    ref={contact.first_name}
+                                >
+                                    {contact.first_name}
+                                </MenuItem>
+                            )
+                        })
+                    ) : (
+                        <MenuItem value={''} key={''} ref={''}>
+                            No Contacts Saved
+                        </MenuItem>
+                    )}
                 </Select>
             </FormControl>
         </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { auth, provider, firebase } from '../FirebaseConfig.js'
+
 import styled from 'styled-components'
 
 const LogoutButton = styled.button`

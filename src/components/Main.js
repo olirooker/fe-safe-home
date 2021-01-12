@@ -1,4 +1,4 @@
-import { React, useRef } from 'react'
+import { React } from 'react'
 import { LoadScript } from '@react-google-maps/api'
 import Map from './Map'
 import JourneyDetails from './JourneyDetails'
@@ -65,7 +65,9 @@ function Main(props) {
         if (!apiCalled) {
             fetchAllContacts(userId)
         }
-    }, [contacts])
+
+    }, [contacts,apiCalled, userId])
+
 
     // sets the state to the required details
     const getAddress = () => {

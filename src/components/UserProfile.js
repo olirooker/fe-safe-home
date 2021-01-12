@@ -1,7 +1,7 @@
-import { React, useState, useEffect, useContext } from 'react'
+import { React, useState, useEffect } from 'react'
 import { getUserByUid, postNewUser, sendEditUser } from './backendApi'
 import Loading from './Loading'
-import SetContacts from './UserContacts'
+
 import UserContacts from './UserContacts'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
@@ -36,7 +36,7 @@ function UserProfile(props) {
     const [city, setCity] = useState('')
     const [userData, setUserData] = useState('')
     const [isNewUser, setIsNewUser] = useState(false)
-    const [userId, setUserId] = useState('')
+
     const [showUserEdit, setShowUserEdit] = useState(false)
     const [userEdited, setUserEdited] = useState(false)
     const uid = JSON.parse(localStorage.getItem('userId'))
@@ -49,37 +49,44 @@ function UserProfile(props) {
 
         const userId = JSON.parse(localStorage.getItem('userId'))
         const isNewUser = JSON.parse(localStorage.getItem('isNewUser'))
-        console.log(userData)
-        console.log(showUserEdit, 'show user edit')
-        console.log(firstName, 'firstName')
+
+        let initUserData = ''
+        try {
+            initUserData = JSON.parse(localStorage.getItem('localUser'))
+        } catch (e) {
+            console.log(e)
+            initUserData = '' // set default value if localStorage parsing failed
+        }
+
+        console.log(isNewUser)
+        console.log(initUserData)
 
         //new user with no details in back end
         if (isNewUser) {
+            console.log('IS NEW USER')
             setIsNewUser(true)
             setIsLoading(false)
             // existing user
-        } else if (
-            !isNewUser &&
-            localStorage.getItem.localUser !== 'undefined'
-        ) {
-            getUserByUid(userId).then((user) => {
-                setUserData(user)
+        } else if (!isNewUser && typeof initUserData === 'object') {
+            console.log('NOT NEW USER, PROFILE CREATED')
+            getUserByUid(userId)
+                .then((user) => {
+                    setUserData(user)
 
-                localStorage.setItem('localUser', JSON.stringify(user))
-                setIsLoading(false)
-            })
+                    localStorage.setItem('localUser', JSON.stringify(user))
+                    setIsLoading(false)
+                })
+                .catch((err) => {
+                    if (err) {
+                        setIsNewUser(true)
+                    }
+                })
             // new user after details submit
-        } else if (
-            !isNewUser &&
-            localStorage.getItem('localUser') === 'undefined'
-        ) {
-            const userId = JSON.parse(localStorage.getItem('userId'))
-            getUserByUid(userId).then((user) => {
-                setUserData(user)
+        } else if (!isNewUser && initUserData.length === 0) {
+            console.log('NOT NEW USER, NO PROFILE CREATED')
 
-                localStorage.setItem('localUser', JSON.stringify(userData))
-                setIsLoading(false)
-            })
+            setIsLoading(false)
+            setIsNewUser(true)
         }
     }, [userEdited, showUserEdit])
 
@@ -98,6 +105,7 @@ function UserProfile(props) {
             uid: userId,
         }
         postNewUser(newUser).then((user) => {
+            console.log('user created')
             setUserData(user)
             localStorage.setItem('localUser', JSON.stringify(user))
             localStorage.setItem('isNewUser', JSON.stringify(false))
