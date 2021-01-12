@@ -172,10 +172,11 @@ const Map = (props) => {
             getOriginCoord(origin).then((response) => {
                 getCrimesByLocation(response.lat, response.lng).then(
                     (response) => {
+                        console.log(response, 'response')
                         const dataCrime = []
                         if (response) {
                             response.forEach((crimeArray) => {
-                                let max = 40
+                                let max = 50
                                 if (crimeArray.length !== 0) {
                                     if (crimeArray.length < max) {
                                         crimeArray.forEach((element) => {
@@ -197,8 +198,9 @@ const Map = (props) => {
             getCrimesByLocation(origin.lat, origin.lng).then((response) => {
                 const dataCrime = []
                 if (response) {
+                    console.log(response, 'response2')
                     response.forEach((crimeArray) => {
-                        let max = 40
+                        let max = 50
                         if (crimeArray.length !== 0) {
                             if (crimeArray.length < max) {
                                 crimeArray.forEach((element) => {
