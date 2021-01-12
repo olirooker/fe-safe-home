@@ -2,8 +2,6 @@ const axios = require('axios')
 const crimeApi = axios.create({ baseURL: 'https://data.police.uk/api' })
 const types = ['robbery', 'violence-crime', 'other-crime']
 export const getCrimesByLocation = async (lat, lng) => {
-    let today = new Date()
-    today = today.toISOString().split('T')[0]
     let lastMonth = new Date()
     lastMonth.setDate(1)
     lastMonth.setMonth(lastMonth.getMonth() - 1)
