@@ -27,6 +27,8 @@ function Main(props) {
     }))
     const API_KEY = process.env.REACT_APP_API_KEY
 
+    const { userId } = props
+
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
     const [origin, setOrigin] = useState('')
@@ -62,7 +64,7 @@ function Main(props) {
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
         if (!apiCalled) {
-            fetchAllContacts()
+            fetchAllContacts(userId)
         }
     }, [])
 
@@ -182,14 +184,11 @@ function Main(props) {
     }
 
     const clearWatch = (watchId) => {
-        // for (let i = 0; i < watchId; i++) {
         navigator.geolocation.clearWatch(watchId)
-        // }
     }
 
-    // uid is hard coded
-    const fetchAllContacts = () => {
-        getContactsByUid('ouq2Vs5hq4afIZiEBV0wIUb8Fk03').then((response) => {
+    const fetchAllContacts = (userId) => {
+        getContactsByUid(userId).then((response) => {
             setContacts(response.contacts)
             setApiCalled(true)
         })
@@ -283,7 +282,6 @@ function Main(props) {
                             other={other}
                         />
                         <SelectContact
-                            userId={props.userId}
                             saveContact={setSelectedContact}
                             contacts={contacts}
                             setContacts={setContacts}
