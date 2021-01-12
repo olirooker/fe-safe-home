@@ -74,19 +74,17 @@ function Main(props) {
         }
     }, [contacts, apiCalled, userId])
 
-
     // sets the state to the required details
-    const getAddress = () => {
-        if (typeof origin !== 'string') {
-            getAddressFromCoord(origin).then((response) => {
-                setOrigin(response)
-            })
-            // getAddressFromCoord(userLocation).then((response) => {
-            //     setUserLocation(response)
-            // })
-        }
-    }
-
+    // const getAddress = () => {
+    //     if (typeof origin !== 'string') {
+    //         getAddressFromCoord(origin).then((response) => {
+    //             setOrigin(response)
+    //         })
+    //         // getAddressFromCoord(userLocation).then((response) => {
+    //         //     setUserLocation(response)
+    //         // })
+    //     }
+    // }
 
     // email sending function.
     const sendStartEmail = () => {
@@ -118,7 +116,6 @@ function Main(props) {
 
             message: `I'm going from ${storageOrigin} to ${storageDestination} ${message} My current position is ${storageUserLocation}. I'm going with ${storageDetails.travelCompanion}. I've been with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
             to_email: `${selected[0].email}`,
-
         }
 
         emailjs
