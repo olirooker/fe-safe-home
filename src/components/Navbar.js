@@ -12,7 +12,8 @@ const NewTabs = withStyles({
 })(Tabs)
 
 const Navbar = (props) => {
-    const [value, setValue] = React.useState(2)
+
+    const [value, setValue] = React.useState(0)
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
@@ -27,12 +28,18 @@ const Navbar = (props) => {
                 aria-label='disabled tabs example'
                 className='nav'
             >
-                <Tab label='Main' to='/main' component={Link} />
-                <Tab label='User Profile' to='/user-profile' component={Link} />
+                <Tab label='Main' to='/main' component={Link} value={0} />
+                <Tab
+                    label='User Profile'
+                    to='/user-profile'
+                    component={Link}
+                    value={1}
+                />
                 <Tab
                     label='Travel Advice'
                     to='/travel-advice'
                     component={Link}
+                    value={2}
                 />
             </NewTabs>
         </Paper>

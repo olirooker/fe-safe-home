@@ -60,13 +60,14 @@ function Main(props) {
     const [watchId, setWatchId] = useState('')
 
     const [apiCalled, setApiCalled] = useState(false)
-
     // component did mount to monitor changing journey details. triggers on new route
     useEffect(() => {
         if (!apiCalled) {
             fetchAllContacts(userId)
         }
-    }, [apiCalled, userId])
+
+    }, [contacts,apiCalled, userId])
+
 
     // sets the state to the required details
     const getAddress = () => {
@@ -173,10 +174,14 @@ function Main(props) {
             setDuration('')
             setDistance('')
             setEndRoute(true)
+            localStorage.setItem('startedJourney', JSON.stringify(false))
+            console.log(JSON.parse(localStorage.getItem('startedJourney')))
         } else if (selectedContact !== '' && !startedJourney) {
             sendStartEmail()
             setStartedJourney(true)
             setHasError(false)
+            localStorage.setItem('startedJourney', JSON.stringify(true))
+            console.log(JSON.parse(localStorage.getItem('startedJourney')))
         } else {
             setHasError(true)
             setContactErrorMessage('You need to select an emergency contact!')
@@ -196,9 +201,9 @@ function Main(props) {
 
     let storageOrigin = JSON.parse(localStorage.getItem('origin'))
     let storageDestination = JSON.parse(localStorage.getItem('destination'))
-
-    console.log(storageOrigin, 'origin')
-    console.log(storageDestination, 'destination')
+    let storageStartedJourney = JSON.parse(
+        localStorage.getItem('startedJourney')
+    )
 
     return (
         <div className='mainContent'>
@@ -222,7 +227,7 @@ function Main(props) {
                     distance={distance}
                 />
             </LoadScript>
-            {!startedJourney &&
+            {!storageStartedJourney &&
                 (savedDetails ? (
                     <div className='savedDetails'>
                         <p>
@@ -311,7 +316,7 @@ function Main(props) {
                 className={classes.button}
                 onClick={startJourneyClick}
             >
-                {!startedJourney ? 'Start Journey' : 'End Journey'}
+                {!storageStartedJourney ? 'Start Journey' : 'End Journey'}
             </Button>
         </div>
     )

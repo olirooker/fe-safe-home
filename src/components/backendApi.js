@@ -22,7 +22,9 @@ export const getUserByUid = async (uid) => {
     try {
         const { data } = await newsApi.get(`/users/${uid}`)
         return data
-    } catch (error) {}
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export const getContactsByUid = async (uid) => {
