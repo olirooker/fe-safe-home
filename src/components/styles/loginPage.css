@@ -6,6 +6,12 @@
 .signupFormContainer input {
     display: flex;
     justify-items: center;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.signupFormContainer {
+    max-width: 300px;
     margin: 0 auto;
 }
 
@@ -17,9 +23,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 250px;
+    margin: 0 auto;
 }
 .facebookLoginContainer {
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 250px;
+    margin: 0 auto;
 }
