@@ -22,7 +22,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
-            margin: theme.spacing(1),
             width: '25ch',
         },
     },
@@ -351,6 +350,9 @@ const Map = (props) => {
             {/* form to add the origin and the destination and the button to render the route */}
             {!storageStartedJourney && (
                 <div className='map-settings'>
+                    <p className='whoYouWithTitle'>
+                        1. Create the route back home
+                    </p>
                     {/* <hr className='mt-0 mb-3' /> */}
                     <div className='row'>
                         <div className='col-md-6 col-lg-4'>
@@ -368,6 +370,10 @@ const Map = (props) => {
                                         placeholder='current location'
                                         inputRef={getOrigin}
                                     />
+                                    <p className='info'>
+                                        It takes your current position by
+                                        default.
+                                    </p>
                                 </form>
                             </div>
                         </div>

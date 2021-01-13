@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from '@reach/router'
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
@@ -13,13 +13,12 @@ const NewTabs = withStyles({
 
 const Navbar = (props) => {
     const [value, setValue] = React.useState(0)
+    let storageNavValue = JSON.parse(localStorage.getItem('value'))
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
         localStorage.setItem('value', JSON.stringify(newValue))
     }
-
-    let storageNavValue = JSON.parse(localStorage.getItem('value'))
 
     return (
         <Paper square>
