@@ -26,8 +26,8 @@ function RouteWarning(props) {
             return [lat, lng]
         })
 
-        console.log(crimeCoordsArr, 'FORMATTED COORDS')
-        console.log(shortCoords, 'SHORT COORDS')
+        // console.log(crimeCoordsArr, 'FORMATTED COORDS')
+        // console.log(shortCoords, 'SHORT COORDS')
     }, [props.directionResponse, props.crimeData])
 
     return <div>Route Warning</div>
