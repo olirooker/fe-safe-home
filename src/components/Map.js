@@ -18,6 +18,7 @@ import Icon from '@material-ui/core/Icon'
 import HeatSwitch from './Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import ErrorMessage from './ErrorMessage'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +38,8 @@ const Map = (props) => {
     const [centre, setCentre] = useState({})
     const [isLoading, setLoading] = useState(true)
     const [hasError, setError] = useState(false)
-    const [messageError, setMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
+    const [errorCode, setErrorCode] = useState('')
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
@@ -58,6 +60,7 @@ const Map = (props) => {
         duration,
         distance,
     } = props
+    let localSavedDetails = JSON.parse(localStorage.getItem('savedDetails'))
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
     const getOrigin = useRef('')
     const getDestination = useRef('')
@@ -85,7 +88,7 @@ const Map = (props) => {
         } else {
             setLocation()
         }
-    }, [startedJourney])
+    }, [storageStartedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -104,13 +107,14 @@ const Map = (props) => {
                 },
                 (error) => {
                     setError(true)
-                    setMessage('Geolocation request timed out')
+                    setErrorMessage('Geolocation request timed out')
+                    setErrorCode(error.code)
                 },
                 { timeout: 10000, enableHighAccuracy: false }
             )
         } else {
             setError(true)
-            setMessage('Your browser needs access to your location')
+            setErrorMessage('Your browser needs access to your location')
         }
     }
 
@@ -133,12 +137,17 @@ const Map = (props) => {
                         })
                     },
                     function (error) {
-                        console.log(error)
+                        setErrorCode(error.code)
+                        setErrorMessage(
+                            'The GPS is having trouble accessing your location'
+                        )
+                        setError(true)
                     },
                     options
                 )
             )
-            console.log(watchId, 'watchId')
+            setErrorMessage('The GPS is having trouble accessing your location')
+            setError(true)
         }
     }
 
@@ -148,10 +157,15 @@ const Map = (props) => {
             setOrigin(centre)
             setRoute(false)
             setCreatedRoute(false)
-            getAddressFromCoord(centre).then((response) => {
-                localStorage.setItem('origin', JSON.stringify(response))
-                localStorage.setItem('centre', JSON.stringify(response))
-            })
+            getAddressFromCoord(centre)
+                .then((response) => {
+                    localStorage.setItem('origin', JSON.stringify(response))
+                    localStorage.setItem('centre', JSON.stringify(response))
+                })
+                .catch((error) => {
+                    setError(true)
+                    setErrorMessage('Try again later')
+                })
         } else {
             setOrigin(getOrigin.current.value)
             setRoute(false)
@@ -180,7 +194,8 @@ const Map = (props) => {
                     JSON.stringify(response)
                 )
             } else {
-                console.log(response, 'response directions')
+                setErrorMessage('Please type a valid address')
+                setError(true)
             }
         }
     }
@@ -196,37 +211,43 @@ const Map = (props) => {
             setRoute(true)
         } else {
             setError(true)
-            setMessage('One or both of Origin and Distination are invalid')
+            setErrorMessage('One or both of Origin and Distination are invalid')
         }
     }
 
     const onClickHeatMap = () => {
         if (typeof origin === 'string') {
-            getOriginCoord(origin).then((response) => {
-                getCrimesByLocation(response.lat, response.lng).then(
-                    (response) => {
-                        console.log(response, 'response')
-                        const dataCrime = []
-                        if (response) {
-                            response.forEach((crimeArray) => {
-                                let max = 50
-                                if (crimeArray.length !== 0) {
-                                    if (crimeArray.length < max) {
-                                        crimeArray.forEach((element) => {
-                                            dataCrime.push(element)
-                                        })
-                                    } else {
-                                        for (let i = 0; i <= max; i++) {
-                                            dataCrime.push(crimeArray[i])
+            getOriginCoord(origin)
+                .then((response) => {
+                    getCrimesByLocation(response.lat, response.lng).then(
+                        (response) => {
+                            console.log(response, 'response')
+                            const dataCrime = []
+                            if (response) {
+                                response.forEach((crimeArray) => {
+                                    let max = 50
+                                    if (crimeArray.length !== 0) {
+                                        if (crimeArray.length < max) {
+                                            crimeArray.forEach((element) => {
+                                                dataCrime.push(element)
+                                            })
+                                        } else {
+                                            for (let i = 0; i <= max; i++) {
+                                                dataCrime.push(crimeArray[i])
+                                            }
                                         }
                                     }
-                                }
-                            })
+                                })
+                            }
+                            setData(dataCrime)
                         }
-                        setData(dataCrime)
-                    }
-                )
-            })
+                    )
+                })
+                .catch((error) => {
+                    setErrorCode(error.code)
+                    setErrorMessage(error.message)
+                    setError(true)
+                })
         } else {
             getCrimesByLocation(origin.lat, origin.lng).then((response) => {
                 const dataCrime = []
@@ -293,8 +314,18 @@ const Map = (props) => {
                         center={centre}
                         options={
                             theme === 'light'
-                                ? { styles: modeDayStyle }
-                                : { styles: modeNightStyle }
+                                ? {
+                                      styles: modeDayStyle,
+                                      streetViewControl: false,
+                                      mapTypeControl: false,
+                                      zoomControl: false,
+                                  }
+                                : {
+                                      styles: modeNightStyle,
+                                      streetViewControl: false,
+                                      mapTypeControl: false,
+                                      zoomControl: false,
+                                  }
                         }
                     >
                         {/* the original marker with the centre in the current position*/}
@@ -348,7 +379,7 @@ const Map = (props) => {
                 </div>
             )}
             {/* form to add the origin and the destination and the button to render the route */}
-            {!storageStartedJourney && (
+            {!storageStartedJourney && !localSavedDetails && (
                 <div className='map-settings'>
                     <p className='whoYouWithTitle'>
                         1. Create the route back home

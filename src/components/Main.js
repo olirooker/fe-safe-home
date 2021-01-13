@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import { init } from 'emailjs-com'
 import emailjs from 'emailjs-com'
+import ErrorMessage from './ErrorMessage'
 
 function Main(props) {
     const useStyles = makeStyles((theme) => ({
@@ -25,6 +26,8 @@ function Main(props) {
         },
     }))
     const API_KEY = process.env.REACT_APP_API_KEY
+    const [errorMessage, setErrorMessage] = useState('')
+    const [errorCode, setErrorCode] = useState('')
 
     // local storage data
     const userId = JSON.parse(localStorage.getItem('userId'))
@@ -36,6 +39,7 @@ function Main(props) {
     let storageDetails = JSON.parse(localStorage.getItem('details'))
     let storageUserLocation = JSON.parse(localStorage.getItem('centre'))
     let storageSavedDetails = JSON.parse(localStorage.getItem('savedDetails'))
+    let storageContacts = JSON.parse(localStorage.getItem('contacts'))
 
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
@@ -77,8 +81,8 @@ function Main(props) {
     // email sending function.
     const sendStartEmail = () => {
         init('user_woEvxk93zUEkrcs7jCTzE')
-        const selected = contacts.filter((contact) => {
-            return contact.first_name === selectedContact
+        const selected = storageContacts.filter((contact) => {
+            return contact.first_name === storageDetails.selectedContact
         })
 
         let message = ''
@@ -112,12 +116,17 @@ function Main(props) {
                     console.log('FAILED...', error)
                 }
             )
+            .catch((err) => {
+                setHasError(true)
+                setErrorCode(500)
+                setErrorMessage('Sorry, please try again later')
+            })
     }
 
     const sendFinishEmail = () => {
         init('user_woEvxk93zUEkrcs7jCTzE')
-        const selected = contacts.filter((contact) => {
-            return contact.first_name === selectedContact
+        const selected = storageContacts.filter((contact) => {
+            return contact.first_name === storageDetails.selectedContact
         })
 
         const templateParams = {
@@ -137,6 +146,11 @@ function Main(props) {
                     console.log('FAILED...', error)
                 }
             )
+            .catch((err) => {
+                setHasError(true)
+                setErrorCode(500)
+                setErrorMessage('Sorry, please try again later')
+            })
     }
 
     const saveDetailsClick = () => {
@@ -166,7 +180,7 @@ function Main(props) {
         }
     }
     const startJourneyClick = () => {
-        if (startedJourney && selectedContact !== '') {
+        if (storageStartedJourney && storageDetails.selectedContact !== '') {
             setStartedJourney(false)
             clearWatch(watchId)
             sendFinishEmail()
@@ -183,7 +197,15 @@ function Main(props) {
             setDistance('')
             setEndRoute(true)
             localStorage.setItem('startedJourney', JSON.stringify(false))
-        } else if (selectedContact !== '' && !startedJourney) {
+            localStorage.removeItem('destination')
+            localStorage.removeItem('responseDirections')
+            localStorage.removeItem('details')
+            localStorage.removeItem('savedDetails')
+            localStorage.removeItem('origin')
+        } else if (
+            storageDetails.selectedContact !== '' &&
+            !storageStartedJourney
+        ) {
             sendStartEmail()
             setStartedJourney(true)
             setHasError(false)
@@ -199,14 +221,25 @@ function Main(props) {
     }
 
     const fetchAllContacts = (id) => {
-        getContactsByUid(id).then((response) => {
-            setContacts(response.contacts)
-            setApiCalled(true)
-        })
+        getContactsByUid(id)
+            .then((response) => {
+                setContacts(response.contacts)
+                setApiCalled(true)
+                localStorage.setItem(
+                    'contacts',
+                    JSON.stringify(response.contacts)
+                )
+            })
+            .catch((err) => {
+                setHasError(true)
+                setErrorMessage('This action cannot be done')
+                setErrorCode(404)
+            })
     }
 
     return (
         <div className='mainContent'>
+            {hasError && <ErrorMessage code={errorCode} msg={errorMessage} />}
             <LoadScript
                 googleMapsApiKey={API_KEY}
                 libraries={['visualization']}
@@ -240,6 +273,8 @@ function Main(props) {
                         <p>
                             Travel companion: {storageDetails.travelCompanion}
                         </p>
+                        <p>{`Emergency Contact: ${storageDetails.selectedContact}`}</p>
+
                         {storageDetails.travelMode === 'walking' ? (
                             <div>
                                 <p>
