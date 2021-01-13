@@ -18,8 +18,10 @@ import Icon from '@material-ui/core/Icon'
 import HeatSwitch from './Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+
 import ErrorMessage from './ErrorMessage'
 import RouteWarning from './RouteWarning'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -136,15 +138,17 @@ const Map = (props) => {
                         })
                     },
                     function (error) {
-                        setErrorCode(error.code)
-                        setErrorMessage(
-                            'The GPS is having trouble accessing your location'
-                        )
-                        setError(true)
+                        // setErrorCode(error.code)
+                        // setErrorMessage(
+                        //     'The GPS is having trouble accessing your location'
+                        // )
+                        // setError(true)
+                        console.log(error)
                     },
                     options
                 )
             )
+        } else {
             setErrorMessage('The GPS is having trouble accessing your location')
             setError(true)
         }
@@ -163,7 +167,7 @@ const Map = (props) => {
                 })
                 .catch((error) => {
                     setError(true)
-                    setErrorMessage('Try again later')
+                    setErrorMessage(error.errorMessage)
                 })
         } else {
             setOrigin(getOrigin.current.value)
@@ -296,7 +300,7 @@ const Map = (props) => {
         <div className='map'>
             {/* display the message */}
 
-            {hasError && <ErrorMessage code={errorCode} msg={errorMessage} />}
+            {hasError && <p>{errorMessage}</p>}
 
             {isLoading ? (
                 <Loading />
