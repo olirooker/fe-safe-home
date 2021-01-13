@@ -137,11 +137,6 @@ const Map = (props) => {
                         })
                     },
                     function (error) {
-                        // setErrorCode(error.code)
-                        // setErrorMessage(
-                        //     'The GPS is having trouble accessing your location'
-                        // )
-                        // setError(true)
                         console.log(error)
                     },
                     options
