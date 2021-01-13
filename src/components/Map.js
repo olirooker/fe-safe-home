@@ -22,7 +22,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import ErrorMessage from './ErrorMessage'
 import RouteWarning from './RouteWarning'
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         '& > *': {
@@ -91,7 +90,7 @@ const Map = (props) => {
         } else {
             setLocation()
         }
-    }, [storageStartedJourney])
+    }, [storageStartedJourney, centre])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -162,6 +161,7 @@ const Map = (props) => {
             setCreatedRoute(false)
             getAddressFromCoord(centre)
                 .then((response) => {
+                    console.log(response, 'address response')
                     localStorage.setItem('origin', JSON.stringify(response))
                     localStorage.setItem('centre', JSON.stringify(response))
                 })
