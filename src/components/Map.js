@@ -192,7 +192,10 @@ const Map = (props) => {
 
     // callback function to send a request to the api of google to get the duration and the distance of route
     const callbackDistanceService = (response) => {
-        if (response !== null && response.status === 'OK') {
+        if (
+            (response !== null && response.originAddresses[0] !== '') ||
+            response.destinationAddresses[0] !== ''
+        ) {
             setDuration(response.rows[0].elements[0].duration.text)
             setDistance(response.rows[0].elements[0].distance.text)
             setRoute(true)

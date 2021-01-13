@@ -14,11 +14,25 @@
     margin: 10px;
 }
 
+.whoYouWithTitle {
+    padding-top: 10px;
+}
+.mainContent {
+    padding-top: 140px;
+    text-align: center;
+}
+
 .whoYouWithForm {
     display: flex;
     flex-direction: column;
+    max-width: 300px;
+    margin: 0 auto;
 }
-
-.whoYouWithTitle {
-    padding-top: 10px;
+.savedDetails {
+    margin-top: 10px;
+    background-color: rgba(128, 128, 128, 0.15);
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 10px;
 }
