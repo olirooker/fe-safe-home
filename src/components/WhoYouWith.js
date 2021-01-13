@@ -25,7 +25,7 @@ function WhoYouWith(props) {
 
     return (
         <div className='whoYouWithContent'>
-            <p className='whoYouWithTitle'>Who You With? </p>
+            <p className='whoYouWithTitle'>2. Who are you with?</p>
             <div className='whoYouWithForm'>
                 <form className={classes.root} noValidate autoComplete='off'>
                     <TextField

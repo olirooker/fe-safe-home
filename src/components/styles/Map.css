@@ -9,3 +9,13 @@
     display: flex;
     align-items: center;
 }
+
+.form-group {
+    margin-top: 10px;
+}
+
+.info {
+    margin: auto;
+    font-weight: 100;
+    font-size: 0.9em;
+}

@@ -42,6 +42,7 @@ function JourneyDetails(props) {
 
     return (
         <div className='journeyContent'>
+            <p className='whoYouWithTitle'>3. How are you getting home?</p>
             <FormControl
                 variant='filled'
                 className='form-control'

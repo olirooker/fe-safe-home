@@ -35,6 +35,7 @@ function Main(props) {
     )
     let storageDetails = JSON.parse(localStorage.getItem('details'))
     let storageUserLocation = JSON.parse(localStorage.getItem('centre'))
+    let storageSavedDetails = JSON.parse(localStorage.getItem('savedDetails'))
 
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
@@ -43,7 +44,6 @@ function Main(props) {
     const [endRoute, setEndRoute] = useState(false)
     const [duration, setDuration] = useState('')
     const [distance, setDistance] = useState('')
-    const [userLocation, setUserLocation] = useState('')
 
     // details from journey details component
     const [travelMode, setTravelMode] = useState('walking')
@@ -72,19 +72,7 @@ function Main(props) {
         if (!apiCalled) {
             fetchAllContacts(userId)
         }
-    }, [contacts, apiCalled, userId])
-
-    // sets the state to the required details
-    // const getAddress = () => {
-    //     if (typeof origin !== 'string') {
-    //         getAddressFromCoord(origin).then((response) => {
-    //             setOrigin(response)
-    //         })
-    //         // getAddressFromCoord(userLocation).then((response) => {
-    //         //     setUserLocation(response)
-    //         // })
-    //     }
-    // }
+    }, [contacts, apiCalled, userId, destination])
 
     // email sending function.
     const sendStartEmail = () => {
@@ -110,10 +98,6 @@ function Main(props) {
         const templateParams = {
             from_name: 'safe home test',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
-
-            message: `I'm going from ${origin} to ${destination} ${message} My current position is ${userLocation}. I'm going with ${travelCompanion}. I've been with ${personOne}, ${personTwo} and ${personThree}`,
-            to_email: selected[0].email,
-
             message: `I'm going from ${storageOrigin} to ${storageDestination} ${message} My current position is ${storageUserLocation}. I'm going with ${storageDetails.travelCompanion}. I've been with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
             to_email: `${selected[0].email}`,
         }
@@ -158,6 +142,7 @@ function Main(props) {
     const saveDetailsClick = () => {
         if (savedDetails) {
             setSavedDetails(false)
+            localStorage.setItem('savedDetails', JSON.stringify(false))
         } else {
             setSavedDetails(true)
             localStorage.setItem(
@@ -177,6 +162,7 @@ function Main(props) {
                     duration,
                 })
             )
+            localStorage.setItem('savedDetails', JSON.stringify(true))
         }
     }
     const startJourneyClick = () => {
@@ -242,7 +228,7 @@ function Main(props) {
                 />
             </LoadScript>
             {!storageStartedJourney &&
-                (savedDetails ? (
+                (storageSavedDetails ? (
                     <div className='savedDetails'>
                         <p>
                             People who you are with: {storageDetails.personOne}{' '}
