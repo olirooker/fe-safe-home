@@ -127,7 +127,7 @@ function App() {
                             <>
                                 <Navbar />
 
-                                <Router>
+                                <Router primary={false}>
                                     <Main
                                         path='/main'
                                         theme={theme}
