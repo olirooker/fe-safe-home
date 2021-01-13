@@ -44,7 +44,6 @@ const Map = (props) => {
     const [createdRoute, setCreatedRoute] = useState(false)
     const {
         theme,
-
         startedJourney,
         setWatchId,
         watchId,

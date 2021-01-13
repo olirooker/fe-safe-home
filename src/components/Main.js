@@ -68,6 +68,14 @@ function Main(props) {
 
     const [apiCalled, setApiCalled] = useState(false)
     // component did mount to monitor changing journey details. triggers on new route
+
+    // some stuff for the error on loadScript libraries
+    // const API_KEY = process.env.REACT_APP_API_KEY
+    // const visualization = useLoadScript({
+    //     googleMapsApiKey: API_KEY,
+    //     libraries: ['visualization'],
+    // })
+
     useEffect(() => {
         if (!apiCalled) {
             fetchAllContacts(userId)

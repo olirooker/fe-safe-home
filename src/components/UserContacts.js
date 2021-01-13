@@ -185,142 +185,144 @@ const UserContacts = () => {
                                             key={contact.contact_id}
                                         >
                                             {' '}
-                                            <FormControl>
-                                                <form
-                                                    className={classes.root}
-                                                    noValidate
-                                                    autoComplete='off'
-                                                >
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='First Name'
-                                                        name='firstName'
-                                                        type='text'
-                                                        value={firstName}
-                                                        required
-                                                        onChange={(event) =>
-                                                            setFirstName(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='Last Name'
-                                                        name='lastName'
-                                                        type='text'
-                                                        required
-                                                        value={lastName}
-                                                        onChange={(event) =>
-                                                            setLastName(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='Email'
-                                                        name='email'
-                                                        type='email'
-                                                        required
-                                                        value={email}
-                                                        onChange={(event) =>
-                                                            setEmail(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='Relationship'
-                                                        name='relationship'
-                                                        type='text'
-                                                        required
-                                                        value={relationship}
-                                                        onChange={(event) =>
-                                                            setRelationship(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='House Number'
-                                                        name='houseNumber'
-                                                        type='text'
-                                                        required
-                                                        value={houseNumber}
-                                                        onChange={(event) =>
-                                                            setHouseNumber(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='Street Name'
-                                                        name='streetName'
-                                                        required
-                                                        type='text'
-                                                        value={streetName}
-                                                        onChange={(event) =>
-                                                            setStreetName(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='Postcode'
-                                                        name='postcode'
-                                                        type='text'
-                                                        required
-                                                        value={postcode}
-                                                        onChange={(event) =>
-                                                            setPostcode(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                    <TextField
-                                                        className='form-control'
-                                                        id='filled-basic'
-                                                        label='city'
-                                                        name='city'
-                                                        required
-                                                        type='text'
-                                                        value={city}
-                                                        onChange={(event) =>
-                                                            setCity(
-                                                                event.target
-                                                                    .value
-                                                            )
-                                                        }
-                                                        variant='filled'
-                                                    />
-                                                </form>
-                                            </FormControl>
+                                            <div className='editContactContainer'>
+                                                <FormControl>
+                                                    <form
+                                                        className={classes.root}
+                                                        noValidate
+                                                        autoComplete='off'
+                                                    >
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='First Name'
+                                                            name='firstName'
+                                                            type='text'
+                                                            value={firstName}
+                                                            required
+                                                            onChange={(event) =>
+                                                                setFirstName(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='Last Name'
+                                                            name='lastName'
+                                                            type='text'
+                                                            required
+                                                            value={lastName}
+                                                            onChange={(event) =>
+                                                                setLastName(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='Email'
+                                                            name='email'
+                                                            type='email'
+                                                            required
+                                                            value={email}
+                                                            onChange={(event) =>
+                                                                setEmail(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='Relationship'
+                                                            name='relationship'
+                                                            type='text'
+                                                            required
+                                                            value={relationship}
+                                                            onChange={(event) =>
+                                                                setRelationship(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='House Number'
+                                                            name='houseNumber'
+                                                            type='text'
+                                                            required
+                                                            value={houseNumber}
+                                                            onChange={(event) =>
+                                                                setHouseNumber(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='Street Name'
+                                                            name='streetName'
+                                                            required
+                                                            type='text'
+                                                            value={streetName}
+                                                            onChange={(event) =>
+                                                                setStreetName(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='Postcode'
+                                                            name='postcode'
+                                                            type='text'
+                                                            required
+                                                            value={postcode}
+                                                            onChange={(event) =>
+                                                                setPostcode(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                        <TextField
+                                                            className='form-control'
+                                                            id='filled-basic'
+                                                            label='city'
+                                                            name='city'
+                                                            required
+                                                            type='text'
+                                                            value={city}
+                                                            onChange={(event) =>
+                                                                setCity(
+                                                                    event.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            variant='filled'
+                                                        />
+                                                    </form>
+                                                </FormControl>
+                                            </div>
                                             <div className='contactButtonsContainer'>
                                                 <Button
                                                     variant='contained'

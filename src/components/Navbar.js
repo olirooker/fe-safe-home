@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from '@reach/router'
 import Paper from '@material-ui/core/Paper'
 import Tabs from '@material-ui/core/Tabs'
@@ -13,17 +13,29 @@ const NewTabs = withStyles({
 
 const Navbar = (props) => {
     const [value, setValue] = React.useState(0)
-    let storageNavValue = JSON.parse(localStorage.getItem('value'))
+
+    // console.log(storageNavValue, 'storage nav value')
+
+    // console.log(
+    //     JSON.parse(localStorage.getItem('isNewUser')),
+    //     'isNewUser from local storage'
+    // )
+
+    // let initNavValue = props.isNewUser ? 1 : 0
+    // console.log(initNavValue, 'init value')
+
+    let initNavValue = JSON.parse(localStorage.getItem('isNewUser')) ? 1 : 0
+    console.log(initNavValue, 'init value return value')
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
-        localStorage.setItem('value', JSON.stringify(newValue))
+        localStorage.setItem('navValue', JSON.stringify(newValue))
     }
 
     return (
         <Paper square>
             <NewTabs
-                value={storageNavValue}
+                value={initNavValue || value}
                 indicatorColor='primary'
                 textColor='primary'
                 onChange={handleChange}

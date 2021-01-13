@@ -58,6 +58,8 @@ function UserProfile(props) {
             initUserData = '' // set default value if localStorage parsing failed
         }
 
+        props.setIsNewUser(isNewUser)
+
         console.log(isNewUser)
         console.log(initUserData)
 
@@ -180,97 +182,99 @@ function UserProfile(props) {
                 <>
                     <h2>New User Profile</h2>
                     <div className='profileDetails'>
-                        <form
-                            className={classes.root}
-                            noValidate
-                            autoComplete='off'
-                        >
-                            <TextField
-                                className='form-control'
-                                id='filled-basic'
-                                label='First Name'
-                                name='firstName'
-                                type='text'
-                                value={firstName}
-                                onChange={(event) =>
-                                    setFirstName(event.target.value)
-                                }
-                                variant='filled'
-                            />
-                            <TextField
-                                className='form-control'
-                                id='filled-basic'
-                                label='Last Name'
-                                name='lastName'
-                                type='text'
-                                value={lastName}
-                                onChange={(event) =>
-                                    setLastName(event.target.value)
-                                }
-                                variant='filled'
-                            />
-                            <TextField
-                                className='form-control'
-                                id='filled-basic'
-                                label='Phone Number'
-                                name='phoneNumber'
-                                type='number'
-                                value={phoneNumber}
-                                onChange={(event) =>
-                                    setPhoneNumber(event.target.value)
-                                }
-                                variant='filled'
-                            />
+                        <div className='newUserContainer'>
+                            <form
+                                className={classes.root}
+                                noValidate
+                                autoComplete='off'
+                            >
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='First Name'
+                                    name='firstName'
+                                    type='text'
+                                    value={firstName}
+                                    onChange={(event) =>
+                                        setFirstName(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='Last Name'
+                                    name='lastName'
+                                    type='text'
+                                    value={lastName}
+                                    onChange={(event) =>
+                                        setLastName(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='Phone Number'
+                                    name='phoneNumber'
+                                    type='number'
+                                    value={phoneNumber}
+                                    onChange={(event) =>
+                                        setPhoneNumber(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
 
-                            <TextField
-                                className='form-control'
-                                id='filled-basic'
-                                label='House Number'
-                                name='houseNumber'
-                                type='number'
-                                value={houseNumber}
-                                onChange={(event) =>
-                                    setHouseNumber(event.target.value)
-                                }
-                                variant='filled'
-                            />
-                            <TextField
-                                className='form-control'
-                                id='filled-basic'
-                                label='Street Name'
-                                name='streetName'
-                                type='text'
-                                value={streetName}
-                                onChange={(event) =>
-                                    setStreetName(event.target.value)
-                                }
-                                variant='filled'
-                            />
-                            <TextField
-                                className='form-control'
-                                id='filled-basic'
-                                label='Postcode'
-                                name='postCode'
-                                type='text'
-                                value={postCode}
-                                onChange={(event) =>
-                                    setPostCode(event.target.value)
-                                }
-                                variant='filled'
-                            />
-                            <TextField
-                                className='form-control'
-                                id='filled-basic'
-                                label='city'
-                                name='city'
-                                type='text'
-                                value={city}
-                                onChange={(event) =>
-                                    setCity(event.target.value)
-                                }
-                                variant='filled'
-                            />
-                        </form>
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='House Number'
+                                    name='houseNumber'
+                                    type='number'
+                                    value={houseNumber}
+                                    onChange={(event) =>
+                                        setHouseNumber(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='Street Name'
+                                    name='streetName'
+                                    type='text'
+                                    value={streetName}
+                                    onChange={(event) =>
+                                        setStreetName(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='Postcode'
+                                    name='postCode'
+                                    type='text'
+                                    value={postCode}
+                                    onChange={(event) =>
+                                        setPostCode(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='city'
+                                    name='city'
+                                    type='text'
+                                    value={city}
+                                    onChange={(event) =>
+                                        setCity(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
+                            </form>
+                        </div>
                         <Button
                             variant='contained'
                             color='primary'
@@ -289,7 +293,7 @@ function UserProfile(props) {
                     ) : (
                         <div className='profileDetails'>
                             {showUserEdit ? (
-                                <>
+                                <div className='editProfileContainer'>
                                     <form
                                         className={classes.root}
                                         noValidate
@@ -405,7 +409,7 @@ function UserProfile(props) {
                                             Save Contact
                                         </Button>
                                     </div>
-                                </>
+                                </div>
                             ) : (
                                 <>
                                     <div className='currentUser'>

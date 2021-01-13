@@ -58,6 +58,7 @@ function JourneyDetails(props) {
                         setTravelMode(event.target.value)
                     }}
                     className='form-control'
+                    defaultValue='walking'
                 >
                     <MenuItem value='walking' ref={createRef}>
                         <em>Walking</em>
