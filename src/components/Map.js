@@ -218,8 +218,8 @@ const Map = (props) => {
         if (typeof origin === 'string') {
             getOriginCoord(origin)
                 .then((response) => {
-                    getCrimesByLocation(response.lat, response.lng).then(
-                        (response) => {
+                    getCrimesByLocation(response.lat, response.lng)
+                        .then((response) => {
                             console.log(response, 'response')
                             const dataCrime = []
                             if (response) {
@@ -239,8 +239,12 @@ const Map = (props) => {
                                 })
                             }
                             setData(dataCrime)
-                        }
-                    )
+                        })
+                        .catch((error) => {
+                            setErrorCode(error.code)
+                            setErrorMessage(error.message)
+                            setError(true)
+                        })
                 })
                 .catch((error) => {
                     setErrorCode(error.code)
@@ -248,27 +252,33 @@ const Map = (props) => {
                     setError(true)
                 })
         } else {
-            getCrimesByLocation(origin.lat, origin.lng).then((response) => {
-                const dataCrime = []
-                if (response) {
-                    console.log(response, 'response2')
-                    response.forEach((crimeArray) => {
-                        let max = 50
-                        if (crimeArray.length !== 0) {
-                            if (crimeArray.length < max) {
-                                crimeArray.forEach((element) => {
-                                    dataCrime.push(element)
-                                })
-                            } else {
-                                for (let i = 0; i <= max; i++) {
-                                    dataCrime.push(crimeArray[i])
+            getCrimesByLocation(origin.lat, origin.lng)
+                .then((response) => {
+                    const dataCrime = []
+                    if (response) {
+                        console.log(response, 'response2')
+                        response.forEach((crimeArray) => {
+                            let max = 50
+                            if (crimeArray.length !== 0) {
+                                if (crimeArray.length < max) {
+                                    crimeArray.forEach((element) => {
+                                        dataCrime.push(element)
+                                    })
+                                } else {
+                                    for (let i = 0; i <= max; i++) {
+                                        dataCrime.push(crimeArray[i])
+                                    }
                                 }
                             }
-                        }
-                    })
-                }
-                setData(dataCrime)
-            })
+                        })
+                    }
+                    setData(dataCrime)
+                })
+                .catch((error) => {
+                    setErrorCode(error.code)
+                    setErrorMessage(error.message)
+                    setError(true)
+                })
         }
         if (showHeatMap === true) {
             setShow(false)
@@ -285,12 +295,9 @@ const Map = (props) => {
         // the names of these classes are predetermined by the google api, they do not appear in any css file created by us
         <div className='map'>
             {/* display the message */}
-            {hasError && (
-                <div>
-                    <p>{errorMessage}</p>
-                    {/* <button onClick={showMap}>show map</button> */}
-                </div>
-            )}
+
+            {hasError && <ErrorMessage code={errorCode} msg={errorMessage} />}
+
             {isLoading ? (
                 <Loading />
             ) : (
