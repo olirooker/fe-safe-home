@@ -14,6 +14,9 @@ const Button = styled.button`
     margin-left: 1.5em;
     width: 4rem;
     height: 3rem;
+    &:focus {
+        outline: none;
+    }
 `
 
 const Sun = styled.svg`
