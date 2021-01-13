@@ -87,7 +87,7 @@ const Map = (props) => {
         } else {
             setLocation()
         }
-    }, [storageStartedJourney, centre])
+    }, [storageStartedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
