@@ -18,3 +18,13 @@
 .newUserForm label {
     margin: 0.5rem;
 }
+
+.editProfileContainer {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.newUserContainer {
+    max-width: 300px;
+    margin: 0 auto;
+}

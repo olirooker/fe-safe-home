@@ -31,7 +31,7 @@ function SignupForm(props) {
             <form className={classes.root} noValidate autoComplete='off'>
                 <TextField
                     className='form-control'
-                    id='filled-basic'
+                    id='filled-basic-1'
                     label='Username'
                     name='username'
                     type='text'
@@ -41,7 +41,7 @@ function SignupForm(props) {
                 />
                 <TextField
                     className='form-control'
-                    id='filled-basic'
+                    id='filled-basic-2'
                     label='Email'
                     name='email'
                     type='text'
@@ -51,10 +51,10 @@ function SignupForm(props) {
                 />
                 <TextField
                     className='form-control'
-                    id='filled-basic'
+                    id='filled-basic-3'
                     label='Password'
                     name='password'
-                    type='text'
+                    type='password'
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     variant='filled'

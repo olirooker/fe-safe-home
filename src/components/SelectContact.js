@@ -41,6 +41,7 @@ function SelectContact(props) {
                         saveContact(event.target.value)
                     }}
                     className='form-control'
+                    defaultValue=''
                     required
                 >
                     {contacts.length > 0 ? (
@@ -49,9 +50,7 @@ function SelectContact(props) {
                                 <MenuItem
                                     value={contact.first_name}
                                     key={contact.first_name}
-
                                     ref={createRef}
-
                                 >
                                     {contact.first_name}
                                 </MenuItem>

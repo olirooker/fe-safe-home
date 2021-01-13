@@ -80,6 +80,7 @@ function App() {
         auth.signOut().then(() => {
             localStorage.setItem('loggedIn', 'false')
             setIsLoggedIn(false)
+            localStorage.clear()
             navigate('/')
         })
     }

@@ -13,3 +13,8 @@
     border-radius: 5px;
     padding: 5px;
 }
+
+.editContactContainer {
+    max-width: 300px;
+    margin: 0 auto;
+}
