@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import { init } from 'emailjs-com'
 import emailjs from 'emailjs-com'
-import ErrorMessage from './ErrorMessage'
 
 function Main(props) {
     const useStyles = makeStyles((theme) => ({
@@ -247,7 +246,7 @@ function Main(props) {
 
     return (
         <div className='mainContent'>
-            {hasError && <ErrorMessage code={errorCode} msg={errorMessage} />}
+            {hasError && <p>{errorMessage}</p>}
             <LoadScript
                 googleMapsApiKey={API_KEY}
                 libraries={['visualization']}
