@@ -108,9 +108,7 @@ const Map = (props) => {
                     setLoading(false)
                 },
                 (error) => {
-                    setError(true)
-                    setErrorMessage('Geolocation request timed out')
-                    setErrorCode(error.code)
+                    console.log(error)
                 },
                 { timeout: 10000, enableHighAccuracy: false }
             )
