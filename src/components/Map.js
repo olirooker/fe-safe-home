@@ -287,7 +287,7 @@ const Map = (props) => {
             {/* display the message */}
             {hasError && (
                 <div>
-                    <p>{messageError}</p>
+                    <p>{errorMessage}</p>
                     {/* <button onClick={showMap}>show map</button> */}
                 </div>
             )}
