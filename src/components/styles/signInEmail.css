@@ -1,5 +1,9 @@
 .signInEmail input {
-  display: flex;
-  justify-items: center;
-  margin: 0 auto;
+    display: flex;
+    justify-items: center;
+}
+
+.signInEmail {
+    max-width: 300px;
+    margin: 0 auto;
 }
