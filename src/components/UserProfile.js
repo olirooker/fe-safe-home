@@ -43,10 +43,6 @@ function UserProfile(props) {
 
     // set state
     useEffect(() => {
-        // we don't need to change isLoading here
-        // console.log(props.userId, 'USER ID IN USER PROFILE')
-        // const reloadUserId = JSON.parse(localStorage.getItem('userProfileId'))
-
         const userId = JSON.parse(localStorage.getItem('userId'))
         const isNewUser = JSON.parse(localStorage.getItem('isNewUser'))
 
@@ -60,17 +56,12 @@ function UserProfile(props) {
 
         props.setIsNewUser(isNewUser)
 
-        console.log(isNewUser)
-        console.log(initUserData)
-
         //new user with no details in back end
         if (isNewUser) {
-            console.log('IS NEW USER')
             setIsNewUser(true)
             setIsLoading(false)
             // existing user
         } else if (!isNewUser && typeof initUserData === 'object') {
-            console.log('NOT NEW USER, PROFILE CREATED')
             getUserByUid(userId)
                 .then((user) => {
                     setUserData(user)
@@ -85,8 +76,6 @@ function UserProfile(props) {
                 })
             // new user after details submit
         } else if (!isNewUser && initUserData.length === 0) {
-            console.log('NOT NEW USER, NO PROFILE CREATED')
-
             setIsLoading(false)
             setIsNewUser(true)
         }
@@ -107,7 +96,6 @@ function UserProfile(props) {
             uid: userId,
         }
         postNewUser(newUser).then((user) => {
-            console.log('user created')
             setUserData(user)
             localStorage.setItem('localUser', JSON.stringify(user))
             localStorage.setItem('isNewUser', JSON.stringify(false))
@@ -138,7 +126,6 @@ function UserProfile(props) {
         setStreetName('')
         setCity('')
         setShowUserEdit(false)
-        console.log('CANCELLED!!')
     }
     const handleEditUserSubmit = (event) => {
         event.preventDefault()

@@ -53,7 +53,7 @@ function App() {
 
         setIsLoading(false)
     }, [])
-    // console.log(userId, 'user ID in app')
+
     // dark mode stuff
     const [theme, themeToggler, mountedComponent] = useDarkMode()
     const themeMode = theme === 'light' ? lightTheme : darkTheme
@@ -85,11 +85,6 @@ function App() {
         })
     }
 
-    // method to check if current user is new to app
-
-    // console.log(isLoggedIn, '<<isLoggedIn');
-    // console.log(theme, 'newTheme')
-    // console.log(isNewUser, 'isNewuser')
     if (!mountedComponent) return <div />
     return (
         // dark mode styled components wrapper

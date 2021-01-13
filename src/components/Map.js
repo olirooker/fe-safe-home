@@ -19,6 +19,7 @@ import HeatSwitch from './Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import ErrorMessage from './ErrorMessage'
+import RouteWarning from './RouteWarning'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,6 +45,7 @@ const Map = (props) => {
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
     const [createdRoute, setCreatedRoute] = useState(false)
+    const [directionResponse, setDirectionResponse] = useState('')
     const {
         theme,
         startedJourney,
@@ -128,8 +130,6 @@ const Map = (props) => {
             setWatchId(
                 navigator.geolocation.watchPosition(
                     function (position) {
-                        console.log('Latitude is :', position.coords.latitude)
-                        console.log('Longitude is :', position.coords.longitude)
                         setCentre({
                             lat: position.coords.latitude,
                             lng: position.coords.longitude,
@@ -192,6 +192,8 @@ const Map = (props) => {
                     'responseDirections',
                     JSON.stringify(response)
                 )
+
+                setDirectionResponse(response)
             } else {
                 setErrorMessage('Please type a valid address')
                 setError(true)
@@ -220,7 +222,6 @@ const Map = (props) => {
                 .then((response) => {
                     getCrimesByLocation(response.lat, response.lng)
                         .then((response) => {
-                            console.log(response, 'response')
                             const dataCrime = []
                             if (response) {
                                 response.forEach((crimeArray) => {
@@ -256,7 +257,6 @@ const Map = (props) => {
                 .then((response) => {
                     const dataCrime = []
                     if (response) {
-                        console.log(response, 'response2')
                         response.forEach((crimeArray) => {
                             let max = 50
                             if (crimeArray.length !== 0) {
@@ -382,6 +382,10 @@ const Map = (props) => {
                             />
                         )}
                     </GoogleMap>
+                    <RouteWarning
+                        directionResponse={directionResponse}
+                        crimeData={crimeData}
+                    />
                 </div>
             )}
             {/* form to add the origin and the destination and the button to render the route */}

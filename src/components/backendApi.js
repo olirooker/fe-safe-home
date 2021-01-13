@@ -74,7 +74,6 @@ export const deleteContactByContactId = async (uid, contact_id) => {
         const { data } = await newsApi.delete(
             `/users/${uid}/contacts/${contact_id}`
         )
-        console.log(data)
     } catch (error) {
         console.log(error)
     }

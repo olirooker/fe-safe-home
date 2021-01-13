@@ -25,7 +25,6 @@ const Navbar = (props) => {
     // console.log(initNavValue, 'init value')
 
     let initNavValue = JSON.parse(localStorage.getItem('isNewUser')) ? 1 : 0
-    console.log(initNavValue, 'init value return value')
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
