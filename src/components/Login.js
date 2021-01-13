@@ -71,12 +71,12 @@ const Login = (props) => {
                 const displayName = result.user.displayName
                 //use methods on props to change state in App.js
                 localStorage.setItem('isNewUser', JSON.stringify(newUser))
-                console.log('new user set!')
+
                 props.setId(uid)
                 props.setLoggedIn(true)
                 props.setUsername(displayName)
                 props.setIsNewUser(newUser)
-                console.log(newUser, 'newUser in google login')
+
                 localStorage.setItem('userId', JSON.stringify(uid))
                 if (newUser) {
                     navigate('/user-profile')
@@ -94,13 +94,12 @@ const Login = (props) => {
     }
     // google login functionality
     const facebookLogin = () => {
-        console.log('clicked')
         auth.signInWithPopup(facebook)
             .then((result) => {
                 const newUser = result.additionalUserInfo.isNewUser
                 const uid = result.user.uid
                 const displayName = result.user.displayName
-                console.log(result)
+
                 //use methods on props to change state in App.js
                 localStorage.setItem('isNewUser', JSON.stringify(newUser))
                 props.setId(uid)
@@ -137,7 +136,6 @@ const Login = (props) => {
             .auth()
             .createUserWithEmailAndPassword(email, password)
             .then((user) => {
-                console.log(user)
                 const { uid } = firebase.auth().currentUser
                 const userInfo = firebase.auth().currentUser
                 const newUser = user.additionalUserInfo.isNewUser

@@ -2,12 +2,14 @@
     "short_name": "React App",
     "name": "Safe Home App Web",
     "description": "Helping get you home safe",
-    "icons": [{
-        "src": "HomeIconSphere.png",
-        "sizes": "800x800",
-        "type": "image/png"
-      }],
-    "start_url": ".",
+    "icons": [
+        {
+            "src": "HomeIconSphere.png",
+            "sizes": "800x800",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "https://safe-home-app.herokuapp.com/",
     "display": "standalone",
     "theme_color": "#00A99D",
     "background_color": "#ffffff"

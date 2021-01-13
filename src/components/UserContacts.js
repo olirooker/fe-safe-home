@@ -98,7 +98,6 @@ const UserContacts = () => {
             })
     }
     const handleShowEdit = (id, contact) => {
-        console.log(id, 'ID')
         setFirstName(contact.first_name)
         setLastName(contact.last_name)
         setEmail(contact.email)
