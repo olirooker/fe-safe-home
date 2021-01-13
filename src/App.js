@@ -82,7 +82,6 @@ function App() {
             setIsLoggedIn(false)
             localStorage.clear()
             navigate('/')
-            localStorage.clear()
         })
     }
 

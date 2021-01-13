@@ -295,7 +295,9 @@ const Map = (props) => {
         // the names of these classes are predetermined by the google api, they do not appear in any css file created by us
         <div className='map'>
             {/* display the message */}
+
             {hasError && <ErrorMessage code={errorCode} msg={errorMessage} />}
+
             {isLoading ? (
                 <Loading />
             ) : (
