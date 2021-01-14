@@ -29,7 +29,7 @@ function SignupForm(props) {
     return (
         <div className='signupFormContainer'>
             <form className={classes.root} noValidate autoComplete='off'>
-                <TextField
+                {/* <TextField
                     className='form-control'
                     id='filled-basic-1'
                     label='Username'
@@ -38,7 +38,7 @@ function SignupForm(props) {
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
                     variant='filled'
-                />
+                /> */}
                 <TextField
                     className='form-control'
                     id='filled-basic-2'

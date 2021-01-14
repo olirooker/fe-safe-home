@@ -39,6 +39,7 @@ function Main(props) {
     let storageUserLocation = JSON.parse(localStorage.getItem('centre'))
     let storageSavedDetails = JSON.parse(localStorage.getItem('savedDetails'))
     let storageContacts = JSON.parse(localStorage.getItem('contacts'))
+    let userDetails = JSON.parse(localStorage.getItem('localUser'))
 
     const [savedDetails, setSavedDetails] = useState(false)
     const [startedJourney, setStartedJourney] = useState(false)
@@ -91,6 +92,7 @@ function Main(props) {
         const selected = storageContacts.filter((contact) => {
             return contact.first_name === storageDetails.selectedContact
         })
+        const user = `${userDetails.user.first_name} ${userDetails.user.last_name}`
 
         let message = ''
 
@@ -107,9 +109,9 @@ function Main(props) {
         }
 
         const templateParams = {
-            from_name: 'safe home test',
+            from_name: 'safe home',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
-            message: `I'm going from ${storageOrigin} to ${storageDestination} ${message} My current position is ${storageUserLocation}. I'm going with ${storageDetails.travelCompanion}. I've been with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
+            message: `${user} is going from ${storageOrigin} to ${storageDestination} ${message} Their current position is ${storageUserLocation}. They're going with ${storageDetails.travelCompanion}. They've been out with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
             to_email: `${selected[0].email}`,
         }
 
@@ -136,10 +138,11 @@ function Main(props) {
             return contact.first_name === storageDetails.selectedContact
         })
 
+        const user = `${userDetails.user.first_name} ${userDetails.user.last_name}`
         const templateParams = {
-            from_name: 'safe home test',
+            from_name: 'safe home',
             to_name: `${selected[0].first_name} ${selected[0].last_name}`,
-            message: "I'm safe home!",
+            message: `${user} is safely home!`,
             to_email: `${selected[0].email}`,
         }
 

@@ -28,7 +28,7 @@ function UserProfile(props) {
     // const [isNewUser, setIsNewUser] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
-    const [userName, setUserName] = useState('')
+    const [username, setUsername] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [houseNumber, setHouseNumber] = useState('')
     const [streetName, setStreetName] = useState('')
@@ -87,7 +87,7 @@ function UserProfile(props) {
         const newUser = {
             first_name: firstName,
             last_name: lastName,
-            username: userName,
+            username: username,
             phone_number: phoneNumber,
             house_number: +houseNumber,
             street_name: streetName,
@@ -110,9 +110,10 @@ function UserProfile(props) {
         setPhoneNumber(userData.user.phone_number)
         setHouseNumber(userData.user.house_number)
         setPostCode(userData.user.postcode)
-
+        setUsername(userData.user.username)
         setStreetName(userData.user.street_name)
         setCity(userData.user.city)
+
         setShowUserEdit(true)
     }
 
@@ -122,7 +123,7 @@ function UserProfile(props) {
         setPhoneNumber('')
         setHouseNumber('')
         setPostCode('')
-
+        setUsername('')
         setStreetName('')
         setCity('')
         setShowUserEdit(false)
@@ -133,7 +134,7 @@ function UserProfile(props) {
             first_name: firstName,
             last_name: lastName,
             phone_number: phoneNumber,
-
+            username: username,
             house_number: houseNumber,
             street_name: streetName,
             postcode: postCode,
@@ -146,7 +147,7 @@ function UserProfile(props) {
                 setPhoneNumber('')
                 setHouseNumber('')
                 setPostCode('')
-
+                setUsername('')
                 setStreetName('')
                 setCity('')
 
@@ -196,6 +197,18 @@ function UserProfile(props) {
                                     value={lastName}
                                     onChange={(event) =>
                                         setLastName(event.target.value)
+                                    }
+                                    variant='filled'
+                                />
+                                <TextField
+                                    className='form-control'
+                                    id='filled-basic'
+                                    label='Username'
+                                    name='username'
+                                    type='text'
+                                    value={username}
+                                    onChange={(event) =>
+                                        setUsername(event.target.value)
                                     }
                                     variant='filled'
                                 />
@@ -307,6 +320,18 @@ function UserProfile(props) {
                                             value={lastName}
                                             onChange={(event) =>
                                                 setLastName(event.target.value)
+                                            }
+                                            variant='filled'
+                                        />
+                                        <TextField
+                                            className='form-control'
+                                            id='filled-basic'
+                                            label='Username'
+                                            name='username'
+                                            type='text'
+                                            value={username}
+                                            onChange={(event) =>
+                                                setUsername(event.target.value)
                                             }
                                             variant='filled'
                                         />
