@@ -49,9 +49,9 @@ function RouteWarning(props) {
             routeCoordSum.includes(element)
         })
 
-        console.log(crimeCoordSum, 'CRIMES')
-        console.log(routeCoordSum, 'ROUTE')
-        console.log(matches, 'MATCHES')
+        // console.log(crimeCoordSum, 'CRIMES')
+        // console.log(routeCoordSum, 'ROUTE')
+        // console.log(matches, 'MATCHES')
     }, [props.directionResponse, props.crimeData])
 
     return <div></div>
