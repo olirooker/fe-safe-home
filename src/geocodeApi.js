@@ -28,7 +28,8 @@ export const getAddressFromCoord = (coords) => {
             `https://eu1.locationiq.com/v1/reverse.php?key=pk.6a9d6e8e4c85dd1d973db43062cf8bf8&lat=${latStr}&lon=${lngStr}&format=json`
         )
         .then((response) => {
-            const address = `${response.data.address.address29}, ${response.data.address.road}, ${response.data.address.postcode}`
+            console.log(response, 'geolocation')
+            const address = `${response.data.address.road}, ${response.data.address.postcode}`
 
             return address
         })
