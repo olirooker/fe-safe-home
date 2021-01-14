@@ -6,7 +6,7 @@ import {
     HeatmapLayer,
     DistanceMatrixService,
 } from '@react-google-maps/api'
-import { React, useRef, useEffect, useState } from 'react'
+import { React, useRef, useEffect, useState, createRef } from 'react'
 import { modeNightStyle, modeDayStyle } from './styles/MapNightMode'
 import Loading from './Loading'
 import { getCrimesByLocation } from '../CrimeApi'
@@ -19,6 +19,10 @@ import HeatSwitch from './Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import RouteWarning from './RouteWarning'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import FormControl from '@material-ui/core/FormControl'
+import Select from '@material-ui/core/Select'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,6 +62,8 @@ const Map = (props) => {
         setDistance,
         duration,
         distance,
+        setTravelMode,
+        travelMode,
     } = props
     let localSavedDetails = JSON.parse(localStorage.getItem('savedDetails'))
     // in order to have control over the origin and destination of the inputs, it is necessary to use them as references
@@ -82,12 +88,8 @@ const Map = (props) => {
 
     // asking permission to navigator to set location
     useEffect(() => {
-        if (startedJourney) {
-            watchLocation()
-        } else {
-            setLocation()
-        }
-    }, [storageStartedJourney])
+        watchLocation()
+    }, [])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -107,7 +109,7 @@ const Map = (props) => {
                 (error) => {
                     console.log(error)
                 },
-                { timeout: 10000, enableHighAccuracy: false }
+                { timeout: 60000, enableHighAccuracy: true, maximumAge: 0 }
             )
         } else {
             setError(true)
@@ -121,7 +123,6 @@ const Map = (props) => {
             timeout: 60000,
             maximumAge: 0,
         }
-
         if (navigator.geolocation) {
             setWatchId(
                 navigator.geolocation.watchPosition(
@@ -130,6 +131,11 @@ const Map = (props) => {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude,
                         })
+                        setOrigin({
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                        })
+                        setLoading(false)
                     },
                     function (error) {
                         console.log(error)
@@ -329,7 +335,10 @@ const Map = (props) => {
                                 options={{
                                     destination,
                                     origin,
-                                    travelMode: 'WALKING',
+                                    travelMode:
+                                        travelMode.toUpperCase() === 'WALKING'
+                                            ? 'WALKING'
+                                            : 'DRIVING',
                                 }}
                                 callback={directionsCallback}
                             />
@@ -362,7 +371,10 @@ const Map = (props) => {
                                 options={{
                                     destinations: [destination],
                                     origins: [origin],
-                                    travelMode: 'WALKING',
+                                    travelMode:
+                                        travelMode.toUpperCase() === 'WALKING'
+                                            ? 'WALKING'
+                                            : 'DRIVING',
                                 }}
                                 callback={callbackDistanceService}
                             />
@@ -380,7 +392,41 @@ const Map = (props) => {
                     <p className='whoYouWithTitle'>
                         1. Create the route back home
                     </p>
-                    {/* <hr className='mt-0 mb-3' /> */}
+                    <FormControl
+                        variant='filled'
+                        className='form-control'
+                        style={{ minWidth: 224 }}
+                    >
+                        <InputLabel id='demo-simple-select-filled-label'>
+                            Select Travel Mode
+                        </InputLabel>
+                        <Select
+                            labelId='demo-simple-select-filled-label'
+                            id='demo-simple-select-filled'
+                            onChange={(event) => {
+                                setTravelMode(event.target.value)
+                            }}
+                            className='form-control'
+                            defaultValue='walking'
+                        >
+                            <MenuItem value='walking' ref={createRef}>
+                                <em>Walking</em>
+                            </MenuItem>
+                            <MenuItem value='taxi' ref={createRef}>
+                                Taxi
+                            </MenuItem>
+                            <MenuItem value='train' ref={createRef}>
+                                Train
+                            </MenuItem>
+                            <MenuItem value='bus' ref={createRef}>
+                                Bus
+                            </MenuItem>
+                            <MenuItem value='other' ref={createRef}>
+                                Other
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+
                     <div className='row'>
                         <div className='col-md-6 col-lg-4'>
                             <div className='form-group'>

@@ -1,10 +1,5 @@
 import { React, createRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import InputLabel from '@material-ui/core/InputLabel'
-import MenuItem from '@material-ui/core/MenuItem'
-
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
 import TextField from '@material-ui/core/TextField'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 function JourneyDetails(props) {
     const classes = useStyles()
     const {
-        setTravelMode,
         travelMode,
         setTaxiReg,
         taxiReg,
@@ -42,42 +36,7 @@ function JourneyDetails(props) {
 
     return (
         <div className='journeyContent'>
-            <p className='whoYouWithTitle'>3. How are you getting home?</p>
-            <FormControl
-                variant='filled'
-                className='form-control'
-                style={{ minWidth: 224 }}
-            >
-                <InputLabel id='demo-simple-select-filled-label'>
-                    Select Travel Mode
-                </InputLabel>
-                <Select
-                    labelId='demo-simple-select-filled-label'
-                    id='demo-simple-select-filled'
-                    onChange={(event) => {
-                        setTravelMode(event.target.value)
-                    }}
-                    className='form-control'
-                    defaultValue='walking'
-                >
-                    <MenuItem value='walking' ref={createRef}>
-                        <em>Walking</em>
-                    </MenuItem>
-                    <MenuItem value='taxi' ref={createRef}>
-                        Taxi
-                    </MenuItem>
-                    <MenuItem value='train' ref={createRef}>
-                        Train
-                    </MenuItem>
-                    <MenuItem value='bus' ref={createRef}>
-                        Bus
-                    </MenuItem>
-                    <MenuItem value='other' ref={createRef}>
-                        Other
-                    </MenuItem>
-                </Select>
-            </FormControl>
-
+            <p className='whoYouWithTitle'>3. Extra info:</p>
             <div className='newUserForm'>
                 {travelMode === 'taxi' && (
                     <div className='form-group'>

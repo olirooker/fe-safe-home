@@ -2,7 +2,7 @@ import { React } from 'react'
 import { LoadScript } from '@react-google-maps/api'
 import Map from './Map'
 import JourneyDetails from './JourneyDetails'
-import { getContactsByUid } from './backendApi'
+import { getContactsByUid, getUserByUid } from './backendApi'
 import { useState, useEffect } from 'react'
 import WhoYouWith from './WhoYouWith'
 import SelectContact from './SelectContact'
@@ -84,7 +84,7 @@ function Main(props) {
         if (!apiCalled) {
             fetchAllContacts(userId)
         }
-    }, [contacts, apiCalled, userId, destination])
+    }, [contacts, apiCalled, userId, destination, travelMode])
 
     // email sending function.
     const sendStartEmail = () => {
@@ -92,44 +92,47 @@ function Main(props) {
         const selected = storageContacts.filter((contact) => {
             return contact.first_name === storageDetails.selectedContact
         })
-        const user = `${userDetails.user.first_name} ${userDetails.user.last_name}`
 
-        let message = ''
+        getUserByUid(userId).then((response) => {
+            console.log(response)
+            let user = `${response.user.first_name} ${response.user.last_name}`
+            let message = ''
 
-        if (storageDetails.travelMode === 'walking') {
-            message = `, it should take me ${storageDetails.duration}.`
-        } else if (storageDetails.travelMode === 'taxi') {
-            message = `. I'm going by taxi and the registration is ${storageDetails.taxiReg}.`
-        } else if (storageDetails.travelMode === 'train') {
-            message = `. I'm going by train and the information is ${storageDetails.trainService}.`
-        } else if (storageDetails.travelMode === 'bus') {
-            message = `. I'm going by bus and the number is ${storageDetails.busService}.`
-        } else {
-            message = `. I'm going by ${storageDetails.other}.`
-        }
+            if (storageDetails.travelMode === 'walking') {
+                message = `, it should take them ${storageDetails.duration}.`
+            } else if (storageDetails.travelMode === 'taxi') {
+                message = `. They're going by taxi and the registration is ${storageDetails.taxiReg}. It should take them ${storageDetails.duration}.`
+            } else if (storageDetails.travelMode === 'train') {
+                message = `. They're going by train and the information is ${storageDetails.trainService}. It should take them ${storageDetails.duration}.`
+            } else if (storageDetails.travelMode === 'bus') {
+                message = `. They're going by bus and the number is ${storageDetails.busService}. It should take them ${storageDetails.duration}.`
+            } else {
+                message = `. They're going by ${storageDetails.other}. It should take them ${storageDetails.duration}.`
+            }
 
-        const templateParams = {
-            from_name: 'safe home',
-            to_name: `${selected[0].first_name} ${selected[0].last_name}`,
-            message: `${user} is going from ${storageOrigin} to ${storageDestination} ${message} Their current position is ${storageUserLocation}. They're going with ${storageDetails.travelCompanion}. They've been out with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
-            to_email: `${selected[0].email}`,
-        }
+            const templateParams = {
+                from_name: 'safe home',
+                to_name: `${selected[0].first_name} ${selected[0].last_name}`,
+                message: `${user} is going from ${storageOrigin} to ${storageDestination} ${message} Their current position is ${storageUserLocation}. They're going with ${storageDetails.travelCompanion}. They've been out with ${storageDetails.personOne}, ${storageDetails.personTwo} and ${storageDetails.personThree}`,
+                to_email: `${selected[0].email}`,
+            }
 
-        emailjs
-            .send('default_service', 'template_u667pzk', templateParams)
-            .then(
-                function (response) {
-                    console.log('SUCCESS!', response.status, response.text)
-                },
-                function (error) {
-                    console.log('FAILED...', error)
-                }
-            )
-            .catch((err) => {
-                setHasError(true)
-                setErrorCode(500)
-                setErrorMessage('Sorry, please try again later')
-            })
+            emailjs
+                .send('default_service', 'template_u667pzk', templateParams)
+                .then(
+                    function (response) {
+                        console.log('SUCCESS!', response.status, response.text)
+                    },
+                    function (error) {
+                        console.log('FAILED...', error)
+                    }
+                )
+                .catch((err) => {
+                    setHasError(true)
+                    setErrorCode(500)
+                    setErrorMessage('Sorry, please try again later')
+                })
+        })
     }
 
     const sendFinishEmail = () => {
@@ -138,29 +141,36 @@ function Main(props) {
             return contact.first_name === storageDetails.selectedContact
         })
 
-        const user = `${userDetails.user.first_name} ${userDetails.user.last_name}`
-        const templateParams = {
-            from_name: 'safe home',
-            to_name: `${selected[0].first_name} ${selected[0].last_name}`,
-            message: `${user} is safely home!`,
-            to_email: `${selected[0].email}`,
-        }
+        getUserByUid(userId).then((response) => {
+            console.log(response)
+            let user = `${response.user.first_name} ${response.user.last_name}`
+            const templateParams = {
+                from_name: 'safe home',
+                to_name: `${selected[0].first_name} ${selected[0].last_name}`,
+                message: `${user} is safely home!`,
+                to_email: `${selected[0].email}`,
+            }
 
-        emailjs
-            .send('default_service', 'template_u667pzk', templateParams)
-            .then(
-                function (response) {
-                    console.log('FINISH EMAIL!', response.status, response.text)
-                },
-                function (error) {
-                    console.log('FAILED...', error)
-                }
-            )
-            .catch((err) => {
-                setHasError(true)
-                setErrorCode(500)
-                setErrorMessage('Sorry, please try again later')
-            })
+            emailjs
+                .send('default_service', 'template_u667pzk', templateParams)
+                .then(
+                    function (response) {
+                        console.log(
+                            'FINISH EMAIL!',
+                            response.status,
+                            response.text
+                        )
+                    },
+                    function (error) {
+                        console.log('FAILED...', error)
+                    }
+                )
+                .catch((err) => {
+                    setHasError(true)
+                    setErrorCode(500)
+                    setErrorMessage('Sorry, please try again later')
+                })
+        })
     }
 
     const saveDetailsClick = () => {
@@ -268,6 +278,8 @@ function Main(props) {
                     setDistance={setDistance}
                     duration={duration}
                     distance={distance}
+                    setTravelMode={setTravelMode}
+                    travelMode={travelMode}
                 />
             </LoadScript>
             {!storageStartedJourney &&
@@ -306,16 +318,32 @@ function Main(props) {
                             </p>
                         )}
                         {storageDetails.travelMode === 'taxi' && (
-                            <p>{storageDetails.taxiReg}</p>
+                            <div>
+                                <p>{storageDetails.taxiReg}</p>
+                                <p>{`Duration: ${storageDetails.duration}`}</p>
+                                <p>{`Distance: ${storageDetails.distance}`}</p>
+                            </div>
                         )}
                         {storageDetails.travelMode === 'bus' && (
-                            <p>{storageDetails.busService}</p>
+                            <div>
+                                <p>{storageDetails.busService}</p>
+                                <p>{`Duration: ${storageDetails.duration}`}</p>
+                                <p>{`Distance: ${storageDetails.distance}`}</p>
+                            </div>
                         )}
                         {storageDetails.travelMode === 'train' && (
-                            <p>{storageDetails.trainService}</p>
+                            <div>
+                                <p>{storageDetails.trainService}</p>
+                                <p>{`Duration: ${storageDetails.duration}`}</p>
+                                <p>{`Distance: ${storageDetails.distance}`}</p>
+                            </div>
                         )}
                         {storageDetails.travelMode === 'other' && (
-                            <p>{storageDetails.other}</p>
+                            <div>
+                                <p>{storageDetails.other}</p>
+                                <p>{`Duration: ${storageDetails.duration}`}</p>
+                                <p>{`Distance: ${storageDetails.distance}`}</p>
+                            </div>
                         )}
                         <Button
                             variant='contained'
@@ -337,7 +365,6 @@ function Main(props) {
                             personThree={personThree}
                         />
                         <JourneyDetails
-                            setTravelMode={setTravelMode}
                             travelMode={travelMode}
                             setTaxiReg={setTaxiReg}
                             taxiReg={taxiReg}
