@@ -18,8 +18,6 @@ import Icon from '@material-ui/core/Icon'
 import HeatSwitch from './Switch'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-
-import ErrorMessage from './ErrorMessage'
 import RouteWarning from './RouteWarning'
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +39,6 @@ const Map = (props) => {
     const [isLoading, setLoading] = useState(true)
     const [hasError, setError] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const [errorCode, setErrorCode] = useState('')
     const [route, setRoute] = useState(false)
     const [crimeData, setData] = useState([])
     const [showHeatMap, setShow] = useState(false)
@@ -90,7 +87,7 @@ const Map = (props) => {
         } else {
             setLocation()
         }
-    }, [storageStartedJourney, centre])
+    }, [storageStartedJourney])
 
     // set centre and origin with current position
     const setLocation = () => {
@@ -181,27 +178,22 @@ const Map = (props) => {
 
     // callback function to send a request to the api of google to get the response to render the route
     const directionsCallback = (response) => {
-        if (response !== null) {
-            if (response.status === 'OK') {
-                setCreatedRoute(true)
-                setResponse(response)
-                localStorage.setItem(
-                    'responseDirections',
-                    JSON.stringify(response)
-                )
+        if (response !== null && response.status === 'OK') {
+            setCreatedRoute(true)
+            setResponse(response)
+            localStorage.setItem('responseDirections', JSON.stringify(response))
 
-                setDirectionResponse(response)
-            } else {
-                setErrorMessage('Please type a valid address')
-                setError(true)
-            }
+            setDirectionResponse(response)
+        } else {
+            setErrorMessage('Please type a valid address')
+            setError(true)
         }
     }
 
     // callback function to send a request to the api of google to get the duration and the distance of route
-    const callbackDistanceService = (response, status) => {
+    const callbackDistanceService = (response) => {
         if (
-            response.originAddresses[0] !== '' ||
+            (response !== null && response.originAddresses[0] !== '') ||
             response.destinationAddresses[0] !== ''
         ) {
             setDuration(response.rows[0].elements[0].duration.text)
@@ -209,7 +201,7 @@ const Map = (props) => {
             setRoute(true)
         } else {
             setError(true)
-            setErrorMessage('One or both of Origin and Distination are invalid')
+            setErrorMessage('Please type a valid address')
         }
     }
 
@@ -239,13 +231,11 @@ const Map = (props) => {
                             setData(dataCrime)
                         })
                         .catch((error) => {
-                            setErrorCode(error.code)
                             setErrorMessage(error.message)
                             setError(true)
                         })
                 })
                 .catch((error) => {
-                    setErrorCode(error.code)
                     setErrorMessage(error.message)
                     setError(true)
                 })
@@ -272,7 +262,6 @@ const Map = (props) => {
                     setData(dataCrime)
                 })
                 .catch((error) => {
-                    setErrorCode(error.code)
                     setErrorMessage(error.message)
                     setError(true)
                 })
