@@ -65,5 +65,7 @@ export const getCrimesByLocation = async (lat, lng) => {
         })
     })
 
+    console.log(result, 'CRIMES')
+
     return result
 }
